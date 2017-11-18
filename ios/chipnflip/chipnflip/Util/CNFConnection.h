@@ -28,5 +28,7 @@
 - (void) stop;
 
 @property (nonatomic, readonly)	NSString	*token;
+@property (nonatomic, readonly)	NSString	*channel;
+@property (nonatomic, readonly)	NSNumber	*userid;
 
 @end

@@ -10,13 +10,32 @@
 #import "CNFLog.h"
 #import "CNFWeakArray.h"
 
-NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
-NSString *const	CNFConnectionServerIP			= @"http://172.16.12.51:80/api";
-NSString *const	CNFConnectionAPIVersion			= @"v1";
+NSString *const	CNFConnectionKey					= @"994095a2c453e06bd4c1";
+NSString *const	CNFConnectionServerIP				= @"http://172.16.12.51:80/api";
+NSString *const	CNFConnectionAPIVersion				= @"v1";
 
-NSString *const	CNFConnectionSuffixRegistration	= @"user";
-NSString *const	CNFConnectionSuffixLogin		= @"login";
-NSString *const	CNFConnectionSuffixLogout		= @"logout";
+NSString *const	CNFConnectionSuffixRegistration		= @"user";
+NSString *const	CNFConnectionSuffixLogin			= @"login";
+NSString *const	CNFConnectionSuffixSubscribe		= @"game-offer";
+NSString *const	CNFConnectionSuffixLogout			= @"logout";
+
+NSString *const	CNFConnectionLoginAnswerToken		= @"token";
+NSString *const	CNFConnectionLoginAnswerUserID		= @"user_id";
+NSString *const	CNFConnectionSubscribeAnswerChannel	= @"channel";
+
+NSString *const	CNFConnectionSubscribed				= @"subscribed";
+NSString *const	CNFConnectionShutdown				= @"shutdown";
+
+NSString *const	CNFConnectionEventOfferAccepted		= @"offer-accepted";
+NSString *const	CNFConnectionEventGridUpdated		= @"grid-updated";
+NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
+
+typedef NS_ENUM(NSUInteger, CNFState) {
+	CNFStateNone = 0,
+	CNFStateLoggedin,
+	CNFStateSubscribe,
+	CNFStateSubscribed,
+};
 
 @interface CNFConnection() {
 	BOOL			_work;
@@ -30,8 +49,9 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 	
 	NSThread		*_rxthread;
 	NSThread		*_txthread;
-
+	
 	NSMutableArray	*_delegates;
+	CNFState		_state;
 }
 @end
 
@@ -75,6 +95,20 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 
 - (void)pusher:(PTPusher *)pusher didSubscribeToChannel:(PTPusherChannel *)channel {
 	CNFLog(@"didSubscribeToChannel %@", channel.name);
+	
+	[_rxcond lock];
+	[_rxarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"yes", CNFConnectionSubscribed, nil]];
+	[_rxcond signal];
+	[_rxcond unlock];
+}
+
+- (void) _shutdown {
+	CNFLog(@"");
+	
+	[_rxcond lock];
+	[_rxarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"yes", CNFConnectionShutdown, nil]];
+	[_rxcond signal];
+	[_rxcond unlock];
 }
 
 - (void)pusher:(PTPusher *)pusher didUnsubscribeFromChannel:(PTPusherChannel *)channel {
@@ -96,6 +130,24 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 	[_pusher connect];
 }
 
+- (void) _pusherSubscribe {
+	CNFLog(@"");
+	
+	PTPusherChannel *channel = [_pusher subscribeToChannelNamed:_channel];
+	
+	[channel bindToEventNamed:CNFConnectionEventOfferAccepted handleWithBlock:^(PTPusherEvent *channelEvent) {
+		// TOOO
+	}];
+	
+	[channel bindToEventNamed:CNFConnectionEventGridUpdated handleWithBlock:^(PTPusherEvent *channelEvent) {
+		// TOOO
+	}];
+	
+	[channel bindToEventNamed:CNFConnectionEventGameEnded handleWithBlock:^(PTPusherEvent *channelEvent) {
+		// TOOO
+	}];
+}
+
 -(void) _postString:(NSString *) suffix json:(NSString *) json {
 	NSData				*data		= [json dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
 	NSMutableURLRequest	*request	= [[NSMutableURLRequest alloc] init];
@@ -112,11 +164,21 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 		[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 		[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 	}
+	else if ([suffix isEqualToString:CNFConnectionSuffixSubscribe]) {
+		NSString	*bearer = [NSString stringWithFormat:@"Bearer %@", _token];
+		
+		[request setHTTPMethod:@"POST"];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+		[request setValue:bearer forHTTPHeaderField:@"Authorization"];
+	}
 	else if ([suffix isEqualToString:CNFConnectionSuffixLogout]) {
 		NSString	*bearer = [NSString stringWithFormat:@"Bearer %@", _token];
 		
 		[request setHTTPMethod:@"GET"];
 		[request setValue:bearer forHTTPHeaderField:@"Authorization"];
+		
+		[self _shutdown];
 	}
 	
 	[request setHTTPBody:data];
@@ -145,6 +207,24 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 	[postDataTask resume];
 }
 
+- (void) _notifyRecv:(NSDictionary *) rxitem {
+	NSArray		*delegates = [self _getDelegates];
+	
+	for (id <CNFConnectionDelegate> delegate in delegates) {
+		if ([delegate respondsToSelector:@selector(recvData:)])
+			[delegate recvData:rxitem];
+	}
+}
+
+- (void) _notifyReady {
+	NSArray		*delegates = [self _getDelegates];
+	
+	for (id <CNFConnectionDelegate> delegate in delegates) {
+		if ([delegate respondsToSelector:@selector(ready:channel:)])
+			[delegate ready:_token channel:_channel];
+	}
+}
+
 -(void) _rxProcessing:(NSNumber *) number {
 	NSArray			*tmp = [[NSArray alloc] init];
 	
@@ -157,6 +237,75 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 		tmp = [NSArray arrayWithArray:_rxarray];
 		_rxarray = [[NSMutableArray alloc] init];
 		[_rxcond unlock];
+		for (NSDictionary *rxitem in tmp) {
+			switch (_state) {
+				case CNFStateNone: {
+					_token = [rxitem objectForKey:CNFConnectionLoginAnswerToken];
+					_userid = [rxitem objectForKey:CNFConnectionLoginAnswerUserID];
+					if ((!_token || [_token isEqualToString:@""]) || !_userid) {
+						_token = @"";
+						_userid = [NSNumber numberWithLong:0];
+						CNFLog(@"error no token");
+						[self _notifyRecv:rxitem];
+					}
+					else {
+						_state = CNFStateLoggedin;
+						CNFLog(@"got token %@ user id %@", _token, _userid);
+						
+						NSDictionary	*dict = [NSDictionary dictionaryWithObjectsAndKeys:@"free", @"type", [NSNumber numberWithLong:10], @"bet", nil];
+						[self _subscribe:dict];
+					}
+					break;
+				}
+					
+				case CNFStateLoggedin: {
+					_channel = [rxitem objectForKey:CNFConnectionSubscribeAnswerChannel];
+					if (!_channel || [_channel isEqualToString:@""]) {
+						_channel = @"";
+						CNFLog(@"error no channel name");
+						[self _notifyRecv:rxitem];
+					}
+					else {
+						_state = CNFStateSubscribe;
+						CNFLog(@"got channel name %@", _channel);
+						[self _pusherSubscribe];
+					}
+					break;
+				}
+					
+				case CNFStateSubscribe: {
+					NSString *subscribed = [rxitem objectForKey:CNFConnectionSubscribed];
+					if (!subscribed || [subscribed isEqualToString:@""]) {
+						CNFLog(@"error no subscription");
+						[self _notifyRecv:rxitem];
+					}
+					else {
+						_state = CNFStateSubscribed;
+						CNFLog(@"got subscription");
+					}
+					break;
+				}
+					
+				default:
+				case CNFStateSubscribed: {
+					NSString	*shutdown = [rxitem objectForKey:CNFConnectionShutdown];
+					if (shutdown && ![shutdown isEqualToString:@""]) {
+						CNFLog(@"got shutdown");
+						
+						_state		= CNFStateNone;
+						_token		= @"";
+						_channel	= @"";
+						_userid		= [NSNumber numberWithLong:0];
+						
+						[_pusher unsubscribeAllChannels];
+						[_pusher disconnect];
+					}
+					else
+						[self _notifyRecv:rxitem];
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -196,6 +345,9 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 	
 	if (self) {
 		_work		= NO;
+		_channel	= @"";
+		_token		= @"";
+		_userid		= [NSNumber numberWithLong:0];
 		_rxcond		= [[NSCondition alloc] init];
 		_txcond		= [[NSCondition alloc] init];
 		_rxarray	= [[NSMutableArray alloc] init];
@@ -244,7 +396,26 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 	[_rxthread cancel];
 }
 
+- (int) _subscribe:(NSDictionary *) dict {
+	CNFLog(@"");
+	
+	if (_state < CNFStateLoggedin || _state >= CNFStateSubscribed)
+		return -1;
+	
+	[_txcond lock];
+	[_txarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:CNFConnectionSuffixSubscribe, @"suffix", dict, @"json", nil]];
+	[_txcond signal];
+	[_txcond unlock];
+	
+	return 0;
+}
+
 - (int) registration:(NSDictionary *) dict {
+	CNFLog(@"");
+	
+	if (_state >= CNFStateLoggedin)
+		return -1;
+
 	[_txcond lock];
 	[_txarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:CNFConnectionSuffixRegistration, @"suffix", dict, @"json", nil]];
 	[_txcond signal];
@@ -254,6 +425,11 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 }
 
 - (int) login:(NSDictionary *) dict {
+	CNFLog(@"");
+	
+	if (_state >= CNFStateLoggedin)
+		return -1;
+	
 	[_txcond lock];
 	[_txarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:CNFConnectionSuffixLogin, @"suffix", dict, @"json", nil]];
 	[_txcond signal];
@@ -263,6 +439,11 @@ NSString *const	CNFConnectionSuffixLogout		= @"logout";
 }
 
 - (int) logout:(NSDictionary *) dict {
+	CNFLog(@"");
+	
+	if (_state < CNFStateSubscribed)
+		return -1;
+	
 	[_txcond lock];
 	[_txarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:CNFConnectionSuffixLogout, @"suffix", dict, @"json", nil]];
 	[_txcond signal];
