@@ -86,7 +86,7 @@ const CGFloat		CNFTouchMove	= 0.2;
 	int y = (int) ((location.y - _fieldRange.origin.y) / _cover);
 	
 	location.x = x;
-	location.x = x;
+	location.y = y;
 	
 	return location;
 }
