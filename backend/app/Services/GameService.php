@@ -5,6 +5,7 @@ use App\Enums\CellStates;
 use App\Models\Game;
 use App\Models\GameOffer;
 use App\Models\User;
+use \Cache;
 
 /**
  * Сервис игры
@@ -40,8 +41,26 @@ class GameService
 
         $this->model->users()->attach([$offer->user->id, $user2->id]);
 
-        //$this->initGameField($this->model->id, config('game.field_size'));
-
         return $this->model;
+    }
+
+    /**
+     * Инициализация игрового поля
+     * @param int $gameId id игры
+     * @param int $size размер поля, в клетках по стороне квадрата
+     * @return string json
+     */
+    public function initGameField(int $gameId, int $size): string
+    {
+        $field = array_fill(0, $size, (array_fill(0, $size, CellStates::FREE)));
+        $max = $size - 1;
+        $field[0][$max] = $field[$max][0] = CellStates::ONE;
+        $field[0][0] = $field[$max][$max] = CellStates::TWO;
+
+        $field = json_encode($field);
+
+        Cache::put($gameId, $field, 60);
+
+        return $field;
     }
 }

@@ -31,7 +31,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"type\": \"free\",\n\t\"bet\": 0\n}"
+					"raw": "{\n\t\"type\": \"free\",\n\t\"bet\": 10\n}"
 				},
 				"description": ""
 			},

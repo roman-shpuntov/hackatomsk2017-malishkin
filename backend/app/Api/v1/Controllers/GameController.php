@@ -68,11 +68,15 @@ class GameController extends Controller
                 'users'   => $game->users->toArray(),
             ];
 
+            $field = $this->gameSvc->initGameField($game->id, config('game.field_size'));
+
             $this->notifier->offerAccepted($offer->game_key, $gameInfo);
 
             return response()->json([
                 'channel'   => $this->notifier->getChannelName($offer->game_key),
                 'game_info' => $gameInfo,
+                'turn' => $offer->user_id,
+                'field' => $field,
             ]);
         } else {
             $gameKey = $this->offerSvc->addOffer($user->id, $request['type'], $request['bet']);
