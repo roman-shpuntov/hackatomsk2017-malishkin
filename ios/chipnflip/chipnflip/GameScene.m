@@ -29,6 +29,11 @@ const CGFloat		CNFTouchMove	= 0.2;
 }
 
 - (void)sceneDidLoad {
+	CNFLog(@"");
+	
+	for (SKNode* node in self.children)
+		[node removeFromParent];
+	
     _lastUpdateTime = 0;
 	
 	self.anchorPoint = CGPointMake(0.0, 0.0);
