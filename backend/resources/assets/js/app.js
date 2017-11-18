@@ -20,6 +20,7 @@ const router = new VueRouter({
     { path: "/register", component: registerPage },
     { path: "/menu", component: menuPage },
     { path: "/game", component: gamePage },
+    { path: "/howtoplay", component: howtoplayPage },
     { path: "/settings", component: settingsPage }
   ]
 });
