@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,6 +20,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="McD-Ex-Mw8" customClass="CNFButton">
+                                <rect key="frame" x="40" y="302" width="240" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Login"/>
+                                <connections>
+                                    <action selector="_handleLogin:" destination="sab-tB-uc3" eventType="touchUpInside" id="w23-xW-ABO"/>
+                                </connections>
+                            </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DKC-tH-bLj">
                                 <rect key="frame" x="20" y="170" width="280" height="30"/>
                                 <nil key="textColor"/>
@@ -40,16 +49,8 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="McD-Ex-Mw8">
-                                <rect key="frame" x="131" y="302" width="58" height="41"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Login"/>
-                                <connections>
-                                    <action selector="_handleLogin:" destination="sab-tB-uc3" eventType="touchUpInside" id="w23-xW-ABO"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="imj-K7-4RG">
-                                <rect key="frame" x="97.5" y="359" width="125" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="imj-K7-4RG" customClass="CNFButton">
+                                <rect key="frame" x="40" y="359" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Registration"/>
                                 <connections>
@@ -66,6 +67,7 @@
                             <constraint firstItem="m6E-JC-bIe" firstAttribute="centerX" secondItem="1AY-2s-8LO" secondAttribute="centerX" id="1z9-HR-O35"/>
                             <constraint firstItem="CrO-wT-ZEA" firstAttribute="top" secondItem="1AY-2s-8LO" secondAttribute="top" multiplier="650:100" id="6kB-Yr-zrC"/>
                             <constraint firstItem="m6E-JC-bIe" firstAttribute="top" secondItem="1AY-2s-8LO" secondAttribute="top" multiplier="120:100" id="6v7-mY-XWw"/>
+                            <constraint firstItem="McD-Ex-Mw8" firstAttribute="width" secondItem="ggd-Uc-Cyx" secondAttribute="height" multiplier="1:2" id="8cq-sy-7st"/>
                             <constraint firstItem="McD-Ex-Mw8" firstAttribute="centerX" secondItem="1AY-2s-8LO" secondAttribute="centerX" id="Kqa-nZ-yP1"/>
                             <constraint firstItem="a2O-Ji-SAI" firstAttribute="centerX" secondItem="1AY-2s-8LO" secondAttribute="centerX" id="PtE-Cp-9ai"/>
                             <constraint firstItem="imj-K7-4RG" firstAttribute="centerX" secondItem="1AY-2s-8LO" secondAttribute="centerX" id="Q29-Sq-X3t"/>
@@ -73,6 +75,7 @@
                             <constraint firstItem="DKC-tH-bLj" firstAttribute="top" secondItem="1AY-2s-8LO" secondAttribute="top" multiplier="850:100" id="RB4-yB-mbj"/>
                             <constraint firstItem="1AY-2s-8LO" firstAttribute="bottom" secondItem="imj-K7-4RG" secondAttribute="bottom" multiplier="120:100" id="S3C-sA-EG7"/>
                             <constraint firstItem="CrO-wT-ZEA" firstAttribute="leading" secondItem="ggd-Uc-Cyx" secondAttribute="leading" constant="20" id="fxE-ZQ-WNN"/>
+                            <constraint firstItem="imj-K7-4RG" firstAttribute="width" secondItem="ggd-Uc-Cyx" secondAttribute="height" multiplier="1:2" id="meN-3i-MT9"/>
                             <constraint firstAttribute="trailing" secondItem="DKC-tH-bLj" secondAttribute="trailing" constant="20" id="uJO-XK-7WE"/>
                             <constraint firstAttribute="trailing" secondItem="CrO-wT-ZEA" secondAttribute="trailing" constant="20" id="vbE-RI-Kwg"/>
                             <constraint firstItem="a2O-Ji-SAI" firstAttribute="centerY" secondItem="1AY-2s-8LO" secondAttribute="centerY" id="wXO-3s-lOK"/>
@@ -101,40 +104,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sjv-Y7-MsK">
-                                <rect key="frame" x="135.5" y="79.5" width="49" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sjv-Y7-MsK" customClass="CNFButton">
+                                <rect key="frame" x="40" y="79.5" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Help"/>
                                 <connections>
                                     <action selector="_handleHelp:" destination="UwA-hj-gil" eventType="touchUpInside" id="duS-Og-J3e"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OPn-Rv-qC3">
-                                <rect key="frame" x="138" y="146" width="44" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OPn-Rv-qC3" customClass="CNFButton">
+                                <rect key="frame" x="40" y="146" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Play"/>
                                 <connections>
                                     <action selector="_handlePlay:" destination="UwA-hj-gil" eventType="touchUpInside" id="5ER-id-pok"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="svE-sW-GUH">
-                                <rect key="frame" x="93.5" y="304.5" width="133" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="svE-sW-GUH" customClass="CNFButton">
+                                <rect key="frame" x="40" y="304.5" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Personal info"/>
                                 <connections>
                                     <action selector="_handlePersonalInfo:" destination="UwA-hj-gil" eventType="touchUpInside" id="e3E-BW-sOz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GWf-Il-mVE">
-                                <rect key="frame" x="117" y="229.5" width="86" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GWf-Il-mVE" customClass="CNFButton">
+                                <rect key="frame" x="40" y="229.5" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Settings"/>
                                 <connections>
                                     <action selector="_handleSettings:" destination="UwA-hj-gil" eventType="touchUpInside" id="UGX-2g-irU"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkG-qQ-0B5">
-                                <rect key="frame" x="123.5" y="379.5" width="73" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkG-qQ-0B5" customClass="CNFButton">
+                                <rect key="frame" x="40" y="379.5" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Logout"/>
                                 <connections>
@@ -148,10 +151,15 @@
                             <constraint firstItem="OPn-Rv-qC3" firstAttribute="centerY" secondItem="GH6-Hu-aS7" secondAttribute="centerY" multiplier="100:150" id="9aD-1k-LIc"/>
                             <constraint firstItem="svE-sW-GUH" firstAttribute="centerX" secondItem="GH6-Hu-aS7" secondAttribute="centerX" id="EA4-16-fKW"/>
                             <constraint firstItem="FkG-qQ-0B5" firstAttribute="centerX" secondItem="GH6-Hu-aS7" secondAttribute="centerX" id="JKh-yZ-gtd"/>
+                            <constraint firstItem="OPn-Rv-qC3" firstAttribute="width" secondItem="MT1-el-AKF" secondAttribute="height" multiplier="1:2" id="Kfc-Bp-Lff"/>
+                            <constraint firstItem="GWf-Il-mVE" firstAttribute="width" secondItem="MT1-el-AKF" secondAttribute="height" multiplier="1:2" id="KhM-p4-OfD"/>
                             <constraint firstItem="OPn-Rv-qC3" firstAttribute="centerX" secondItem="GH6-Hu-aS7" secondAttribute="centerX" id="ZMl-4d-jen"/>
+                            <constraint firstItem="Sjv-Y7-MsK" firstAttribute="width" secondItem="MT1-el-AKF" secondAttribute="height" multiplier="1:2" id="cns-tY-Yaa"/>
                             <constraint firstItem="Sjv-Y7-MsK" firstAttribute="centerY" secondItem="GH6-Hu-aS7" secondAttribute="centerY" multiplier="100:250" id="m9Y-9R-I5P"/>
                             <constraint firstItem="svE-sW-GUH" firstAttribute="centerY" secondItem="GH6-Hu-aS7" secondAttribute="centerY" multiplier="130:100" id="sbj-tu-BwC"/>
+                            <constraint firstItem="FkG-qQ-0B5" firstAttribute="width" secondItem="MT1-el-AKF" secondAttribute="height" multiplier="1:2" id="tXR-Mh-msS"/>
                             <constraint firstItem="GWf-Il-mVE" firstAttribute="centerY" secondItem="GH6-Hu-aS7" secondAttribute="centerY" id="tdD-Kx-qY7"/>
+                            <constraint firstItem="svE-sW-GUH" firstAttribute="width" secondItem="MT1-el-AKF" secondAttribute="height" multiplier="1:2" id="uFn-OE-s9X"/>
                             <constraint firstItem="Sjv-Y7-MsK" firstAttribute="centerX" secondItem="GH6-Hu-aS7" secondAttribute="centerX" id="wtU-Xu-lPs"/>
                             <constraint firstItem="FkG-qQ-0B5" firstAttribute="centerY" secondItem="GH6-Hu-aS7" secondAttribute="centerY" multiplier="160:100" id="xIS-Hy-Ko0"/>
                         </constraints>
@@ -172,7 +180,19 @@
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hl0-XX-jvv" customClass="CNFButton">
+                                <rect key="frame" x="40" y="429" width="240" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="End game"/>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Hl0-XX-jvv" firstAttribute="width" secondItem="3se-qz-xqx" secondAttribute="height" multiplier="1:2" id="Aml-1F-Eez"/>
+                            <constraint firstAttribute="bottom" secondItem="Hl0-XX-jvv" secondAttribute="bottom" constant="10" id="Asb-Nk-qBZ"/>
+                            <constraint firstItem="Hl0-XX-jvv" firstAttribute="centerX" secondItem="4qk-I5-YsI" secondAttribute="centerX" id="xeZ-iG-cnJ"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                     </view>
                 </viewController>
@@ -209,16 +229,16 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SeU-vb-DJ1">
-                                <rect key="frame" x="93.5" y="302" width="133" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SeU-vb-DJ1" customClass="CNFButton">
+                                <rect key="frame" x="40" y="302" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Back to login"/>
                                 <connections>
                                     <action selector="_handleBack:" destination="Lbp-ed-3PX" eventType="touchUpInside" id="EYk-om-VA9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xyc-Hl-kqT">
-                                <rect key="frame" x="117" y="359" width="86" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xyc-Hl-kqT" customClass="CNFButton">
+                                <rect key="frame" x="40" y="359" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Register"/>
                                 <connections>
@@ -237,8 +257,10 @@
                         </subviews>
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Xyc-Hl-kqT" firstAttribute="width" secondItem="iDl-Tn-Ds8" secondAttribute="height" multiplier="1:2" id="8YJ-au-blY"/>
                             <constraint firstItem="IUx-Gn-2a1" firstAttribute="leading" secondItem="nkh-rq-o7c" secondAttribute="leading" constant="20" id="AxR-Ud-Db1"/>
                             <constraint firstItem="ah4-GP-jMe" firstAttribute="centerX" secondItem="nkh-rq-o7c" secondAttribute="centerX" id="BO8-2c-muV"/>
+                            <constraint firstItem="SeU-vb-DJ1" firstAttribute="width" secondItem="iDl-Tn-Ds8" secondAttribute="height" multiplier="1:2" id="Cnu-Vd-V1q"/>
                             <constraint firstItem="nkh-rq-o7c" firstAttribute="bottom" secondItem="SeU-vb-DJ1" secondAttribute="bottom" multiplier="140:100" id="FVd-RR-Txq"/>
                             <constraint firstItem="nkh-rq-o7c" firstAttribute="bottom" secondItem="Xyc-Hl-kqT" secondAttribute="bottom" multiplier="120:100" id="GVA-m5-DPC"/>
                             <constraint firstItem="EIx-VJ-mmW" firstAttribute="top" secondItem="nkh-rq-o7c" secondAttribute="top" multiplier="650:100" id="J1Q-rY-erp"/>
@@ -273,6 +295,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Ags-WK-UL5"/>
+        <segue reference="CL9-tW-cs6"/>
     </inferredMetricsTieBreakers>
 </document>
