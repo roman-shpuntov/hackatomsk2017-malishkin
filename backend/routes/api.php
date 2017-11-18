@@ -1,27 +1,10 @@
 <?php
-
-use Illuminate\Http\Request;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group(['prefix' => 'v1'], function () {
     $ns = '\App\Api\v1\Controllers\\';
 
-    Route::post('game-offer', $ns . 'GameController@gameOffer');
+    Route::post('user', $ns . 'RegisterController@create')->middleware('guest');
+    Route::post('login', $ns . 'AuthController@login')->middleware('guest');
+    Route::get('logout', $ns . 'AuthController@logout')->middleware('jwt.auth');
 
-    Route::post('user', $ns . 'RegisterController@create');
+    Route::post('game-offer', $ns . 'GameController@gameOffer')->middleware('jwt.auth');
 });
-
