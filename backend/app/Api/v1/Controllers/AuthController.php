@@ -5,6 +5,7 @@ use App\Requests\LoginRequest;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
+use Auth;
 
 /**
  * Вход и выход юзера
@@ -28,7 +29,8 @@ class AuthController extends Controller
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
-        return response()->json(compact('token'));
+        $user = Auth::user();
+        return response()->json(['token' => $token, 'user_id' => $user->id]);
     }
 
     /**
