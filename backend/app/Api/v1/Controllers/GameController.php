@@ -1,9 +1,11 @@
 <?php
 namespace App\Api\V1\Controllers;
 
+use App\GameNotifier;
 use App\Http\Controllers\Controller;
 use App\Requests\GameOfferRequest;
 use App\Services\GameOfferService;
+use App\Services\GameService;
 use Auth;
 
 /**
@@ -12,16 +14,31 @@ use Auth;
 class GameController extends Controller
 {
     /**
+     * Push-уведомления по игре
+     * @var GameNotifier
+     */
+    private $notifier;
+
+    /**
      * @var GameOfferService
      */
     private $offerSvc;
 
     /**
-     * @param GameOfferService $offerSvc
+     * @var GameService
      */
-    public function __construct(GameOfferService $offerSvc)
+    private $gameSvc;
+
+    /**
+     * @param GameNotifier     $notifier
+     * @param GameOfferService $offerSvc
+     * @param GameService      $gameSvc
+     */
+    public function __construct(GameNotifier $notifier, GameOfferService $offerSvc, GameService $gameSvc)
     {
+        $this->notifier = $notifier;
         $this->offerSvc = $offerSvc;
+        $this->gameSvc = $gameSvc;
     }
 
     /**
@@ -43,12 +60,23 @@ class GameController extends Controller
 
         $offer = $this->offerSvc->searchGame($user->id, $request['type'], $request['bet']);
 
-        if (!$offer) {
-            $offer = $this->offerSvc->addOffer($user->id, $request['type'], $request['bet']);
-        }
+        if ($offer) {
+            $game = $this->gameSvc->newGame($offer, $user);
+            $gameInfo = [
+                'game_id' => $game->id,
+                'prize'   => $game->prize,
+                'users'   => $game->users->toArray(),
+            ];
 
-        return response()->json([
-            'channel' => 'game-' . $offer->user->id,
-        ]);
+            $this->notifier->offerAccepted($offer->game_key, $gameInfo);
+
+            return response()->json([
+                'channel'   => $this->notifier->getChannelName($offer->game_key),
+                'game_info' => $gameInfo,
+            ]);
+        } else {
+            $gameKey = $this->offerSvc->addOffer($user->id, $request['type'], $request['bet']);
+            return response()->json(['channel' => $this->notifier->getChannelName($gameKey)]);
+        }
     }
 }
