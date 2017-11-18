@@ -45,6 +45,9 @@ class GameServiceTest extends TestCase
         $this->assertEquals(34, $snapshot['turn_user_id']);
 
         $field = $snapshot['field'];
+
+        // $this->drawGrid($field); // DBG
+
         $this->assertEquals(7, count($field));
         $this->assertEquals(7, count($field[0]));
         $this->assertEquals(7, count($field[6]));
@@ -55,9 +58,9 @@ class GameServiceTest extends TestCase
     }
 
     /**
-     * Тест: пересчет поля при ходе игрока
+     * Тест: пересчет поля при ходе игрока. Середина поля
      */
-    public function test_calculateStepResult_middle()
+    public function test_calculateProfit_middle()
     {
         $size = 7;
         $field = array_fill(0, $size, (array_fill(0, $size, 0)));
@@ -68,10 +71,10 @@ class GameServiceTest extends TestCase
         $field[5][4] = 7;
         $field[4][5] = 7; // это не должно замениться
 
-        // $this->drawGrid($field); // DBG
+        //$this->drawGrid($field); // DBG
 
         // Шагаем по диагонали, вверх-вправо
-        $this->service->calculateStepResult($field, 2, '3:2', '4:3', $size);
+        $this->service->calculateProfit($field, 2, '3:2', '4:3', $size);
 
         // $this->drawGrid($field); // DBG
 
@@ -86,5 +89,35 @@ class GameServiceTest extends TestCase
 
         // Эта осталась без изменений
         $this->assertEquals(7, $field[4][5]);
+    }
+
+    /**
+     * Тест: пересчет поля при ходе игрока. Край поля
+     */
+    public function test_calculateProfit_edge()
+    {
+        $size = 7;
+        $field = array_fill(0, $size, (array_fill(0, $size, 0)));
+
+        $field[6][0] = 2;
+        $field[6][2] = 7;
+        $field[6][3] = 7;
+
+        // $this->drawGrid($field); // DBG
+
+        // Шагаем вправо на соседнюю клетку
+        $this->service->calculateProfit($field, 2, '6:0', '6:1', $size);
+
+        // $this->drawGrid($field); // DBG
+
+        // эти две - результат движения на соседнюю  клетку
+        $this->assertEquals(2, $field[6][0]);
+        $this->assertEquals(2, $field[6][1]);
+
+        // Эта - захваченная
+        $this->assertEquals(2, $field[6][2]);
+
+        // Эта осталась без изменений
+        $this->assertEquals(7, $field[6][3]);
     }
 }

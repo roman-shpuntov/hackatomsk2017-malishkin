@@ -41,6 +41,7 @@ class GameService
             'prize'    => $offer->bet * 2,
             'is_ended' => 0,
             'snapshot' => json_encode($snapshot),
+            'game_key' => $offer->game_key,
         ])->save();
 
         $this->model->users()->attach([$offer->user->id, $user2->id]);
@@ -83,21 +84,22 @@ class GameService
     {
         /** @var Game $game */
         $game = $this->model->find($gameId);
-        $players = $game->users->pluck('user_id');
+        $players = $game->users->pluck('user_id')->toArray();
 
         $snapshot = json_decode($game->snapshot, true);
         $field = &$snapshot['field'];
         $size = count($field);
 
-        $this->calculateStepResult($field, $userId, $from, $to, $size);
+        $this->calculateProfit($field, $userId, $from, $to, $size);
 
-        $snapshot['turn_user_id'] = array_shift($players) != $userId ?: $players[0];
+        $id = array_shift($players);
+        $snapshot['turn_user_id'] = $id != $userId ? $id : $players[0];
         $game->snapshot = json_encode($snapshot);
 
         if (!$game->log) {
             $game->log = 'size:' . $size;
         }
-        $game->log .= "|{from}-{$to}";
+        $game->log .= "|{$from}-{$to}";
 
         $game->save();
 
@@ -115,7 +117,7 @@ class GameService
      * @param string $to     координаты, куда ходит игрок
      * @param int    $size   размер поля, в клетках по стороне квадрата
      */
-    public function calculateStepResult(array &$field, int $userId, string $from, string $to, int $size)
+    public function calculateProfit(array &$field, int $userId, string $from, string $to, int $size)
     {
         [$fromRow, $fromCol] = explode(':', $from);
         [$toRow, $toCol] = explode(':', $to);
@@ -125,8 +127,8 @@ class GameService
         }
         $field[$toRow][$toCol] = $userId;
 
-        for ($row = max(0, $toRow - 1); $row <= min($size, $toRow + 1); $row++) {
-            for ($col = max(0, $toCol - 1); $col <= min($size, $toCol + 1); $col++) {
+        for ($row = max(0, $toRow - 1); $row <= min($size - 1, $toRow + 1); $row++) {
+            for ($col = max(0, $toCol - 1); $col <= min($size - 1, $toCol + 1); $col++) {
                 $cellState = &$field[$row][$col];
                 if ($cellState) {
                     $cellState = $userId;
@@ -143,8 +145,9 @@ class GameService
      * @param array $snapshot снимок поля
      * @return int
      */
-    public function hasWinner(array $snapshot): int
+    public function anyWinner(array $snapshot): int
     {
         // TODO
+        return 0;
     }
 }
