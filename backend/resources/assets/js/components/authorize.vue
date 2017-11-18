@@ -3,7 +3,7 @@
       <input type="email" name="email" placeholder="email">
       <input type="password" name="password" placeholder="password">
       <input type="submit" value="authorize">
-      <a href="#/register">Register</a>
+      <a href="#/register">Authorize</a>
     </form>
 </template>
 
