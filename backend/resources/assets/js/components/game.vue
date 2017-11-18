@@ -3,8 +3,7 @@
     <div class="grid" v-if="game_info_fetched">
       <div class="row" v-for="row in game_info.snapshot.field">
         <div class="cell" v-for="playerIndex in row">
-          <div v-if="playerIndex == 1" class="check first-check"></div>
-          <div v-if="playerIndex == 2" class="check second-check"></div>
+          <div class="check">{{playerIndex}}</div>
         </div>
       </div>
     </div>
@@ -50,8 +49,8 @@
         }).then((request) => request.json()).then((data) => {
           this.channel = data.channel;
 
-          echo.channel(data.channel).listen(".offer-accepted", (game_info) => {
-            this.game_info = game_info;
+          echo.channel(data.channel).listen(".offer-accepted", (event) => {
+            this.game_info = event.game_info;
             this.game_info_fetched = true;
           });
 
