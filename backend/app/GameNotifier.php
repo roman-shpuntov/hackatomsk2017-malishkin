@@ -42,7 +42,7 @@ class  GameNotifier
 
     /**
      * Уведомление игроку, предложившему игру о том, что его предложение принято и игра создана
-     * @param string $gameKey защитный ключ игры
+     * @param string $gameKey  защитный ключ игры
      * @param array  $gameInfo минимальная инфа об игре
      */
     public function offerAccepted(string $gameKey, array $gameInfo): void
@@ -54,13 +54,31 @@ class  GameNotifier
         );
     }
 
-    public function gridUpdated()
+    /**
+     * Поле пересчитано после хода игрока. Сообщаем другому игроку об этом.
+     * @param string $gameKey  защитный ключ игры
+     * @param array  $snapshot снимок поля
+     */
+    public function gridUpdated(string $gameKey, array $snapshot)
     {
-        // TODO
+        $this->pusher->trigger(
+            $this->getChannelName($gameKey),
+            'grid-updated',
+            $snapshot
+        );
     }
 
-    public function gameEnded()
+    /**
+     * Игра окончена, объявляем победителя
+     * @param string $gameKey  защитный ключ игры
+     * @param int    $winnerId id победителя
+     */
+    public function gameEnded(string $gameKey, int $winnerId)
     {
-        // TODO
+        $this->pusher->trigger(
+            $this->getChannelName($gameKey),
+            'game-ended',
+            $winnerId
+        );
     }
 }
