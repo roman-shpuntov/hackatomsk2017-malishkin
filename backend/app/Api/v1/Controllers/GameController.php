@@ -66,19 +66,19 @@ class GameController extends Controller
         if ($offer) {
             $game = $this->gameSvc->newGame($offer, $user, config('game.field_size'));
 
-            $gameInfo = [
-                'game_id'  => $game->id,
-                'prize'    => $game->prize,
-                'users'    => $game->users->toArray(),
-                'snapshot' => $game->snapshot,
+            $response = [
+                'game_info' => [
+                    'game_id'  => $game->id,
+                    'prize'    => $game->prize,
+                    'users'    => $game->users->toArray(),
+                    'snapshot' => $game->snapshot,
+                ],
             ];
 
-            $this->notifier->offerAccepted($offer->game_key, $gameInfo);
+            $this->notifier->offerAccepted($offer->game_key, $response);
 
-            return response()->json([
-                'channel'   => $this->notifier->getChannelName($offer->game_key),
-                'game_info' => $gameInfo,
-            ]);
+            $response['channel'] = $this->notifier->getChannelName($offer->game_key);
+            return response()->json($response);
         } else {
             $gameKey = $this->offerSvc->addOffer($user->id, $request['type'], $request['bet']);
             return response()->json(['channel' => $this->notifier->getChannelName($gameKey)]);
