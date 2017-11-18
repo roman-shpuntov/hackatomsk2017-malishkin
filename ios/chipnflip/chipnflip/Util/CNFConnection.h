@@ -22,4 +22,7 @@
 - (void) addDelegate:(id <CNFConnectionDelegate> ) delegate;
 - (void) removeDelegate:(id <CNFConnectionDelegate> ) delegate;
 
+- (void) start;
+- (void) stop;
+
 @end

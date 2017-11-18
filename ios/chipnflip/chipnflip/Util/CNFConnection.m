@@ -13,8 +13,18 @@
 NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
 
 @interface CNFConnection() {
+	BOOL			_work;
 	PTPusher 		*_pusher;
 	
+	NSMutableArray	*_rxarray;
+	NSMutableArray	*_txarray;
+	
+	NSCondition		*_rxcond;
+	NSCondition		*_txcond;
+	
+	NSThread		*_rxthread;
+	NSThread		*_txthread;
+
 	NSMutableArray	*_delegates;
 }
 @end
@@ -80,13 +90,54 @@ NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
 	[_pusher connect];
 }
 
+-(void) _rxProcessing:(NSNumber *) number {
+	NSArray			*tmp = [[NSArray alloc] init];
+	
+	while (_work) {
+		[_rxcond lock];
+		
+		while (!_rxarray.count)
+			[_rxcond wait];
+		
+		tmp = [NSArray arrayWithArray:_rxarray];
+		_rxarray = [[NSMutableArray alloc] init];
+		[_rxcond unlock];
+	}
+}
+
+-(void) _txProcessing:(NSNumber *) number {
+	NSArray	*tmp = [[NSArray alloc] init];
+	
+	while (_work) {
+		[_txcond lock];
+		
+		while (!_txarray.count)
+			[_txcond wait];
+		
+		tmp = [NSArray arrayWithArray:_txarray];
+		_txarray = [[NSMutableArray alloc] init];
+		[_txcond unlock];
+	}
+}
+
 - (id) init {
 	self = [super init];
 	
 	if (self) {
+		_work		= NO;
+		_rxcond		= [[NSCondition alloc] init];
+		_txcond		= [[NSCondition alloc] init];
+		_rxarray	= [[NSMutableArray alloc] init];
+		_txarray	= [[NSMutableArray alloc] init];
 		_delegates	= [NSMutableArray mutableArrayUsingWeakReferences];
+		_rxthread	= [[NSThread alloc] initWithTarget:self
+											selector:@selector(_rxProcessing:)
+											  object:nil];
+		_txthread	= [[NSThread alloc] initWithTarget:self
+											selector:@selector(_txProcessing:)
+											  object:nil];
 		
-		//[self _pusherSetup];
+		[self _pusherSetup];
 	}
 	return self;
 }
@@ -104,6 +155,22 @@ NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
 
 - (void) dealloc {
 	CNFLog(@"");
+}
+
+- (void) start {
+	CNFLog(@"");
+	
+	_work = YES;
+	[_txthread start];
+	[_rxthread start];
+}
+
+- (void) stop {
+	CNFLog(@"");
+	
+	_work = NO;
+	[_txthread cancel];
+	[_rxthread cancel];
 }
 
 - (void) addDelegate:(id <CNFConnectionDelegate> ) delegate {
