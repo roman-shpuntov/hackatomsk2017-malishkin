@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14D81D21E50AC799CDB25CE1 /* libPods-chipnflip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A27F4AA2BDEDFED2601984F /* libPods-chipnflip.a */; };
 		303D071D1FC004B000FE6D83 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 303D071C1FC004B000FE6D83 /* AppDelegate.m */; };
 		303D071F1FC004B000FE6D83 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 303D071E1FC004B000FE6D83 /* GameScene.sks */; };
 		303D07211FC004B000FE6D83 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 303D07201FC004B000FE6D83 /* Actions.sks */; };
@@ -19,7 +20,9 @@
 		3046BB061FC012220021F3F0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB051FC012220021F3F0 /* LoginViewController.m */; };
 		3046BB0B1FC018E70021F3F0 /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB0A1FC018E70021F3F0 /* RegistrationViewController.m */; };
 		3046BB0E1FC01DFA0021F3F0 /* GameInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB0D1FC01DFA0021F3F0 /* GameInfoViewController.m */; };
-		3046BB111FC01ED40021F3F0 /* GameOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB101FC01ED40021F3F0 /* GameOverViewController.m */; };
+		3046BB151FC033350021F3F0 /* wchip.png in Resources */ = {isa = PBXBuildFile; fileRef = 3046BB131FC033350021F3F0 /* wchip.png */; };
+		3046BB161FC033350021F3F0 /* bchip.png in Resources */ = {isa = PBXBuildFile; fileRef = 3046BB141FC033350021F3F0 /* bchip.png */; };
+		3046BB191FC0470F0021F3F0 /* CNFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB181FC0470F0021F3F0 /* CNFButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,8 +47,13 @@
 		3046BB0A1FC018E70021F3F0 /* RegistrationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RegistrationViewController.m; sourceTree = "<group>"; };
 		3046BB0C1FC01DFA0021F3F0 /* GameInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameInfoViewController.h; sourceTree = "<group>"; };
 		3046BB0D1FC01DFA0021F3F0 /* GameInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameInfoViewController.m; sourceTree = "<group>"; };
-		3046BB0F1FC01ED40021F3F0 /* GameOverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameOverViewController.h; sourceTree = "<group>"; };
-		3046BB101FC01ED40021F3F0 /* GameOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameOverViewController.m; sourceTree = "<group>"; };
+		3046BB131FC033350021F3F0 /* wchip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wchip.png; sourceTree = "<group>"; };
+		3046BB141FC033350021F3F0 /* bchip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bchip.png; sourceTree = "<group>"; };
+		3046BB171FC0470F0021F3F0 /* CNFButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNFButton.h; sourceTree = "<group>"; };
+		3046BB181FC0470F0021F3F0 /* CNFButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNFButton.m; sourceTree = "<group>"; };
+		515324A85A247487B1EB0617 /* Pods-chipnflip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chipnflip.release.xcconfig"; path = "Pods/Target Support Files/Pods-chipnflip/Pods-chipnflip.release.xcconfig"; sourceTree = "<group>"; };
+		8A27F4AA2BDEDFED2601984F /* libPods-chipnflip.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-chipnflip.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9D262D2440D8AE56BD17632 /* Pods-chipnflip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chipnflip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-chipnflip/Pods-chipnflip.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,17 +61,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14D81D21E50AC799CDB25CE1 /* libPods-chipnflip.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D7A53D79CBF69ABF73FC044 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A27F4AA2BDEDFED2601984F /* libPods-chipnflip.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		303D070F1FC004B000FE6D83 = {
 			isa = PBXGroup;
 			children = (
 				303D071A1FC004B000FE6D83 /* chipnflip */,
 				303D07191FC004B000FE6D83 /* Products */,
+				AACBA4375BAEE6FCCFFFB4D3 /* Pods */,
+				2D7A53D79CBF69ABF73FC044 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 			usesTabs = 1;
@@ -79,6 +98,7 @@
 		303D071A1FC004B000FE6D83 /* chipnflip */ = {
 			isa = PBXGroup;
 			children = (
+				3046BB121FC033350021F3F0 /* Images */,
 				3046BB071FC016D10021F3F0 /* Util */,
 				303D071B1FC004B000FE6D83 /* AppDelegate.h */,
 				303D071C1FC004B000FE6D83 /* AppDelegate.m */,
@@ -99,8 +119,6 @@
 				3046BB0A1FC018E70021F3F0 /* RegistrationViewController.m */,
 				3046BB0C1FC01DFA0021F3F0 /* GameInfoViewController.h */,
 				3046BB0D1FC01DFA0021F3F0 /* GameInfoViewController.m */,
-				3046BB0F1FC01ED40021F3F0 /* GameOverViewController.h */,
-				3046BB101FC01ED40021F3F0 /* GameOverViewController.m */,
 			);
 			path = chipnflip;
 			sourceTree = "<group>";
@@ -109,8 +127,28 @@
 			isa = PBXGroup;
 			children = (
 				3046BB081FC0170E0021F3F0 /* CNFLog.h */,
+				3046BB171FC0470F0021F3F0 /* CNFButton.h */,
+				3046BB181FC0470F0021F3F0 /* CNFButton.m */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		3046BB121FC033350021F3F0 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				3046BB131FC033350021F3F0 /* wchip.png */,
+				3046BB141FC033350021F3F0 /* bchip.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		AACBA4375BAEE6FCCFFFB4D3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E9D262D2440D8AE56BD17632 /* Pods-chipnflip.debug.xcconfig */,
+				515324A85A247487B1EB0617 /* Pods-chipnflip.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,9 +158,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 303D07351FC004B000FE6D83 /* Build configuration list for PBXNativeTarget "chipnflip" */;
 			buildPhases = (
+				D6B333658F4A6A59E6487102 /* [CP] Check Pods Manifest.lock */,
 				303D07141FC004B000FE6D83 /* Sources */,
 				303D07151FC004B000FE6D83 /* Frameworks */,
 				303D07161FC004B000FE6D83 /* Resources */,
+				81440A58047BD3EA3C2499B9 /* [CP] Embed Pods Frameworks */,
+				3A4FD8281422DBC59ABC76B2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -171,23 +212,76 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3046BB161FC033350021F3F0 /* bchip.png in Resources */,
 				303D072A1FC004B000FE6D83 /* Main.storyboard in Resources */,
 				303D071F1FC004B000FE6D83 /* GameScene.sks in Resources */,
 				303D072C1FC004B000FE6D83 /* Assets.xcassets in Resources */,
 				303D072F1FC004B000FE6D83 /* LaunchScreen.storyboard in Resources */,
 				303D07211FC004B000FE6D83 /* Actions.sks in Resources */,
+				3046BB151FC033350021F3F0 /* wchip.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3A4FD8281422DBC59ABC76B2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-chipnflip/Pods-chipnflip-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		81440A58047BD3EA3C2499B9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-chipnflip/Pods-chipnflip-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D6B333658F4A6A59E6487102 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-chipnflip-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		303D07141FC004B000FE6D83 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3046BB111FC01ED40021F3F0 /* GameOverViewController.m in Sources */,
 				303D07241FC004B000FE6D83 /* GameScene.m in Sources */,
+				3046BB191FC0470F0021F3F0 /* CNFButton.m in Sources */,
 				3046BB0B1FC018E70021F3F0 /* RegistrationViewController.m in Sources */,
 				303D07271FC004B000FE6D83 /* GameViewController.m in Sources */,
 				303D07321FC004B000FE6D83 /* main.m in Sources */,
@@ -325,6 +419,7 @@
 		};
 		303D07361FC004B000FE6D83 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9D262D2440D8AE56BD17632 /* Pods-chipnflip.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -340,6 +435,7 @@
 		};
 		303D07371FC004B000FE6D83 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 515324A85A247487B1EB0617 /* Pods-chipnflip.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
