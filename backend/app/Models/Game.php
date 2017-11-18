@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $type       тип игры, см. Enums\GameTypes
  * @property int    $prize      приз игры
  * @property bool   $is_ended   игра окончена?
+ * @property string   $log   игра лог игры
  *
  * @property User[] $users      игроки
  */
