@@ -86,6 +86,7 @@
 
 														  CNFParser *parser = [CNFParser sharedInstance];
 														  [parser registration:_name.text email:_email.text password:_password.text];
+														  [_progress startAnimating];
 													  }];
 	[alert addAction:yesAction];
 	

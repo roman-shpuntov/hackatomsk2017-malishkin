@@ -26,10 +26,53 @@ const CGFloat		CNFTouchMove	= 0.2;
 
 -(void)dealloc {
 	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser removeDelegate:self];
+}
+
+- (void) serverFields:(NSArray *) fields {
+	CNFParser	*parser = [CNFParser sharedInstance];
+	
+	for (int i=0; i<fields.count; i++) {
+		NSArray *row = fields[i];
+		for (int j=0; j<row.count; j++) {
+			NSNumber	*col = [row objectAtIndex:j];
+			if (col == parser.peerid) {
+				[self _createChip:[NSNumber numberWithLong:i] ypos:col selfChip:NO];
+			}
+			else if (col == parser.userid) {
+				[self _createChip:[NSNumber numberWithLong:i] ypos:col selfChip:YES];
+			}
+		}
+	}
+}
+
+- (void)_createChip:(NSNumber *) xpos ypos:(NSNumber *) ypos selfChip:(BOOL) selfChip {
+	int				i = (int) xpos.longValue;
+	int				j = (int) ypos.longValue;
+	CGFloat			x = i * _side + i * _space;
+	CGFloat			y = j * _side + j * _space + (self.size.height - self.size.width) / 2;
+	//x += _fieldRange.origin.x;
+	//y += _fieldRange.origin.y;
+	CGFloat			mx = x + _side / 2 + _space / 2;
+	CGFloat			my = y + _side / 2 + _space / 2;
+	
+	NSString		*m = [NSString stringWithFormat:@"%@", selfChip?@"wchip.png":@"bchip.png"];
+	SKSpriteNode	*n = [SKSpriteNode spriteNodeWithImageNamed:m];
+	
+	n.position = CGPointMake(mx, my);
+	n.size  = CGSizeMake(_side, _side);
+	n.name = @"chip";
+	[self addChild:n];
 }
 
 - (void)sceneDidLoad {
 	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser removeDelegate:self];
+	[parser addDelegate:self];
 	
 	for (SKNode* node in self.children)
 		[node removeFromParent];
@@ -53,16 +96,6 @@ const CGFloat		CNFTouchMove	= 0.2;
 				_fieldRange.origin.x = x;
 				_fieldRange.origin.y = y;
 			}
-			
-			//if (rand() % 2) {
-			NSString		*m = [NSString stringWithFormat:@"%@", ((i + j) % 2 == 0)?@"wchip.png":@"bchip.png"];
-			SKSpriteNode	*n = [SKSpriteNode spriteNodeWithImageNamed:m];
-			
-			n.position = CGPointMake(mx, my);
-			n.size  = CGSizeMake(_side, _side);
-			n.name = @"chip";
-			[self addChild:n];
-			//}
 			
 			SKShapeNode *item = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(_cover, _cover)];
 			item.name = @"grid";

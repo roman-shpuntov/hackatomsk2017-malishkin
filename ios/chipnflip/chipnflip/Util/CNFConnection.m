@@ -76,14 +76,6 @@ NSString *const	CNFConnectionChannel				= @"channel";
 
 - (void)pusher:(PTPusher *)pusher didSubscribeToChannel:(PTPusherChannel *)channel {
 	CNFLog(@"didSubscribeToChannel %@", channel.name);
-	
-	//[self _addRX:[NSDictionary dictionaryWithObjectsAndKeys:@"yes", CNFConnectionSubscribed, nil]];
-}
-
-- (void) _shutdown {
-	CNFLog(@"");
-	
-	//[self _addRX:[NSDictionary dictionaryWithObjectsAndKeys:@"yes", CNFConnectionShutdown, nil]];
 }
 
 - (void)pusher:(PTPusher *)pusher didUnsubscribeFromChannel:(PTPusherChannel *)channel {
@@ -123,6 +115,13 @@ NSString *const	CNFConnectionChannel				= @"channel";
 	return 0;
 }
 
+- (void) pusherUnsubscribeAll {
+	CNFLog(@"");
+	
+	if (_pusher && _channel)
+		[_pusher unsubscribeAllChannels];
+}
+
 - (int) pusherBindToEvent:(NSString *) eventName {
 	CNFLog(@"");
 	
@@ -138,6 +137,13 @@ NSString *const	CNFConnectionChannel				= @"channel";
 	}
 	
 	return 0;
+}
+
+- (void) pusherUnbindAll {
+	CNFLog(@"");
+	
+	if (_channel)
+		[_channel removeAllBindings];
 }
 
 -(void) _postString:(NSString *) suffix json:(NSString *) json header:(NSDictionary *) header method:(NSString *) method {
@@ -299,15 +305,6 @@ NSString *const	CNFConnectionChannel				= @"channel";
 	
 	return 0;
 }
-
-/*- (int) _subscribe:(NSDictionary *) dict {
-	CNFLog(@"");
-	
-	if (_state < CNFStateLoggedin || _state >= CNFStateSubscribed)
-		return -1;
-	
-	return [self _addTX:dict suffix:CNFConnectionSuffixSubscribe];
-}*/
 
 - (int) send:(NSDictionary *) json suffix:(NSString *) suffix method:(NSString *) method header:(NSDictionary *) header {
 	CNFLog(@"");

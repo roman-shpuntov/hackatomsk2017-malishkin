@@ -13,6 +13,7 @@
 #import "GameInfoViewController.h"
 
 @interface GameViewController() {
+	__weak IBOutlet UILabel					*_name;
 	__weak IBOutlet	UIActivityIndicatorView	*_progress;
 }
 
@@ -23,6 +24,7 @@
 -(void)serverGameReady:(NSString *)userName {
 	CNFLog(@"user %@", userName);
 	
+	_name.text = [NSString stringWithFormat:@"Name: %@", userName];
 	[_progress stopAnimating];
 }
 

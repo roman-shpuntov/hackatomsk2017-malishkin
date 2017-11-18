@@ -14,6 +14,7 @@
 - (void) serverError:(NSError *) error;
 - (void) serverLoginReady:(NSString *) token;
 - (void) serverGameReady:(NSString *) userName;
+- (void) serverFields:(NSArray *) fields;
 @end
 
 @interface CNFParser : NSObject <CNFConnectionDelegate>
@@ -35,5 +36,7 @@
 @property (nonatomic, readonly)	NSNumber	*userid;
 @property (nonatomic, readonly)	NSNumber	*peerid;
 @property (nonatomic, readonly)	NSString	*peerName;
+@property (nonatomic, readonly)	NSNumber	*prize;
+@property (nonatomic, readonly)	NSNumber	*gameid;
 
 @end

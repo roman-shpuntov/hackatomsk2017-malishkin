@@ -46,6 +46,8 @@
 	CNFParser *parser = [CNFParser sharedInstance];
 	[parser login:_email.text password:_password.text];
 	
+	[_progress startAnimating];
+	
 	// DEBUG
 	//[self performSegueWithIdentifier:@"sw_login" sender:nil];
 }

@@ -84,6 +84,17 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 	});
 }
 
+- (void) _notifyFieldUpdate:(NSArray *) array {
+	NSArray	*delegates = [self _getDelegates];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^(void) {
+		for (id <CNFParserDelegate> delegate in delegates) {
+			if ([delegate respondsToSelector:@selector(serverFields:)])
+				[delegate serverFields:array];
+		}
+	});
+}
+
 - (void) _parseToken:(NSDictionary *) json {
 	_token = [json objectForKey:CNFConnectionLoginAnswerToken];
 	_userid = [json objectForKey:CNFConnectionLoginAnswerUserID];
@@ -97,6 +108,16 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 		CNFLog(@"got token %@ user id %@", _token, _userid);
 		[self _notifyLoginReady];
 	}
+}
+
+- (void) _parseSnapshot:(NSDictionary *) json {
+	CNFLog(@"");
+	
+	NSDictionary	*snap	= [json objectForKey:@"snapshot"];
+	NSNumber		*turnid	= [snap objectForKey:@"turn_user_id"];
+	NSArray			*rows	= [snap valueForKey:@"field"];
+	
+	[self _notifyFieldUpdate:rows];
 }
 
 - (void) _parseGameInfo:(NSDictionary *) json {
@@ -115,10 +136,17 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 	}
 	
 	for (NSDictionary *u in users) {
-		NSNumber *userid = [u objectForKey:@"user_id"];
-		if ([userid longValue] != [_userid longValue])
+		NSNumber *userid = [u objectForKey:CNFConnectionLoginAnswerUserID];
+		if ([userid longValue] != [_userid longValue]) {
 			_peerName = [u objectForKey:@"name"];
+			_peerid = [u objectForKey:@"user_id"];
+		}
 	}
+	
+	_prize = [gameInfo objectForKey:@"prize"];
+	_gameid = [gameInfo objectForKey:@"game_id"];
+	
+	[self _parseSnapshot:gameInfo];
 }
 
 - (void) _parseChannel:(NSDictionary *) json {
@@ -165,6 +193,10 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 	}
 }
 
+- (void) _parseFields:(NSDictionary *) json {
+	[self _parseSnapshot:json];
+}
+
 - (void)recvData:(NSDictionary *) json {
 	NSString	*string = [json objectForKey:@"error"];
 	if (string && ![string isEqualToString:@""]) {
@@ -187,6 +219,7 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 			
 		default:
 		case CNFStateSubscribed:
+			[self _parseFields:json];
 			break;
 	}
 }
@@ -195,6 +228,7 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 	self = [super init];
 	
 	if (self) {
+		[self _shutdown];
 		_delegates	= [NSMutableArray mutableArrayUsingWeakReferences];
 		_connection	= [CNFConnection sharedInstance];
 		[_connection addDelegate:self];
@@ -287,7 +321,27 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 							@"application/json", @"Accept",
 							bearer, @"Authorization",nil];
 	
+	[self _shutdown];
+	
 	return [_connection send:json suffix:CNFConnectionSuffixLogout method:@"GET" header:header];
+}
+
+- (void) _shutdown {
+	CNFLog(@"");
+	
+	[_connection pusherUnbindAll];
+	[_connection pusherUnsubscribeAll];
+	
+	_state		= CNFStateNone;
+	_user		= @"";
+	_money		= [NSNumber numberWithLong:0];
+	_token		= @"";
+	_channel	= @"";
+	_userid		= [NSNumber numberWithLong:0];
+	_peerid		= [NSNumber numberWithLong:0];
+	_peerName	= @"";
+	_prize		= [NSNumber numberWithLong:0];
+	_gameid		= [NSNumber numberWithLong:0];
 }
 
 - (void) addDelegate:(id <CNFParserDelegate> ) delegate {

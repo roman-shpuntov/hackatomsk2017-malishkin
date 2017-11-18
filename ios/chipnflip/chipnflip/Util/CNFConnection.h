@@ -22,8 +22,12 @@
 - (void) removeDelegate:(id <CNFConnectionDelegate> ) delegate;
 
 - (int) send:(NSDictionary *) json suffix:(NSString *) suffix method:(NSString *) method header:(NSDictionary *) header;
+
 - (int) pusherSubscribeChannel:(NSString *) channelName;
+- (void) pusherUnsubscribeAll;
+
 - (int) pusherBindToEvent:(NSString *) eventName;
+- (void) pusherUnbindAll;
 
 - (void) start;
 - (void) stop;

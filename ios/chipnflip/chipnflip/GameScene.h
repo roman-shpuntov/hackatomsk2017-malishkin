@@ -8,8 +8,9 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import <GameplayKit/GameplayKit.h>
+#import "CNFParser.h"
 
-@interface GameScene : SKScene
+@interface GameScene : SKScene <CNFParserDelegate>
 
 @property (nonatomic) NSMutableArray<GKEntity *> *entities;
 @property (nonatomic) NSMutableDictionary<NSString*, GKGraph *> *graphs;
