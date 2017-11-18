@@ -34,7 +34,7 @@ class GameOfferService
     {
         $this->dropAllOffers($userId);
 
-        $bet = $type == GameTypes::FLOAT_BET ? $bet : ($type == GameTypes::FIXED_BET ? conf('game.fixed_bet') : 0);
+        $bet = $this->determineBet($type, $bet);
 
         $gameKey = str_random(6);
 
@@ -62,6 +62,8 @@ class GameOfferService
      */
     public function searchGame(int $userId, string $type, int $bet): ?GameOffer
     {
+        $bet = $this->determineBet($type, $bet);
+
         while (1) {
             /* @var GameOffer $offer */
             $offer = $this->model
@@ -81,6 +83,17 @@ class GameOfferService
                 return $offer;
             }
         }
+    }
+
+    /**
+     * Определить реальное значение ставки в зависимости от типа игры
+     * @param string $type
+     * @param int    $bet
+     * @return int
+     */
+    private function determineBet(string $type, int $bet): int
+    {
+        return $type == GameTypes::FLOAT_BET ? $bet : ($type == GameTypes::FIXED_BET ? config('game.fixed_bet') : 0);
     }
 
     /**
