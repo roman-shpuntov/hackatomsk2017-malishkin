@@ -94,14 +94,16 @@ class GameController extends Controller
     {
         $params = array_values($request->only('game_id', 'user_id', 'from', 'to'));
         $snapshot = $this->gameSvc->step(...$params);
-        $gameId = $request->get('game_id');
-        if ($winner = $this->gameSvc->hasWinner($snapshot)) {
-            $this->notifier->gameEnded($gameId, $winner);
-            return response()->json(['game_ended' => $winner]);
+
+        $gameKey = $request->get('game_key');
+
+        if ($winnerId = $this->gameSvc->anyWinner($snapshot)) {
+            $this->notifier->gameEnded($gameKey, $winnerId);
+            return response()->json(['game_ended' => $winnerId]);
         }
 
         $snapshot = compact('snapshot');
-        $this->notifier->gridUpdated($gameId, $snapshot);
+        $this->notifier->gridUpdated($gameKey, $snapshot);
         return response()->json($snapshot);
     }
 }

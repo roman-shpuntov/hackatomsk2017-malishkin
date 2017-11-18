@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool   $is_ended   игра окончена?
  * @property string $snapshot   снимок поля
  * @property string $log        игра лог игры
+ * @property string $game_key   защитный ключ игры
  *
  * @property User[] $users      игроки
  */

@@ -2,6 +2,7 @@
 namespace App\Requests;
 
 use App\Models\Game;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -51,7 +52,13 @@ class StepRequest extends FormRequest
     {
         $coordinateRules = 'required|regex:/\d{1,2}:\d{1,2}/';
         return [
-            'game_id' => 'required|integer|exists:games,id|game_allowed:' . $this->get('user_id'),
+            'game_id'  => 'required|integer|exists:games,id|game_allowed:' . $this->get('user_id'),
+            'game_key' => [
+                'required',
+                Rule::exists('games')->where(function ($query) {
+                    $query->where('id', $this->get('game_id'));
+                }),
+            ],
             'user_id' => 'required|integer',
             'from'    => $coordinateRules,
             'to'      => $coordinateRules,
