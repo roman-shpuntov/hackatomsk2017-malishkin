@@ -1,0 +1,25 @@
+//
+//  CNFConnection.h
+//  chipnflip
+//
+//  Created by roman on 18.11.2017.
+//  Copyright © 2017 roman.shpuntov. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <Pusher/Pusher.h>
+
+@protocol CNFConnectionDelegate <NSObject>
+@optional
+- (void) recvData:(NSDictionary *) dict;
+- (void) ready:(NSString *) token channel:(NSString *) channel;
+@end
+
+@interface CNFConnection : NSObject <PTPusherDelegate>
+
++ (CNFConnection *) sharedInstance;
+- (void) dealloc;
+- (void) addDelegate:(id <CNFConnectionDelegate> ) delegate;
+- (void) removeDelegate:(id <CNFConnectionDelegate> ) delegate;
+
+@end
