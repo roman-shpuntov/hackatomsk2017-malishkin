@@ -69,6 +69,7 @@ class GameController extends Controller
             $response = [
                 'game_info' => [
                     'game_id'  => $game->id,
+                    'game_key' => $game->game_key,
                     'prize'    => $game->prize,
                     'users'    => $game->users->toArray(),
                     'snapshot' => json_decode($game->snapshot, true),
