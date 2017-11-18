@@ -21,6 +21,16 @@ NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
 
 @implementation CNFConnection
 
+- (NSArray *) _getDelegates {
+	NSArray		*delegates;
+	
+	@synchronized(self) {
+		delegates = [NSArray arrayWithArray:_delegates];
+	}
+	
+	return delegates;
+}
+
 - (BOOL)pusher:(PTPusher *)pusher connectionWillConnect:(PTPusherConnection *)connection {
 	CNFLog(@"connectionWillConnect");
 	return YES;

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		14D81D21E50AC799CDB25CE1 /* libPods-chipnflip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A27F4AA2BDEDFED2601984F /* libPods-chipnflip.a */; };
 		300359441FC0558200F3B51F /* CNFConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 300359431FC0558200F3B51F /* CNFConnection.m */; };
+		300359481FC0628E00F3B51F /* CNFParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 300359471FC0628E00F3B51F /* CNFParser.m */; };
 		303D071D1FC004B000FE6D83 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 303D071C1FC004B000FE6D83 /* AppDelegate.m */; };
 		303D071F1FC004B000FE6D83 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 303D071E1FC004B000FE6D83 /* GameScene.sks */; };
 		303D07211FC004B000FE6D83 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 303D07201FC004B000FE6D83 /* Actions.sks */; };
@@ -30,6 +31,8 @@
 		300359421FC0558200F3B51F /* CNFConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNFConnection.h; sourceTree = "<group>"; };
 		300359431FC0558200F3B51F /* CNFConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNFConnection.m; sourceTree = "<group>"; };
 		300359451FC057D400F3B51F /* CNFWeakArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNFWeakArray.h; sourceTree = "<group>"; };
+		300359461FC0628E00F3B51F /* CNFParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNFParser.h; sourceTree = "<group>"; };
+		300359471FC0628E00F3B51F /* CNFParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNFParser.m; sourceTree = "<group>"; };
 		303D07181FC004B000FE6D83 /* chipnflip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chipnflip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		303D071B1FC004B000FE6D83 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		303D071C1FC004B000FE6D83 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -136,6 +139,8 @@
 				300359421FC0558200F3B51F /* CNFConnection.h */,
 				300359431FC0558200F3B51F /* CNFConnection.m */,
 				300359451FC057D400F3B51F /* CNFWeakArray.h */,
+				300359461FC0628E00F3B51F /* CNFParser.h */,
+				300359471FC0628E00F3B51F /* CNFParser.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -289,6 +294,7 @@
 			files = (
 				303D07241FC004B000FE6D83 /* GameScene.m in Sources */,
 				3046BB191FC0470F0021F3F0 /* CNFButton.m in Sources */,
+				300359481FC0628E00F3B51F /* CNFParser.m in Sources */,
 				3046BB0B1FC018E70021F3F0 /* RegistrationViewController.m in Sources */,
 				300359441FC0558200F3B51F /* CNFConnection.m in Sources */,
 				303D07271FC004B000FE6D83 /* GameViewController.m in Sources */,
