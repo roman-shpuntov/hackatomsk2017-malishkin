@@ -1,8 +1,8 @@
 <template>
   <form class="register-form" method="post" @submit="authorize">
-    <input type="email" name="email" placeholder="email">
-    <input type="text" name="username" placeholder="username">
-    <input type="password" name="password" placeholder="password">
+    <input type="email" name="email" placeholder="Your Email">
+    <input type="text" name="username" placeholder="Your name">
+    <input type="password" name="password" placeholder="Your password">
     <input type="submit" value="register">
   </form>
 </template>

@@ -67,6 +67,14 @@ input:not([type="submit"]) {
   input:not(:last-child) {
     margin-bottom: 10px;
   }
+
+  input[type="submit"] {
+    margin-top: 60px;
+  }
+
+  .register-link {
+    margin-top: 20px;
+  }
 }
 
 .register-link {
