@@ -30,104 +30,171 @@ html, body, #application {
   margin: 0 auto;
 }
 
-.page-index {
-  .authorized-variant {
-    display: flex;
-    flex-flow: column;
-    background: white;
+.chipnflip-layout {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  background: white;
 
-    header {
-      @include center-content;
-      height: 80px;
-      border-bottom: 2px solid gray;
+  header {
+    @include center-content;
+    height: 80px;
+    border-bottom: 2px solid gray;
 
-      .tabs {
-        float: right;
-        display: flex;
-        flex-flow: row;
-        align-items: baseline;
+    .tabs {
+      float: right;
+      display: flex;
+      flex-flow: row;
+      align-items: baseline;
 
-        .tab {
-          width: 100px;
-          @include center-content;
+      .tab {
+        width: 100px;
+        @include center-content;
 
+        a {
+          color: black;
+          text-decoration: none;
+        }
+
+        &.active {
           a {
-            color: black;
-            text-decoration: none;
+            color: #8D3EC1;
           }
-
-          &.active {
-            a {
-              color: #8D3EC1;
-            }
-          }
-        }
-      }
-    }
-
-    main {
-      flex-grow: 1;
-
-      .user {
-        margin-bottom: 20px;
-      }
-
-      &.start-the-game {
-        background: white;
-        .central-part {
-          @include center-content;
-          flex-flow: column;
-        }
-      }
-    }
-
-    footer {
-      height: 80px;
-
-      background: #7634C7;
-      color: white;
-      a { color: white; }
-
-      .container {
-        display: flex;
-        flex-flow: row;
-        align-items: center;
-
-        .brand {
-          @include center-content;
-          flex-grow: 2;
-          font-size: 2em;
-          width: 200px;
-        }
-
-        .links {
-          display: flex;
-          flex-flow: column;
-          flex-grow: 1;
-        }
-
-        .social-icons {
-          flex-grow: 1;
-          display: flex;
-          flex-flow: row;
-
-          .social-icon {
-            width: 32px;
-            height: 32px;
-            margin: 0 5px;
-            background: #602E9C;
-            border-radius: 100%;
-            @include center-content;
-          }
-        }
-
-        .phone {
-          margin: 0 20px;
         }
       }
     }
   }
 
+  main {
+    flex-grow: 1;
+    background: #EEEEEE;
+    display: flex;
+    flex-flow: column;
+
+    .user {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    &.start-the-game {
+      background: white;
+      @include center-content;
+    }
+
+    .central-panel {
+      flex-grow: 1;
+      margin: 40px auto;
+      background: white;
+      box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.5);
+
+      display: flex;
+      flex-flow: column;
+
+      &.bills {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+
+        .note-row {
+          text-align: center;
+        }
+
+        .bill-row {
+          display: flex;
+          flex-flow: row;
+          justify-content: center;
+
+          .current {
+            color: $brand-color;
+            text-align: center;
+
+            .amount {
+              font-size: 4em;
+            }
+          }
+
+          .decrease, .increase {
+            display: flex;
+            align-items: center;
+            margin: 0 20px;
+
+            .arrow {
+              margin: 0 10px;
+            }
+
+            .delta {
+              color: $brand-color;
+            }
+          }
+        }
+
+        .note-currency-row {
+          text-align: center;
+          color: $brand-color;
+          font-size: 1.8em;
+        }
+
+        .buttons-row {
+          margin-top: 50px;
+          display: flex;
+          justify-content: center;
+
+          button {
+            margin: 0 50px;
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    height: 80px;
+
+    background: #7634C7;
+    color: white;
+    a { color: white; }
+
+    .container {
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+
+      .brand {
+        @include center-content;
+        flex-grow: 2;
+        font-size: 2em;
+        width: 200px;
+      }
+
+      .links {
+        display: flex;
+        flex-flow: column;
+        flex-grow: 1;
+      }
+
+      .social-icons {
+        flex-grow: 1;
+        display: flex;
+        flex-flow: row;
+
+        .social-icon {
+          width: 32px;
+          height: 32px;
+          margin: 0 5px;
+          background: #602E9C;
+          border-radius: 100%;
+          @include center-content;
+        }
+      }
+
+      .phone {
+        margin: 0 20px;
+      }
+    }
+  }
+}
+
+.page-index {
   .unauthorized-variant {
     background: linear-gradient(to bottom, #7633c7 0%, #8744d9 100%);
 
