@@ -7,8 +7,17 @@
 //
 
 #import "RegistrationViewController.h"
+#import "CNFLog.h"
 
 @interface RegistrationViewController ()
+{
+	__weak IBOutlet UITextField				*_name;
+	__weak IBOutlet UITextField				*_email;
+	__weak IBOutlet UITextField				*_password;
+	__weak IBOutlet UIActivityIndicatorView	*_progress;
+	__weak IBOutlet UIButton				*_backLogin;
+	__weak IBOutlet UIButton				*_doRegister;
+}
 
 @end
 
@@ -16,22 +25,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)_handleBack:(id)sender {
+	CNFLog(@"");
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (IBAction)_handleRegister:(id)sender {
+	CNFLog(@"");
 }
-*/
 
 @end

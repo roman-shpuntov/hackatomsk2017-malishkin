@@ -16,6 +16,10 @@
 		303D072C1FC004B000FE6D83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 303D072B1FC004B000FE6D83 /* Assets.xcassets */; };
 		303D072F1FC004B000FE6D83 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 303D072D1FC004B000FE6D83 /* LaunchScreen.storyboard */; };
 		303D07321FC004B000FE6D83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 303D07311FC004B000FE6D83 /* main.m */; };
+		3046BB061FC012220021F3F0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB051FC012220021F3F0 /* LoginViewController.m */; };
+		3046BB0B1FC018E70021F3F0 /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB0A1FC018E70021F3F0 /* RegistrationViewController.m */; };
+		3046BB0E1FC01DFA0021F3F0 /* GameInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB0D1FC01DFA0021F3F0 /* GameInfoViewController.m */; };
+		3046BB111FC01ED40021F3F0 /* GameOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB101FC01ED40021F3F0 /* GameOverViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +37,15 @@
 		303D072E1FC004B000FE6D83 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		303D07301FC004B000FE6D83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		303D07311FC004B000FE6D83 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3046BB041FC012220021F3F0 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		3046BB051FC012220021F3F0 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		3046BB081FC0170E0021F3F0 /* CNFLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNFLog.h; sourceTree = "<group>"; };
+		3046BB091FC018E70021F3F0 /* RegistrationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegistrationViewController.h; sourceTree = "<group>"; };
+		3046BB0A1FC018E70021F3F0 /* RegistrationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RegistrationViewController.m; sourceTree = "<group>"; };
+		3046BB0C1FC01DFA0021F3F0 /* GameInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameInfoViewController.h; sourceTree = "<group>"; };
+		3046BB0D1FC01DFA0021F3F0 /* GameInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameInfoViewController.m; sourceTree = "<group>"; };
+		3046BB0F1FC01ED40021F3F0 /* GameOverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameOverViewController.h; sourceTree = "<group>"; };
+		3046BB101FC01ED40021F3F0 /* GameOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameOverViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +66,7 @@
 				303D07191FC004B000FE6D83 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		303D07191FC004B000FE6D83 /* Products */ = {
 			isa = PBXGroup;
@@ -65,6 +79,7 @@
 		303D071A1FC004B000FE6D83 /* chipnflip */ = {
 			isa = PBXGroup;
 			children = (
+				3046BB071FC016D10021F3F0 /* Util */,
 				303D071B1FC004B000FE6D83 /* AppDelegate.h */,
 				303D071C1FC004B000FE6D83 /* AppDelegate.m */,
 				303D071E1FC004B000FE6D83 /* GameScene.sks */,
@@ -78,8 +93,24 @@
 				303D072D1FC004B000FE6D83 /* LaunchScreen.storyboard */,
 				303D07301FC004B000FE6D83 /* Info.plist */,
 				303D07311FC004B000FE6D83 /* main.m */,
+				3046BB041FC012220021F3F0 /* LoginViewController.h */,
+				3046BB051FC012220021F3F0 /* LoginViewController.m */,
+				3046BB091FC018E70021F3F0 /* RegistrationViewController.h */,
+				3046BB0A1FC018E70021F3F0 /* RegistrationViewController.m */,
+				3046BB0C1FC01DFA0021F3F0 /* GameInfoViewController.h */,
+				3046BB0D1FC01DFA0021F3F0 /* GameInfoViewController.m */,
+				3046BB0F1FC01ED40021F3F0 /* GameOverViewController.h */,
+				3046BB101FC01ED40021F3F0 /* GameOverViewController.m */,
 			);
 			path = chipnflip;
+			sourceTree = "<group>";
+		};
+		3046BB071FC016D10021F3F0 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				3046BB081FC0170E0021F3F0 /* CNFLog.h */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,10 +186,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3046BB111FC01ED40021F3F0 /* GameOverViewController.m in Sources */,
 				303D07241FC004B000FE6D83 /* GameScene.m in Sources */,
+				3046BB0B1FC018E70021F3F0 /* RegistrationViewController.m in Sources */,
 				303D07271FC004B000FE6D83 /* GameViewController.m in Sources */,
 				303D07321FC004B000FE6D83 /* main.m in Sources */,
 				303D071D1FC004B000FE6D83 /* AppDelegate.m in Sources */,
+				3046BB0E1FC01DFA0021F3F0 /* GameInfoViewController.m in Sources */,
+				3046BB061FC012220021F3F0 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,7 +267,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -281,7 +316,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -295,6 +330,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4ELPU988BP;
 				INFOPLIST_FILE = chipnflip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = roman.shpuntov.chipnflip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -309,6 +345,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4ELPU988BP;
 				INFOPLIST_FILE = chipnflip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = roman.shpuntov.chipnflip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
