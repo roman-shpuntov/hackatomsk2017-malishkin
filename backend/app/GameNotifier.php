@@ -53,4 +53,14 @@ class  GameNotifier
             $gameInfo
         );
     }
+
+    public function gridUpdated()
+    {
+        // TODO
+    }
+
+    public function gameEnded()
+    {
+        // TODO
+    }
 }

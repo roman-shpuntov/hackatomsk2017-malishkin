@@ -130,7 +130,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"user_id\": 1,\n    \"game_id\": 1,\n    \"from\": \"1:1\",\n    \"to\": \"2:1\"\n}"
+					"raw": "{\n    \"user_id\": 2,\n    \"game_id\": 2,\n    \"from\": \"6:0\",\n    \"to\": \"6:1\"\n}"
 				},
 				"description": "ход игрока"
 			},

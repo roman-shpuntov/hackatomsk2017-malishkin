@@ -71,7 +71,7 @@ class GameController extends Controller
                     'game_id'  => $game->id,
                     'prize'    => $game->prize,
                     'users'    => $game->users->toArray(),
-                    'snapshot' => $game->snapshot,
+                    'snapshot' => json_decode($game->snapshot, true),
                 ],
             ];
 
@@ -93,6 +93,15 @@ class GameController extends Controller
     public function step(StepRequest $request)
     {
         $params = array_values($request->only('game_id', 'user_id', 'from', 'to'));
-        $this->gameSvc->step(...$params);
+        $snapshot = $this->gameSvc->step(...$params);
+        $gameId = $request->get('game_id');
+        if ($winner = $this->gameSvc->hasWinner($snapshot)) {
+            $this->notifier->gameEnded($gameId, $winner);
+            return response()->json(['game_ended' => $winner]);
+        }
+
+        $snapshot = compact('snapshot');
+        $this->notifier->gridUpdated($gameId, $snapshot);
+        return response()->json($snapshot);
     }
 }
