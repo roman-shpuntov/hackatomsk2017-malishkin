@@ -4,6 +4,7 @@ namespace App\Api\V1\Controllers;
 use App\GameNotifier;
 use App\Http\Controllers\Controller;
 use App\Requests\GameOfferRequest;
+use App\Requests\StepRequest;
 use App\Services\GameOfferService;
 use App\Services\GameService;
 use Auth;
@@ -85,9 +86,15 @@ class GameController extends Controller
 
     /**
      * Ход игрока
+     * @param StepRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function step()
+    public function step(StepRequest $request)
     {
-        // echo
+        $params = array_values($request->only('game_id', 'user_id', 'from', 'to'));
+        $result = $this->gameSvc->isStepAllowed(...$params);
+        if ($result !== true) {
+            return response()->json(['error' => $result]);
+        }
     }
 }

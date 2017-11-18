@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Validators\GameAllowedValidator;
+use App\Validators\StepAllowedValidator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend(
+            'game_allowed',
+            GameAllowedValidator::class,
+            GameAllowedValidator::errorMessage()
+        );
     }
 
     /**
