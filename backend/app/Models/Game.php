@@ -51,11 +51,11 @@ class Game extends Model
     }
 
     /**
-     * Игроки
+     * Игроки. Выдача для game-offer
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_games')->select('id', 'name');
+        return $this->belongsToMany(User::class, 'user_games')->select(\DB::raw('id AS user_id'), 'name');
     }
 }

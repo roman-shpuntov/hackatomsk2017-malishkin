@@ -71,7 +71,10 @@ class GameService
         $field[0][$max] = $field[$max][0] = CellStates::ONE;
         $field[0][0] = $field[$max][$max] = CellStates::TWO;
 
-        $snapshot = compact('turn', 'field');
+        $snapshot = [
+            'turn_user_id' => $turn,
+            'field' => $field,
+        ];
 
         Cache::put($this->getGameCacheKey($gameId), json_encode($snapshot), 30);
 
