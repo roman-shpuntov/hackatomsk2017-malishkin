@@ -1,15 +1,19 @@
 @mixin input {
-  border: solid transparent;
   padding: 0 20px;
   color: black;
+
+  height: 50px;
+  width: 217px;
+}
+
+.input-solid {
+  @include input();
+  border: 2px #E6E6E6 solid;
 }
 
 .input-rounded {
   @include input();
-
-  height: 50px;
-  width: 217px;
-
+  border: solid transparent;
   border-radius: 100px;
 }
 

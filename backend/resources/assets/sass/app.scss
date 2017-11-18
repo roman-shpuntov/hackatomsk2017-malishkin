@@ -145,7 +145,7 @@ html, body, #application {
         }
       }
 
-      &.howtoplay {
+      &.howtoplay, &.settings {
         display: flex;
         flex-flow: row;
 
@@ -156,11 +156,32 @@ html, body, #application {
           color: $brand-color;
         }
 
-        .article {
+        .content {
           padding: 20px;
+          flex-grow: 1;
 
           p:first-child {
             margin-top: 0;
+          }
+        }
+      }
+
+      &.settings {
+        form {
+          margin-top: 10px;
+          display: flex;
+          flex-flow: column;
+
+          input {
+            margin: 5px 0;
+          }
+
+          input:not([type="submit"]) {
+            width: 100%;
+          }
+
+          input[type="submit"] {
+            margin-top: 30px;
           }
         }
       }
