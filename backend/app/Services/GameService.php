@@ -40,7 +40,7 @@ class GameService
 
         $this->model->users()->attach([$offer->user->id, $user2->id]);
 
-        $this->initGameField($this->model->id, config('game.field_size'));
+        //$this->initGameField($this->model->id, config('game.field_size'));
 
         return $this->model;
     }
