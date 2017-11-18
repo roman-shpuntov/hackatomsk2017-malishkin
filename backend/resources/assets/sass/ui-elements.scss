@@ -1,0 +1,66 @@
+@mixin input {
+  border: solid transparent;
+  padding: 0 20px;
+  color: black;
+}
+
+.input-rounded {
+  @include input();
+
+  height: 50px;
+  width: 217px;
+
+  border-radius: 100px;
+}
+
+@mixin button {
+  height: 50px;
+  width: 217px;
+  padding: 0;
+
+  border-radius: 100px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  text-decoration: none;
+  outline: 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button-light {
+  @include button;
+
+  background: transparent;
+  border: solid white;
+  color: white;
+
+  &:hover {
+    background: #9763d9;
+    border: solid transparent;
+  }
+
+  &:active {
+    background: #b088e1;
+    border: solid transparent;
+    padding: 0;
+  }
+
+  &::-moz-focus-inner {
+    border: none;
+  }
+}
+
+.button-solid {
+  @include button;
+
+  background: #8D3EC1;
+  border: transparent;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+}
