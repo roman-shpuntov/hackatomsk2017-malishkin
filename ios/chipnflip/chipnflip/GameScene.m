@@ -18,6 +18,8 @@
 }
 
 const NSUInteger	CNFGridSide		= 7;
+const NSUInteger	CNFGridSpace	= 10;
+const CGFloat		CNFTouchAplha	= 0.5;
 
 -(void)dealloc {
 	CNFLog(@"");
@@ -29,7 +31,7 @@ const NSUInteger	CNFGridSide		= 7;
 	self.anchorPoint = CGPointMake(0.0, 0.0);
 	
 	_cover = self.size.width / CNFGridSide;
-	_space = _cover / 10;
+	_space = _cover / CNFGridSpace;
 	_side = _cover - _space;
 	
 	for (int i=0; i<CNFGridSide; i++) {
@@ -60,6 +62,7 @@ const NSUInteger	CNFGridSide		= 7;
 				item.fillColor = SKColor.whiteColor;
 			else
 				item.fillColor = SKColor.blackColor;
+			
 			item.lineWidth = 0.0;
 			item.position = CGPointMake(mx, my);
 			item.zPosition = -100;
@@ -71,7 +74,27 @@ const NSUInteger	CNFGridSide		= 7;
 	_fieldRange.size.width	= _cover * CNFGridSide;
 	_fieldRange.size.height	= _cover * CNFGridSide;
 	
-	CNFLog(@"range %f:%f %f:%f", _fieldRange.origin.x, _fieldRange.origin.y, _fieldRange.size.width, _fieldRange.size.height);
+	CNFLog(@"range %f:%f %f:%f", _fieldRange.origin.x, _fieldRange.origin.y,
+		_fieldRange.size.width, _fieldRange.size.height);
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	for (UITouch *touch in touches) {
+		CGPoint touchLocation = [touch locationInNode:self];
+		SKNode *touchedNode = [self nodeAtPoint:touchLocation];
+		
+		CNFLog(@"%f:%f", touchLocation.x, touchLocation.y);
+		
+		if (touchedNode != self) {
+			if ([touchedNode.name isEqualToString:@"chip"]) {
+				if ([touchedNode isKindOfClass:[SKSpriteNode class]]) {
+					SKSpriteNode    *node = (SKSpriteNode *) touchedNode;
+					node.alpha = CNFTouchAplha;
+					node.zPosition++;
+				}
+			}
+		}
+	}
 }
 
 -(void)update:(CFTimeInterval)currentTime {
