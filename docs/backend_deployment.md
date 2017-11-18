@@ -24,6 +24,8 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 sudo apt-get update && sudo apt-get install yarn
 ```
 
+**Важно** В `apache` должен быть включен `mod_rewrite`.
+
 ## Собственно развертывание проекта
 
 **Все выполняется в каталоге бэкенда**
@@ -83,7 +85,7 @@ php artisan make:auth
 
 [GitHub](https://github.com/tymondesigns/jwt-auth)
 
-На данный момент (16.11.2017) библиотека встает криво в Laravel 5.5, см. [issue](https://github.com/tymondesigns/jwt-auth/issues/1298).
+На данный момент (18.11.2017) библиотека встает криво в Laravel 5.5, см. [issue](https://github.com/tymondesigns/jwt-auth/issues/1298).
 
 Решение: переименовать метод `fire()` в `handle()` тут [vendor/tymon/jwt-auth/src/Commands/JWTGenerateCommand.php] Только потом выполнять:
 
