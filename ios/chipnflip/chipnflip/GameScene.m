@@ -22,6 +22,7 @@
 const NSUInteger	CNFGridSide		= 7;
 const NSUInteger	CNFGridSpace	= 10;
 const CGFloat		CNFTouchAplha	= 0.5;
+const CGFloat		CNFTouchMove	= 0.2;
 
 -(void)dealloc {
 	CNFLog(@"");
@@ -80,16 +81,29 @@ const CGFloat		CNFTouchAplha	= 0.5;
 		_fieldRange.size.width, _fieldRange.size.height);
 }
 
+- (CGPoint) _location2cell:(CGPoint) location {
+	int x = (int) ((location.x - _fieldRange.origin.x) / _cover);
+	int y = (int) ((location.y - _fieldRange.origin.y) / _cover);
+	
+	location.x = x;
+	location.x = x;
+	
+	return location;
+}
+
+- (CGPoint) _location2grid:(CGPoint) location {
+	location = [self _location2cell:location];
+	
+	location.x = _fieldRange.origin.x + location.x * _cover + _side / 2 + _space / 2;
+	location.y = _fieldRange.origin.y + location.y * _cover + _side / 2 + _space / 2;
+	
+	return location;
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 	for (UITouch *touch in touches) {
 		CGPoint location = [touch locationInNode:self];
-		
-		int x = (int) ((location.x - _fieldRange.origin.x) / _cover);
-		int y = (int) ((location.y - _fieldRange.origin.y) / _cover);
-
-		_selectedLocation.x = _fieldRange.origin.x + x * _cover + _side / 2 + _space / 2;
-		_selectedLocation.y = _fieldRange.origin.y + y * _cover + _side / 2 + _space / 2;
-
+		_selectedLocation = [self _location2grid:location];
 		SKNode *touchedNode = [self nodeAtPoint:location];
 		
 		CNFLog(@"%f:%f", location.x, location.y);
@@ -126,23 +140,18 @@ const CGFloat		CNFTouchAplha	= 0.5;
 			_selectedNode.alpha = 1.0;
 			
 			CGPoint location = [touch locationInNode:self];
-			
-			int x = (int) ((location.x - _fieldRange.origin.x) / _cover);
-			int y = (int) ((location.y - _fieldRange.origin.y) / _cover);
-			
-			location.x = _fieldRange.origin.x + x * _cover + _side / 2 + _space / 2;
-			location.y = _fieldRange.origin.y + y * _cover + _side / 2 + _space / 2;
+			location = [self _location2grid:location];
 			
 			if (location.x < _fieldRange.origin.x ||
 				location.x >= _fieldRange.origin.x + _fieldRange.size.width) {
-				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:0.2]];
+				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
 			}
 			else if (location.y < _fieldRange.origin.y ||
 					 location.y >= _fieldRange.origin.y + _fieldRange.size.height) {
-				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:0.2]];
+				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
 			}
 			else
-				[_selectedNode runAction:[SKAction moveTo:location duration:0.2]];
+				[_selectedNode runAction:[SKAction moveTo:location duration:CNFTouchMove]];
 			
 			_selectedNode = nil;
 		}
