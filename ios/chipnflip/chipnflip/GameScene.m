@@ -111,6 +111,17 @@ const CGFloat		CNFTouchAplha	= 0.5;
 	}
 }
 
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	if (_selectedNode) {
+		for (UITouch *touch in touches) {
+			_selectedNode.zPosition--;
+			_selectedNode.alpha = 1.0;
+			
+			_selectedNode = nil;
+		}
+	}
+}
+
 -(void)update:(CFTimeInterval)currentTime {
     // Called before each frame is rendered
     
