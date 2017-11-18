@@ -24,7 +24,7 @@ class GameServiceTest extends TestCase
      */
     public function test_initGameField()
     {
-        $snapshot = $this->service->initGameField(3, 34, 15, 7); // $gameId, $userId1, $userId2, $size
+        $snapshot = $this->service->initGameField(34, 15, 7); // $userId1, $userId2, $size
 
         $this->assertEquals(34, $snapshot['turn_user_id']);
 

@@ -64,14 +64,13 @@ class GameController extends Controller
         $offer = $this->offerSvc->searchGame($user->id, $request['type'], $request['bet']);
 
         if ($offer) {
-            $game = $this->gameSvc->newGame($offer, $user);
-            $snapshot = $this->gameSvc->initGameField($game->id, $offer->user_id, $user->id, config('game.field_size'));
+            $game = $this->gameSvc->newGame($offer, $user, config('game.field_size'));
 
             $gameInfo = [
                 'game_id'  => $game->id,
                 'prize'    => $game->prize,
                 'users'    => $game->users->toArray(),
-                'snapshot' => $snapshot,
+                'snapshot' => $game->snapshot,
             ];
 
             $this->notifier->offerAccepted($offer->game_key, $gameInfo);
@@ -93,6 +92,7 @@ class GameController extends Controller
      */
     public function step(StepRequest $request)
     {
-        // TODO реализация
+        $params = array_values($request->only('game_id', 'user_id', 'from', 'to'));
+        $this->gameSvc->step(...$params);
     }
 }
