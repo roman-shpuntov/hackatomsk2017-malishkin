@@ -34,10 +34,12 @@
 												   handler:nil];
 	[alert addAction:action];
 	[self presentViewController:alert animated:YES completion:nil];
+	[_progress stopAnimating];
 }
 
 -(void)serverLoginReady:(NSString *)token {
 	[self performSegueWithIdentifier:@"sw_login" sender:nil];
+	[_progress stopAnimating];
 }
 
 - (IBAction)_handleLogin:(id)sender {
@@ -68,6 +70,8 @@
 	_email.text		= [NSString stringWithFormat:@"user1@m.ru"];
 	_password.text	= [NSString stringWithFormat:@"123456"];
 #endif
+	
+	[_progress stopAnimating];
 }
 
 - (void)viewDidLoad {

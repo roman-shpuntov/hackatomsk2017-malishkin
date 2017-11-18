@@ -269,7 +269,7 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 							   @"application/json", @"Content-Type",
 							   @"application/json", @"Accept", nil];
 	
-	return [_connection send:json suffix:CNFConnectionSuffixLogin method:@"POST" header:header];
+	return [_connection send:json suffix:CNFConnectionSuffixRegistration method:@"POST" header:header];
 }
 
 - (int) login:(NSString *) email password:(NSString *) password {
@@ -311,7 +311,7 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 - (int) logout {
 	CNFLog(@"");
 	
-	if (_state < CNFStateSubscribed)
+	if (_state < CNFStateLoggedin)
 		return -1;
 	
 	NSString *bearer = [NSString stringWithFormat:@"Bearer %@", _token];

@@ -194,8 +194,8 @@
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="1Te-gF-DW8">
                                 <rect key="frame" x="142" y="50" width="37" height="37"/>
                             </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name: user" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9b-pl-7uE">
-                                <rect key="frame" x="0.0" y="0.0" width="87.5" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waiting..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9b-pl-7uE">
+                                <rect key="frame" x="0.0" y="0.0" width="71.5" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -305,7 +305,7 @@
                         <outlet property="_name" destination="IUx-Gn-2a1" id="FU1-l2-Ntq"/>
                         <outlet property="_password" destination="StB-Cg-oiF" id="6Wo-LT-KZH"/>
                         <outlet property="_progress" destination="q4K-mB-KzG" id="TuA-n8-Dc9"/>
-                        <segue destination="UwA-hj-gil" kind="show" identifier="sw_registration" id="CL9-tW-cs6"/>
+                        <segue destination="UwA-hj-gil" kind="show" identifier="sw_register" id="CL9-tW-cs6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SW7-hB-cOU" userLabel="First Responder" sceneMemberID="firstResponder"/>

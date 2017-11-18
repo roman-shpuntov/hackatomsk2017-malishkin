@@ -23,6 +23,8 @@
 
 @implementation RegistrationViewController
 
+#define EMULATE_INFO
+
 -(void)serverError:(NSError *)error {
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil)
 																   message:error.domain
@@ -33,14 +35,16 @@
 												   handler:nil];
 	[alert addAction:action];
 	[self presentViewController:alert animated:YES completion:nil];
+	[_progress stopAnimating];
 }
 
 -(void)serverLoginReady:(NSString *)token {
 	[self performSegueWithIdentifier:@"sw_register" sender:nil];
+	[_progress stopAnimating];
 }
 
 - (void) _customSetup {
-	_progress.hidden = YES;
+	[_progress stopAnimating];
 	
 	CNFParser *parser = [CNFParser sharedInstance];
 	[parser addDelegate:self];

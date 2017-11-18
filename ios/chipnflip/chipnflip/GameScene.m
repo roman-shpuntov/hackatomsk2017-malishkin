@@ -17,9 +17,11 @@
 	CGRect			_fieldRange;
 	SKSpriteNode	*_selectedNode;
 	CGPoint			_selectedLocation;
+	NSArray			*_lastMove;
 }
 
 const NSUInteger	CNFGridSide		= 7;
+const NSUInteger	CNFStepMax		= 3;
 const NSUInteger	CNFGridSpace	= 10;
 const CGFloat		CNFTouchAplha	= 0.5;
 const CGFloat		CNFTouchMove	= 0.2;
@@ -39,13 +41,15 @@ const CGFloat		CNFTouchMove	= 0.2;
 		for (int j=0; j<row.count; j++) {
 			NSNumber	*col = [row objectAtIndex:j];
 			if (col == parser.peerid) {
-				[self _createChip:[NSNumber numberWithLong:i] ypos:col selfChip:NO];
+				[self _createChip:[NSNumber numberWithLong:i] ypos:[NSNumber numberWithLong:j] selfChip:NO];
 			}
 			else if (col == parser.userid) {
-				[self _createChip:[NSNumber numberWithLong:i] ypos:col selfChip:YES];
+				[self _createChip:[NSNumber numberWithLong:i] ypos:[NSNumber numberWithLong:j] selfChip:YES];
 			}
 		}
 	}
+	
+	_lastMove = [NSArray arrayWithArray:fields];
 }
 
 - (void)_createChip:(NSNumber *) xpos ypos:(NSNumber *) ypos selfChip:(BOOL) selfChip {
@@ -53,8 +57,6 @@ const CGFloat		CNFTouchMove	= 0.2;
 	int				j = (int) ypos.longValue;
 	CGFloat			x = i * _side + i * _space;
 	CGFloat			y = j * _side + j * _space + (self.size.height - self.size.width) / 2;
-	//x += _fieldRange.origin.x;
-	//y += _fieldRange.origin.y;
 	CGFloat			mx = x + _side / 2 + _space / 2;
 	CGFloat			my = y + _side / 2 + _space / 2;
 	
@@ -111,6 +113,12 @@ const CGFloat		CNFTouchMove	= 0.2;
 			[self addChild:item];
 		}
 	}
+	
+/*	for (int i=0; i<CNFGridSide; i++) {
+		for (int j=0; j<CNFGridSide; j++) {
+			[self _createChip:[NSNumber numberWithLong:i] ypos:[NSNumber numberWithLong:j] selfChip:(i+j)%2];
+		}
+	}*/
 	
 	_fieldRange.size.width	= _cover * CNFGridSide;
 	_fieldRange.size.height	= _cover * CNFGridSide;
@@ -188,8 +196,23 @@ const CGFloat		CNFTouchMove	= 0.2;
 					 location.y >= _fieldRange.origin.y + _fieldRange.size.height) {
 				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
 			}
-			else
-				[_selectedNode runAction:[SKAction moveTo:location duration:CNFTouchMove]];
+			else {
+				CGPoint		grid = [self _location2cell:location];
+				NSArray		*xarr = _lastMove[(int) grid.x];
+				NSNumber	*yval = xarr[(int) grid.y];
+				if ([yval longValue])
+					[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
+				else {
+					CGPoint		old = [self _location2cell:_selectedLocation];
+					int			x = (int) (old.x - grid.x);
+					int			y = (int) (old.y - grid.y);
+					
+					if (abs(x) >= CNFStepMax || abs(y) >= CNFStepMax)
+						[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
+					else
+						[_selectedNode runAction:[SKAction moveTo:location duration:CNFTouchMove]];
+				}
+			}
 			
 			_selectedNode = nil;
 		}
