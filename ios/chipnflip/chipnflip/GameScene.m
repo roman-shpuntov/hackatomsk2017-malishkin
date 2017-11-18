@@ -15,6 +15,7 @@
 	CGFloat			_space;
     NSTimeInterval	_lastUpdateTime;
 	CGRect			_fieldRange;
+	SKSpriteNode	*_selectedNode;
 }
 
 const NSUInteger	CNFGridSide		= 7;
@@ -87,12 +88,25 @@ const CGFloat		CNFTouchAplha	= 0.5;
 		
 		if (touchedNode != self) {
 			if ([touchedNode.name isEqualToString:@"chip"]) {
+				_selectedNode = (SKSpriteNode *) touchedNode;
+				
 				if ([touchedNode isKindOfClass:[SKSpriteNode class]]) {
 					SKSpriteNode    *node = (SKSpriteNode *) touchedNode;
 					node.alpha = CNFTouchAplha;
 					node.zPosition++;
 				}
 			}
+		}
+	}
+}
+
+-(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	for (UITouch *touch in touches) {
+		CGPoint location  = [touch locationInNode:self];
+		
+		if (_selectedNode) {
+			_selectedNode.position = location;
+			CNFLog(@"%f:%f", location.x, location.y);
 		}
 	}
 }
