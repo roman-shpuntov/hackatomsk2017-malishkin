@@ -12,32 +12,57 @@
 #import "CNFLog.h"
 #import "GameInfoViewController.h"
 
+@interface GameViewController() {
+	__weak IBOutlet	UIActivityIndicatorView	*_progress;
+}
+
+@end
+
 @implementation GameViewController
+
+-(void)serverGameReady:(NSString *)userName {
+	CNFLog(@"user %@", userName);
+	
+	[_progress stopAnimating];
+}
+
+- (void)_customSetup {
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser addDelegate:self];
+	
+	// Load 'GameScene.sks' as a GKScene. This provides gameplay related content
+	// including entities and graphs.
+	GKScene *scene = [GKScene sceneWithFileNamed:@"GameScene"];
+	
+	// Get the SKScene from the loaded GKScene
+	GameScene *sceneNode = (GameScene *)scene.rootNode;
+	
+	// Copy gameplay related content over to the scene
+	sceneNode.entities = [scene.entities mutableCopy];
+	sceneNode.graphs = [scene.graphs mutableCopy];
+	
+	// Set the scale mode to scale to fit the window
+	sceneNode.scaleMode = SKSceneScaleModeAspectFill;
+	
+	SKView *skView = (SKView *)self.view;
+	
+	// Present the scene
+	[skView presentScene:sceneNode];
+	
+	skView.showsFPS = YES;
+	skView.showsNodeCount = YES;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	[self _customSetup];
+}
 
-    // Load 'GameScene.sks' as a GKScene. This provides gameplay related content
-    // including entities and graphs.
-    GKScene *scene = [GKScene sceneWithFileNamed:@"GameScene"];
-    
-    // Get the SKScene from the loaded GKScene
-    GameScene *sceneNode = (GameScene *)scene.rootNode;
-    
-    // Copy gameplay related content over to the scene
-    sceneNode.entities = [scene.entities mutableCopy];
-    sceneNode.graphs = [scene.graphs mutableCopy];
-    
-    // Set the scale mode to scale to fit the window
-    sceneNode.scaleMode = SKSceneScaleModeAspectFill;
-    
-    SKView *skView = (SKView *)self.view;
-    
-    // Present the scene
-    [skView presentScene:sceneNode];
-    
-    skView.showsFPS = YES;
-    skView.showsNodeCount = YES;
+-(void)dealloc {
+	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser removeDelegate:self];
 }
 
 - (IBAction)_handleEnd:(id)sender {
@@ -62,7 +87,9 @@
 														 CNFParser	*parser = [CNFParser sharedInstance];
 														 [parser logout];
 														 
-														 [self dismissViewControllerAnimated:YES completion:nil];
+														 [self dismissViewControllerAnimated:YES completion:^{
+															 [self.prevViewController dismissViewControllerAnimated:YES completion:nil];
+														 }];
 													 }];
 	[alert addAction:noAction];
 	[self presentViewController:alert animated:YES completion:nil];

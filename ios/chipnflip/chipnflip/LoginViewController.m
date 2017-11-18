@@ -36,18 +36,18 @@
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
--(void)serverLoginReady:(NSString *)token channel:(NSString *)channel {
+-(void)serverLoginReady:(NSString *)token {
 	[self performSegueWithIdentifier:@"sw_login" sender:nil];
 }
 
 - (IBAction)_handleLogin:(id)sender {
 	CNFLog(@"");
 	
-/*	CNFParser *parser = [CNFParser sharedInstance];
-	[parser login:_email.text password:_password.text];*/
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser login:_email.text password:_password.text];
 	
 	// DEBUG
-	[self performSegueWithIdentifier:@"sw_login" sender:nil];
+	//[self performSegueWithIdentifier:@"sw_login" sender:nil];
 }
 
 - (IBAction)_handleRegistration:(id)sender {

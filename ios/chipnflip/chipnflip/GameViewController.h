@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <SpriteKit/SpriteKit.h>
 #import <GameplayKit/GameplayKit.h>
+#import "CNFParser.h"
 
-@interface GameViewController : UIViewController
+@interface GameViewController : UIViewController <CNFParserDelegate>
 
 @property (nonnull, strong) UIViewController	*prevViewController;
 

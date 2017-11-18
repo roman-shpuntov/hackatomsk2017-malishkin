@@ -12,8 +12,6 @@
 @protocol CNFConnectionDelegate <NSObject>
 @optional
 - (void) recvData:(NSDictionary *) dict;
-- (void) loginReady:(NSString *) token channel:(NSString *) channel;
-- (void) gameReady:(NSNumber *) peerid;
 @end
 
 @interface CNFConnection : NSObject <PTPusherDelegate, NSURLSessionDelegate>
@@ -22,15 +20,12 @@
 - (void) dealloc;
 - (void) addDelegate:(id <CNFConnectionDelegate> ) delegate;
 - (void) removeDelegate:(id <CNFConnectionDelegate> ) delegate;
-- (int) registration:(NSDictionary *) dict;
-- (int) login:(NSDictionary *) dict;
-- (int) logout:(NSDictionary *) dict;
+
+- (int) send:(NSDictionary *) json suffix:(NSString *) suffix method:(NSString *) method header:(NSDictionary *) header;
+- (int) pusherSubscribeChannel:(NSString *) channelName;
+- (int) pusherBindToEvent:(NSString *) eventName;
+
 - (void) start;
 - (void) stop;
-
-@property (nonatomic, readonly)	NSString	*token;
-@property (nonatomic, readonly)	NSString	*channel;
-@property (nonatomic, readonly)	NSNumber	*userid;
-@property (nonatomic, readonly)	NSNumber	*peerid;
 
 @end

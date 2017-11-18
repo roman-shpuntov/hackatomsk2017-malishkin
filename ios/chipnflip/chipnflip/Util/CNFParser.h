@@ -12,8 +12,7 @@
 @protocol CNFParserDelegate <NSObject>
 @optional
 - (void) serverError:(NSError *) error;
-- (void) serverData:(NSString *) string;
-- (void) serverLoginReady:(NSString *) token channel:(NSString *) channel;
+- (void) serverLoginReady:(NSString *) token;
 - (void) serverGameReady:(NSString *) userName;
 @end
 
@@ -23,11 +22,18 @@
 - (void) dealloc;
 - (void) addDelegate:(id <CNFParserDelegate> ) delegate;
 - (void) removeDelegate:(id <CNFParserDelegate> ) delegate;
-- (void) registration:(NSString *) name email:(NSString *) email password:(NSString *) password;
-- (void) login:(NSString *) email password:(NSString *) password;
-- (void) logout;
+
+- (int) registration:(NSString *) name email:(NSString *) email password:(NSString *) password;
+- (int) login:(NSString *) email password:(NSString *) password;
+- (int) startGame;
+- (int) logout;
 
 @property (nonatomic, readonly)	NSString	*user;
-@property (nonatomic, readonly)	NSUInteger	money;
+@property (nonatomic, readonly)	NSNumber	*money;
+@property (nonatomic, readonly)	NSString	*token;
+@property (nonatomic, readonly)	NSString	*channel;
+@property (nonatomic, readonly)	NSNumber	*userid;
+@property (nonatomic, readonly)	NSNumber	*peerid;
+@property (nonatomic, readonly)	NSString	*peerName;
 
 @end

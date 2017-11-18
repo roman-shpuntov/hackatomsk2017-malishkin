@@ -9,7 +9,6 @@
 #import "GameInfoViewController.h"
 #import "GameViewController.h"
 #import "CNFLog.h"
-#import "CNFParser.h"
 
 @interface GameInfoViewController ()
 
@@ -17,8 +16,23 @@
 
 @implementation GameInfoViewController
 
+- (void)_customSetup {
+	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser addDelegate:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+	[self _customSetup];
+}
+
+-(void)dealloc {
+	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser removeDelegate:self];
 }
 
 - (IBAction)_handleHelp:(id)sender {
@@ -38,6 +52,9 @@
 
 - (IBAction)_handlePlay:(id)sender {
 	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser startGame];
 	
 	[self performSegueWithIdentifier:@"sw_game" sender:nil];
 }
