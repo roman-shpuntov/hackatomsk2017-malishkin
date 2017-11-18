@@ -70,3 +70,11 @@ php artisan key:generate
 ```
 php artisan migrate
 ```
+
+### 5. Аутентификация
+
+Аутентификация "из коробки":
+
+```sh
+php artisan make:auth
+```
