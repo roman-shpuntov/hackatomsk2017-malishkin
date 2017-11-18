@@ -62,25 +62,32 @@ class GameController extends Controller
 
         if ($offer) {
             $game = $this->gameSvc->newGame($offer, $user);
-            $gameInfo = [
-                'game_id' => $game->id,
-                'prize'   => $game->prize,
-                'users'   => $game->users->toArray(),
-            ];
+            $snapshot = $this->gameSvc->initGameField($game->id, $offer->user_id, config('game.field_size'));
 
-            $field = $this->gameSvc->initGameField($game->id, config('game.field_size'));
+            $gameInfo = [
+                'game_id'  => $game->id,
+                'prize'    => $game->prize,
+                'users'    => $game->users->toArray(),
+                'snapshot' => $snapshot,
+            ];
 
             $this->notifier->offerAccepted($offer->game_key, $gameInfo);
 
             return response()->json([
                 'channel'   => $this->notifier->getChannelName($offer->game_key),
                 'game_info' => $gameInfo,
-                'turn' => $offer->user_id,
-                'field' => $field,
             ]);
         } else {
             $gameKey = $this->offerSvc->addOffer($user->id, $request['type'], $request['bet']);
             return response()->json(['channel' => $this->notifier->getChannelName($gameKey)]);
         }
+    }
+
+    /**
+     * Ход игрока
+     */
+    public function step()
+    {
+        // echo
     }
 }

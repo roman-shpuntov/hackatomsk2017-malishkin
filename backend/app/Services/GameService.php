@@ -45,22 +45,36 @@ class GameService
     }
 
     /**
-     * Инициализация игрового поля
-     * @param int $gameId id игры
-     * @param int $size размер поля, в клетках по стороне квадрата
-     * @return string json
+     * Название ключа в кеше: снимок поля игры
+     * @param int $gameId
+     * @return string
      */
-    public function initGameField(int $gameId, int $size): string
+    private function getGameCacheKey(int $gameId): string
+    {
+        return 'game-' . $gameId;
+    }
+
+    /**
+     * Инициализация игрового поля
+     *
+     * Поле кешируется на полчаса. Должно хватить на одну игру
+     *
+     * @param int $gameId id игры
+     * @param int $turn   id игрока, чья очередь ходить
+     * @param int $size   размер поля, в клетках по стороне квадрата
+     * @return array
+     */
+    public function initGameField(int $gameId, int $turn, int $size): array
     {
         $field = array_fill(0, $size, (array_fill(0, $size, CellStates::FREE)));
         $max = $size - 1;
         $field[0][$max] = $field[$max][0] = CellStates::ONE;
         $field[0][0] = $field[$max][$max] = CellStates::TWO;
 
-        $field = json_encode($field);
+        $snapshot = compact('turn', 'field');
 
-        Cache::put($gameId, $field, 60);
+        Cache::put($this->getGameCacheKey($gameId), json_encode($snapshot), 30);
 
-        return $field;
+        return $snapshot;
     }
 }

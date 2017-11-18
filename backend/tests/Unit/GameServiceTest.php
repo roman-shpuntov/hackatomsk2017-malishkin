@@ -17,10 +17,11 @@ class GameServiceTest extends TestCase
     {
         $model = $this->createMock(Game::class);
         $svc = new GameService($model);
-        $field = $svc->initGameField(3, 7);
+        $snapshot = $svc->initGameField(3, 34, 7);
 
-        $field = json_decode($field, true);
+        $this->assertEquals(34, $snapshot['turn']);
 
+        $field = $snapshot['field'];
         $this->assertEquals(7, count($field));
         $this->assertEquals(7, count($field[0]));
         $this->assertEquals(7, count($field[6]));
