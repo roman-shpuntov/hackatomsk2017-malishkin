@@ -26,6 +26,14 @@ sudo apt-get update && sudo apt-get install yarn
 
 ## Собственно развертывание проекта
 
+**Все выполняется в каталоге бэкедна**
+
+Пример:
+
+```sh
+cd /home/www/app/backend/
+```
+
 ### 1. Установка пакетов
 
 ```sh
