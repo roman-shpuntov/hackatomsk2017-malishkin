@@ -1,7 +1,7 @@
 <?php
 namespace App\Requests;
 
-use App\Services\GameService;
+use App\Models\Game;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -10,12 +10,12 @@ use Illuminate\Foundation\Http\FormRequest;
 class StepRequest extends FormRequest
 {
     /**
-     * @var GameService
+     * @var Game
      */
-    private $service;
+    private $model;
 
     /**
-     * @param GameService     $service
+     * @param Game            $model
      * @param array           $query      The GET parameters
      * @param array           $request    The POST parameters
      * @param array           $attributes The request attributes (parameters parsed from the PATH_INFO, ...)
@@ -25,7 +25,7 @@ class StepRequest extends FormRequest
      * @param string|resource $content    The raw body data
      */
     public function __construct(
-        GameService $service,
+        Game $model,
         array $query = array(),
         array $request = array(),
         array $attributes = array(),
@@ -35,7 +35,7 @@ class StepRequest extends FormRequest
         $content = null
     ) {
         parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
-        $this->service = $service;
+        $this->model = $model;
     }
 
     /**
@@ -70,7 +70,11 @@ class StepRequest extends FormRequest
         $validator->after(function () use ($validator) {
             [$gameId, $userId, $from, $to] = array_values($this->only('game_id', 'user_id', 'from', 'to'));
 
-            $snapshot = $this->service->getSnapshot($gameId);
+            $snapshot = optional($this->model->find($gameId))->snapshot;
+            if (!$snapshot) {
+                return $validator->errors()->add('bug', 'Something wrong, a game snapshot not found');
+            }
+            $snapshot = json_decode($snapshot, true);
 
             if ($snapshot['turn_user_id'] != $userId) {
                 return $validator->errors()->add('turn', 'Not your turn now');

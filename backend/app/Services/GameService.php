@@ -67,18 +67,4 @@ class GameService
             'field'        => $field,
         ];
     }
-
-    /**
-     * Получение текущего снимка поля
-     *
-     * Прим: в нормальной ситуации не может быть такого, что снимка поля нет. Первый снимок созается при создании игры
-     *
-     * @param int $gameId
-     * @return array
-     */
-    public function getSnapshot(int $gameId): array
-    {
-        $snapshot = $this->model->find($gameId)->snapshot;
-        return json_decode($snapshot, true);
-    }
 }
