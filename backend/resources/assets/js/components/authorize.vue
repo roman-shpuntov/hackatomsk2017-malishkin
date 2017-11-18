@@ -2,7 +2,7 @@
   <form method="post" @submit="authorize">
     <input type="email" name="email" placeholder="email">
     <input type="password" name="password" placeholder="password">
-    <input type="submit" value="authorize">
+    <input type="submit" value="Log in">
     <a href="#/register">Authorize</a>
   </form>
 </template>
