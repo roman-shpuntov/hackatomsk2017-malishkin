@@ -78,3 +78,24 @@ php artisan migrate
 ```sh
 php artisan make:auth
 ```
+
+#### 5.1 JWT
+
+[GitHub](https://github.com/tymondesigns/jwt-auth)
+
+На данный момент (16.11.2017) библиотека встает криво в Laravel 5.5, см. [issue](https://github.com/tymondesigns/jwt-auth/issues/1298).
+
+Решение: переименовать метод `fire()` в `handle()` тут [vendor/tymon/jwt-auth/src/Commands/JWTGenerateCommand.php] Только потом выполнять:
+
+```sh
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\JWTAuthServiceProvider"
+php artisan jwt:generate
+```
+
+Назад потом не забудь переименовать, а то при обновлении `Composer` задаст вопрос, а ты уже не вспомнишь, че там было и почему правил код библиотеки.
+
+**Важно** Секретный ключ генерируемый `php artisan jwt:generate` прописывается прям в `config/jwt.php`, что не есть гуд. Надо убрать его оттуда и прописать только в `.env`:
+
+```
+JWT_SECRET=<some_super_secret_key>
+```
