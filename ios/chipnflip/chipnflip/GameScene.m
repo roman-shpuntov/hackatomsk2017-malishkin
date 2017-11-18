@@ -141,6 +141,8 @@ const CGFloat		CNFTouchAplha	= 0.5;
 					 location.y >= _fieldRange.origin.y + _fieldRange.size.height) {
 				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:0.2]];
 			}
+			else
+				[_selectedNode runAction:[SKAction moveTo:location duration:0.2]];
 			
 			_selectedNode = nil;
 		}
