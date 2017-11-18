@@ -16,6 +16,7 @@
     NSTimeInterval	_lastUpdateTime;
 	CGRect			_fieldRange;
 	SKSpriteNode	*_selectedNode;
+	CGPoint			_selectedLocation;
 }
 
 const NSUInteger	CNFGridSide		= 7;
@@ -31,9 +32,9 @@ const CGFloat		CNFTouchAplha	= 0.5;
 	
 	self.anchorPoint = CGPointMake(0.0, 0.0);
 	
-	_cover = self.size.width / CNFGridSide;
-	_space = _cover / CNFGridSpace;
-	_side = _cover - _space;
+	_cover	= self.size.width / CNFGridSide;
+	_space	= _cover / CNFGridSpace;
+	_side	= _cover - _space;
 	
 	for (int i=0; i<CNFGridSide; i++) {
 		for (int j=0; j<CNFGridSide; j++) {
@@ -81,10 +82,17 @@ const CGFloat		CNFTouchAplha	= 0.5;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 	for (UITouch *touch in touches) {
-		CGPoint touchLocation = [touch locationInNode:self];
-		SKNode *touchedNode = [self nodeAtPoint:touchLocation];
+		CGPoint location = [touch locationInNode:self];
 		
-		CNFLog(@"%f:%f", touchLocation.x, touchLocation.y);
+		int x = (int) ((location.x - _fieldRange.origin.x) / _cover);
+		int y = (int) ((location.y - _fieldRange.origin.y) / _cover);
+
+		_selectedLocation.x = _fieldRange.origin.x + x * _cover + _side / 2 + _space / 2;
+		_selectedLocation.y = _fieldRange.origin.y + y * _cover + _side / 2 + _space / 2;
+
+		SKNode *touchedNode = [self nodeAtPoint:location];
+		
+		CNFLog(@"%f:%f", location.x, location.y);
 		
 		if (touchedNode != self) {
 			if ([touchedNode.name isEqualToString:@"chip"]) {
@@ -116,6 +124,23 @@ const CGFloat		CNFTouchAplha	= 0.5;
 		for (UITouch *touch in touches) {
 			_selectedNode.zPosition--;
 			_selectedNode.alpha = 1.0;
+			
+			CGPoint location = [touch locationInNode:self];
+			
+			int x = (int) ((location.x - _fieldRange.origin.x) / _cover);
+			int y = (int) ((location.y - _fieldRange.origin.y) / _cover);
+			
+			location.x = _fieldRange.origin.x + x * _cover + _side / 2 + _space / 2;
+			location.y = _fieldRange.origin.y + y * _cover + _side / 2 + _space / 2;
+			
+			if (location.x < _fieldRange.origin.x ||
+				location.x >= _fieldRange.origin.x + _fieldRange.size.width) {
+				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:0.2]];
+			}
+			else if (location.y < _fieldRange.origin.y ||
+					 location.y >= _fieldRange.origin.y + _fieldRange.size.height) {
+				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:0.2]];
+			}
 			
 			_selectedNode = nil;
 		}
