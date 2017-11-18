@@ -73,3 +73,36 @@ input:not([type="submit"]) {
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
 }
+
+.page-game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .grid {
+    .row {
+      .cell {
+        display: inline-block;
+        height: 50px;
+        width: 50px;
+        background: rgba(0, 0, 0, 0.4);
+        margin: 0 2px;
+
+        .check {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+
+          &.first-check {
+            background: black;
+          }
+
+          &.second-check {
+            background: white;
+          }
+        }
+      }
+    }
+  }
+}
