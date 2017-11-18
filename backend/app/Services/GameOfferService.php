@@ -36,13 +36,16 @@ class GameOfferService
 
         $bet = $type == GameTypes::FLOAT_BET ? $bet : ($type == GameTypes::FIXED_BET ? conf('game.fixed_bet') : 0);
 
+        $gameKey = str_random(6);
+
         $this->model->fill([
             'user_id'  => $userId,
             'type'     => $type,
             'bet'      => $bet,
+            'game_key' => $gameKey,
         ])->save();
 
-        return $this->model;
+        return $gameKey;
     }
 
     /**
