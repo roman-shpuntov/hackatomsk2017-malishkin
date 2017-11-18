@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int    $user_id  id юзера, предложивший игру
  * @property string $type     тип игры, см. Enums\GameTypes
  * @property int    $bet      ставка
+ * @property string $game_key ключ предложения об игре
  *
  * @property User   $user     юзер, предложивший игру
  */
@@ -32,6 +33,7 @@ class GameOffer extends Model
         'user_id',
         'type',
         'bet',
+        'game_key',
     ];
 
     /**
