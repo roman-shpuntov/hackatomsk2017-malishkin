@@ -82,17 +82,17 @@ class StepRequest extends FormRequest
 
             $field = $snapshot['field'];
 
-            [$fromX, $fromY] = explode(':', $from);
-            if (!isset($field[$fromX][$fromY]) || $field[$fromX][$fromY] != $userId) {
+            [$fromRow, $fromCol] = explode(':', $from);
+            if (!isset($field[$fromRow][$fromCol]) || $field[$fromRow][$fromCol] != $userId) {
                 return $validator->errors()->add('not_own_chip', 'You try to move not your chip');
             }
 
-            [$toX, $toY] = explode(':', $to);
-            if (!isset($field[$toX][$toY]) || $field[$toX][$toY] != 0) {
+            [$toRow, $toCol] = explode(':', $to);
+            if (!isset($field[$toRow][$toCol]) || $field[$toRow][$toCol] != 0) {
                 return $validator->errors()->add('occupied_cell', 'You try to step to occupied cell');
             }
 
-            if (abs($fromX - $toX) > 2 || abs($fromY - $toY) > 2) {
+            if (abs($fromRow - $toRow) > 2 || abs($fromCol - $toCol) > 2) {
                 $validator->errors()->add('far_step', 'You try to step too far');
             }
         });
