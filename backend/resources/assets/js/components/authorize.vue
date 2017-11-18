@@ -1,9 +1,9 @@
 <template>
-  <form method="post" @submit="authorize">
-    <input type="email" name="email" placeholder="email">
-    <input type="password" name="password" placeholder="password">
+  <form class="authorize-form" method="post" @submit="authorize">
+    <input type="email" name="email" placeholder="Your Email">
+    <input type="password" name="password" placeholder="Password">
     <input type="submit" value="Log in">
-    <a href="#/register">Authorize</a>
+    <a class="register-link" href="#/register">Register</a>
   </form>
 </template>
 

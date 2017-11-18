@@ -1,5 +1,5 @@
-@import "variables";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+// @import "variables";
+// @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
 html, body, #application {
   margin: 0;
@@ -9,14 +9,13 @@ html, body, #application {
   background: linear-gradient(to bottom, #7633c7 0%, #8744d9 100%);
 }
 
-input[type="submit"], button {
-  height: 40px;
-  width: 200px;
+input, button {
+  box-sizing: border-box;
+
+  height: 50px;
+  width: 217px;
   padding: 0;
 
-  background: transparent;
-
-  border: solid white;
   border-radius: 100px;
 
   display: inline-flex;
@@ -24,11 +23,15 @@ input[type="submit"], button {
   align-items: center;
 
   font-family: 'Roboto', sans-serif;
-  color: white;
   text-decoration: none;
   outline: 0;
-  font-size: 18px;
+  font-size: 14px;
+}
 
+input[type="submit"], button {
+  background: transparent;
+  border: solid white;
+  color: white;
   cursor: pointer;
 
   &:hover {
@@ -45,4 +48,28 @@ input[type="submit"], button {
   &::-moz-focus-inner {
     border: none;
   }
+}
+
+input:not([type="submit"]) {
+  border: solid transparent;
+  padding: 0 20px;
+  color: black;
+}
+
+.authorize-form, .register-form {
+  height: 100%;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  input:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
+.register-link {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
 }
