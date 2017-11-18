@@ -7,77 +7,72 @@
 //
 
 #import "GameScene.h"
+#import "CNFLog.h"
 
 @implementation GameScene {
-    NSTimeInterval _lastUpdateTime;
-    SKShapeNode *_spinnyNode;
-    SKLabelNode *_label;
+	CGFloat			_side;
+	CGFloat			_cover;
+	CGFloat			_space;
+    NSTimeInterval	_lastUpdateTime;
+	CGRect			_fieldRange;
+}
+
+const NSUInteger	CNFGridSide		= 7;
+
+-(void)dealloc {
+	CNFLog(@"");
 }
 
 - (void)sceneDidLoad {
-    // Setup your scene here
-    
-    // Initialize update time
     _lastUpdateTime = 0;
-    
-    // Get label node from scene and store it for use later
-    _label = (SKLabelNode *)[self childNodeWithName:@"//helloLabel"];
-    
-    _label.alpha = 0.0;
-    [_label runAction:[SKAction fadeInWithDuration:2.0]];
-    
-    CGFloat w = (self.size.width + self.size.height) * 0.05;
-    
-    // Create shape node to use during mouse interaction
-    _spinnyNode = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(w, w) cornerRadius:w * 0.3];
-    _spinnyNode.lineWidth = 2.5;
-    
-    [_spinnyNode runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:M_PI duration:1]]];
-    [_spinnyNode runAction:[SKAction sequence:@[
-                                                [SKAction waitForDuration:0.5],
-                                                [SKAction fadeOutWithDuration:0.5],
-                                                [SKAction removeFromParent],
-                                                ]]];
+	
+	self.anchorPoint = CGPointMake(0.0, 0.0);
+	
+	_cover = self.size.width / CNFGridSide;
+	_space = _cover / 10;
+	_side = _cover - _space;
+	
+	for (int i=0; i<CNFGridSide; i++) {
+		for (int j=0; j<CNFGridSide; j++) {
+			CGFloat			x = i * _side + i * _space;
+			CGFloat			y = j * _side + j * _space + (self.size.height - self.size.width) / 2;
+			CGFloat			mx = x + _side / 2 + _space / 2;
+			CGFloat			my = y + _side / 2 + _space / 2;
+			
+			if (i == 0 && j == 0) {
+				_fieldRange.origin.x = x;
+				_fieldRange.origin.y = y;
+			}
+			
+			//if (rand() % 2) {
+			NSString		*m = [NSString stringWithFormat:@"%@", ((i + j) % 2 == 0)?@"wchip.png":@"bchip.png"];
+			SKSpriteNode	*n = [SKSpriteNode spriteNodeWithImageNamed:m];
+			
+			n.position = CGPointMake(mx, my);
+			n.size  = CGSizeMake(_side, _side);
+			n.name = @"chip";
+			[self addChild:n];
+			//}
+			
+			SKShapeNode *item = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(_cover, _cover)];
+			item.name = @"grid";
+			if ((i + j) % 2)
+				item.fillColor = SKColor.whiteColor;
+			else
+				item.fillColor = SKColor.blackColor;
+			item.lineWidth = 0.0;
+			item.position = CGPointMake(mx, my);
+			item.zPosition = -100;
+			
+			[self addChild:item];
+		}
+	}
+	
+	_fieldRange.size.width	= _cover * CNFGridSide;
+	_fieldRange.size.height	= _cover * CNFGridSide;
+	
+	CNFLog(@"range %f:%f %f:%f", _fieldRange.origin.x, _fieldRange.origin.y, _fieldRange.size.width, _fieldRange.size.height);
 }
-
-
-- (void)touchDownAtPoint:(CGPoint)pos {
-    SKShapeNode *n = [_spinnyNode copy];
-    n.position = pos;
-    n.strokeColor = [SKColor greenColor];
-    [self addChild:n];
-}
-
-- (void)touchMovedToPoint:(CGPoint)pos {
-    SKShapeNode *n = [_spinnyNode copy];
-    n.position = pos;
-    n.strokeColor = [SKColor blueColor];
-    [self addChild:n];
-}
-
-- (void)touchUpAtPoint:(CGPoint)pos {
-    SKShapeNode *n = [_spinnyNode copy];
-    n.position = pos;
-    n.strokeColor = [SKColor redColor];
-    [self addChild:n];
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    // Run 'Pulse' action from 'Actions.sks'
-    [_label runAction:[SKAction actionNamed:@"Pulse"] withKey:@"fadeInOut"];
-    
-    for (UITouch *t in touches) {[self touchDownAtPoint:[t locationInNode:self]];}
-}
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    for (UITouch *t in touches) {[self touchMovedToPoint:[t locationInNode:self]];}
-}
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
-}
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
-}
-
 
 -(void)update:(CFTimeInterval)currentTime {
     // Called before each frame is rendered

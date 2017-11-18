@@ -25,6 +25,8 @@
 
 - (IBAction)_handlePlay:(id)sender {
 	CNFLog(@"");
+	
+	[self performSegueWithIdentifier:@"sw_game" sender:nil];
 }
 
 - (IBAction)_handleSettings:(id)sender {

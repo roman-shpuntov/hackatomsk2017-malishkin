@@ -24,6 +24,8 @@
 
 - (IBAction)_handleLogin:(id)sender {
 	CNFLog(@"");
+	
+	[self performSegueWithIdentifier:@"sw_login" sender:nil];
 }
 
 - (IBAction)_handleRegistration:(id)sender {
