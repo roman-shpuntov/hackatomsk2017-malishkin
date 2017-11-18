@@ -22,7 +22,8 @@
             password: event.target.password.value
           })
         }).then((request) => request.json()).then((data) => {
-          console.log(data);
+          localStorage.token = data.token;
+          this.$router.push("/menu");
         });
 
         event.preventDefault();
