@@ -91,10 +91,6 @@ class GameController extends Controller
      */
     public function step(StepRequest $request)
     {
-        $params = array_values($request->only('game_id', 'user_id', 'from', 'to'));
-        $result = $this->gameSvc->isStepAllowed(...$params);
-        if ($result !== true) {
-            return response()->json(['error' => $result]);
-        }
+        // TODO реализация
     }
 }

@@ -101,12 +101,12 @@ class GameService
     /**
      * Чтение снимка поля из кеша
      * @param int $gameId
-     * @return array [turn => user id, field = array]
+     * @return null|array [turn => user id, field = array]
      */
-    private function readSnapshotFromCache(int $gameId): array
+    private function readSnapshotFromCache(int $gameId): ?array
     {
         $snapshot = Cache::get($this->getGameCacheKey($gameId));
-        return json_decode($snapshot, true);
+        return $snapshot ? json_decode($snapshot, true) : null;
     }
 
     /**
@@ -126,54 +126,13 @@ class GameService
 
     /**
      * Восстановить снимок поля по логу игры
-     * @param int    $gameId
-     * @param string $log
+     * @param int         $gameId
+     * @param string|null $log
      * @return array
      */
-    public function rebuildFieldByLog(int $gameId, string $log): array
+    public function rebuildFieldByLog(int $gameId, ?string $log): array
     {
         // TODO распасить лог, проиграть его весь над полем, определить, чей ход, записать в кеш и вернуть результат
         return $this->initGameField($gameId, 0, config('game.field_size'));
-    }
-
-    /**
-     * Проверка хода пользователя
-     *
-     * Проверки: сейчас ход игрока; можно ходить, куда указал юзер.
-     *
-     * TODO Хреновое решение. ЭТо как бы валидация, надо возращать ValidationException. Или валидировать в другом месте.
-     *
-     * @param int    $gameId id игры
-     * @param int    $userId id игрока, делающего ход
-     * @param string $from   откуда двигает фишку, формат x:y
-     * @param string $to     куда двигает фишку, формат x:y
-     * @return mixed сообщение об ошибке или TRUE
-     */
-    public function isStepAllowed(int $gameId, int $userId, string $from, string $to)
-    {
-        $snapshot = $this->getSnapshot($gameId);
-        if ($snapshot['turn_user_id'] != $userId) {
-            return 'Not your turn now';
-        }
-
-        $field = $snapshot['field'];
-
-        [$fromX, $fromY] = explode(':', $from);
-        if (!isset($field[$fromX][$fromY]) || $field[$fromX][$fromY] != $userId) {
-            return 'You try to move not your chip';
-        }
-
-        [$toX, $toY] = explode(':', $to);
-        if (!isset($field[$toX][$toY]) || $field[$toX][$toY] != 0) {
-            return 'You try to step to occupied cell';
-        }
-
-        if (abs($fromX - $toX) > 2 || abs($fromY - $toY) > 2) {
-            return 'You try to step too far';
-        }
-
-        $this->snapshot = $snapshot;
-
-        return true;
     }
 }
