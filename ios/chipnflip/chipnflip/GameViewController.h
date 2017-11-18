@@ -12,4 +12,6 @@
 
 @interface GameViewController : UIViewController
 
+@property (nonnull, strong) UIViewController	*prevViewController;
+
 @end

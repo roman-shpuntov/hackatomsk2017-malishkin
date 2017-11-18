@@ -13,7 +13,8 @@
 @optional
 - (void) serverError:(NSError *) error;
 - (void) serverData:(NSString *) string;
-- (void) serverReady:(NSString *) token channel:(NSString *) channel;
+- (void) serverLoginReady:(NSString *) token channel:(NSString *) channel;
+- (void) serverGameReady:(NSString *) userName;
 @end
 
 @interface CNFParser : NSObject <CNFConnectionDelegate>

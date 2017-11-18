@@ -29,6 +29,67 @@
 	return delegates;
 }
 
+- (void) _notifyError:(NSString *) str {
+	NSError	*error = [[NSError alloc] initWithDomain:str code:-1 userInfo:nil];
+	NSArray	*delegates = [self _getDelegates];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^(void) {
+		for (id <CNFParserDelegate> delegate in delegates) {
+			if ([delegate respondsToSelector:@selector(serverError:)])
+				[delegate serverError:error];
+		}
+	});
+}
+
+- (void) _notifyData:(NSString *) str {
+	NSArray	*delegates = [self _getDelegates];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^(void) {
+		for (id <CNFParserDelegate> delegate in delegates) {
+			if ([delegate respondsToSelector:@selector(serverData:)])
+				[delegate serverData:str];
+		}
+	});
+}
+
+- (void) _notifyLoginReady:(NSString *) token channel:(NSString *) channel {
+	NSArray	*delegates = [self _getDelegates];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^(void) {
+		for (id <CNFParserDelegate> delegate in delegates) {
+			if ([delegate respondsToSelector:@selector(serverLoginReady:channel:)])
+				[delegate serverLoginReady:token channel:channel];
+		}
+	});
+}
+
+- (void) _notifyGameReady:(NSString *) userName {
+	NSArray	*delegates = [self _getDelegates];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^(void) {
+		for (id <CNFParserDelegate> delegate in delegates) {
+			if ([delegate respondsToSelector:@selector(serverGameReady:)])
+				[delegate serverGameReady:userName];
+		}
+	});
+}
+
+- (void)recvData:(NSDictionary *)dict {
+	NSString	*string = [dict objectForKey:@"error"];
+	if (string && ![string isEqualToString:@""]) {
+		[self _notifyError:string];
+		return;
+	}
+	
+	string = [dict objectForKey:@"channel"];
+	if (string && ![string isEqualToString:@""]) {
+		//[self _notifyGameReady:];
+		return;
+	}
+	
+	[self _notifyData:string];
+}
+
 - (id) init {
 	self = [super init];
 	

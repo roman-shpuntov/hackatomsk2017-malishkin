@@ -12,7 +12,8 @@
 @protocol CNFConnectionDelegate <NSObject>
 @optional
 - (void) recvData:(NSDictionary *) dict;
-- (void) ready:(NSString *) token channel:(NSString *) channel;
+- (void) loginReady:(NSString *) token channel:(NSString *) channel;
+- (void) gameReady:(NSNumber *) peerid;
 @end
 
 @interface CNFConnection : NSObject <PTPusherDelegate, NSURLSessionDelegate>
@@ -30,5 +31,6 @@
 @property (nonatomic, readonly)	NSString	*token;
 @property (nonatomic, readonly)	NSString	*channel;
 @property (nonatomic, readonly)	NSNumber	*userid;
+@property (nonatomic, readonly)	NSNumber	*peerid;
 
 @end

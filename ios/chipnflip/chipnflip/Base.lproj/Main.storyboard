@@ -42,19 +42,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6E-JC-bIe">
-                                <rect key="frame" x="94" y="24" width="132" height="29"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="132" id="OGn-yz-Rcr"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="imj-K7-4RG" customClass="CNFButton">
                                 <rect key="frame" x="80" y="432.5" width="160" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Registration"/>
+                                <state key="normal" title="Sign up"/>
                                 <connections>
                                     <action selector="_handleRegistration:" destination="sab-tB-uc3" eventType="touchUpInside" id="VM9-Fr-tZk"/>
                                 </connections>
@@ -65,9 +56,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.5409764051" blue="0.84731429820000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="m6E-JC-bIe" firstAttribute="centerX" secondItem="1AY-2s-8LO" secondAttribute="centerX" id="1z9-HR-O35"/>
                             <constraint firstItem="CrO-wT-ZEA" firstAttribute="top" secondItem="1AY-2s-8LO" secondAttribute="top" multiplier="650:100" id="6kB-Yr-zrC"/>
-                            <constraint firstItem="m6E-JC-bIe" firstAttribute="top" secondItem="1AY-2s-8LO" secondAttribute="top" multiplier="120:100" id="6v7-mY-XWw"/>
                             <constraint firstItem="McD-Ex-Mw8" firstAttribute="width" secondItem="ggd-Uc-Cyx" secondAttribute="width" multiplier="1:2" id="8cq-sy-7st"/>
                             <constraint firstItem="xT5-0I-y0S" firstAttribute="top" secondItem="ggd-Uc-Cyx" secondAttribute="top" id="C15-gV-CSb"/>
                             <constraint firstItem="McD-Ex-Mw8" firstAttribute="centerX" secondItem="1AY-2s-8LO" secondAttribute="centerX" id="Kqa-nZ-yP1"/>
@@ -198,6 +187,9 @@
                                 <rect key="frame" x="80" y="517" width="160" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="End game"/>
+                                <connections>
+                                    <action selector="_handleEnd:" destination="BV1-FR-VrT" eventType="touchUpInside" id="XLP-dp-JSr"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -236,15 +228,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Registration" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ah4-GP-jMe">
-                                <rect key="frame" x="52.5" y="24" width="215" height="29"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="215" id="gnU-cm-uxA"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SeU-vb-DJ1" customClass="CNFButton">
                                 <rect key="frame" x="80" y="364.5" width="160" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
@@ -256,7 +239,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xyc-Hl-kqT" customClass="CNFButton">
                                 <rect key="frame" x="80" y="432.5" width="160" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Register"/>
+                                <state key="normal" title="Sign up"/>
                                 <connections>
                                     <action selector="_handleRegister:" destination="Lbp-ed-3PX" eventType="touchUpInside" id="WVZ-6f-6CX"/>
                                 </connections>
@@ -274,7 +257,6 @@
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Xyc-Hl-kqT" firstAttribute="width" secondItem="iDl-Tn-Ds8" secondAttribute="width" multiplier="1:2" id="8YJ-au-blY"/>
-                            <constraint firstItem="ah4-GP-jMe" firstAttribute="centerX" secondItem="nkh-rq-o7c" secondAttribute="centerX" id="BO8-2c-muV"/>
                             <constraint firstItem="SeU-vb-DJ1" firstAttribute="width" secondItem="iDl-Tn-Ds8" secondAttribute="width" multiplier="1:2" id="Cnu-Vd-V1q"/>
                             <constraint firstAttribute="bottom" secondItem="gRS-Fu-W7g" secondAttribute="bottom" id="DtA-ev-LOM"/>
                             <constraint firstItem="StB-Cg-oiF" firstAttribute="width" secondItem="iDl-Tn-Ds8" secondAttribute="width" multiplier="1:2" id="ENZ-OS-Oh6"/>
@@ -286,7 +268,6 @@
                             <constraint firstItem="EIx-VJ-mmW" firstAttribute="width" secondItem="iDl-Tn-Ds8" secondAttribute="width" multiplier="1:2" id="O61-YH-UyL"/>
                             <constraint firstItem="IUx-Gn-2a1" firstAttribute="top" secondItem="nkh-rq-o7c" secondAttribute="top" multiplier="450:100" id="OKG-Mz-Jgz"/>
                             <constraint firstItem="gRS-Fu-W7g" firstAttribute="top" secondItem="iDl-Tn-Ds8" secondAttribute="top" id="Oef-Sn-LAp"/>
-                            <constraint firstItem="ah4-GP-jMe" firstAttribute="top" secondItem="nkh-rq-o7c" secondAttribute="top" multiplier="120:100" id="RcT-84-8vY"/>
                             <constraint firstItem="Xyc-Hl-kqT" firstAttribute="centerX" secondItem="nkh-rq-o7c" secondAttribute="centerX" id="SOz-fY-iQI"/>
                             <constraint firstItem="gRS-Fu-W7g" firstAttribute="leading" secondItem="iDl-Tn-Ds8" secondAttribute="leading" id="Tx4-fk-cTd"/>
                             <constraint firstItem="IUx-Gn-2a1" firstAttribute="width" secondItem="iDl-Tn-Ds8" secondAttribute="width" multiplier="1:2" id="Vun-Xp-Sd0"/>
@@ -318,6 +299,6 @@
         <image name="background.png" width="1125" height="2436"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ags-WK-UL5"/>
+        <segue reference="CL9-tW-cs6"/>
     </inferredMetricsTieBreakers>
 </document>

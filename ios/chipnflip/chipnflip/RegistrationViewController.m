@@ -35,7 +35,7 @@
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
--(void)serverReady:(NSString *)token channel:(NSString *)channel {
+-(void)serverLoginReady:(NSString *)token channel:(NSString *)channel {
 	[self performSegueWithIdentifier:@"sw_register" sender:nil];
 }
 

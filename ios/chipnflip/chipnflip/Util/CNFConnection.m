@@ -25,6 +25,7 @@ NSString *const	CNFConnectionSubscribeAnswerChannel	= @"channel";
 
 NSString *const	CNFConnectionSubscribed				= @"subscribed";
 NSString *const	CNFConnectionShutdown				= @"shutdown";
+NSString *const	CNFConnectionChannel				= @"channel";
 
 NSString *const	CNFConnectionEventOfferAccepted		= @"offer-accepted";
 NSString *const	CNFConnectionEventGridUpdated		= @"grid-updated";
@@ -136,7 +137,10 @@ typedef NS_ENUM(NSUInteger, CNFState) {
 	PTPusherChannel *channel = [_pusher subscribeToChannelNamed:_channel];
 	
 	[channel bindToEventNamed:CNFConnectionEventOfferAccepted handleWithBlock:^(PTPusherEvent *channelEvent) {
-		// TOOO
+		[self _parseGameInfo:channelEvent.data];
+		
+		[self _notifyGameReady];
+		[self _notifyRecv:channelEvent.data];
 	}];
 	
 	[channel bindToEventNamed:CNFConnectionEventGridUpdated handleWithBlock:^(PTPusherEvent *channelEvent) {
@@ -146,6 +150,22 @@ typedef NS_ENUM(NSUInteger, CNFState) {
 	[channel bindToEventNamed:CNFConnectionEventGameEnded handleWithBlock:^(PTPusherEvent *channelEvent) {
 		// TOOO
 	}];
+}
+- (void) _parseGameInfo:(NSDictionary *) dict {
+	CNFLog(@"");
+	
+	NSDictionary	*gameInfo = [dict objectForKey:@"game_info"];
+	if (!gameInfo) {
+		CNFLog(@"no game info");
+		return;
+	}
+	
+	NSArray *users = [gameInfo objectForKey:@"users"];
+	if (!users) {
+		CNFLog(@"no users");
+		return;
+	}
+	
 }
 
 -(void) _postString:(NSString *) suffix json:(NSString *) json {
@@ -216,12 +236,21 @@ typedef NS_ENUM(NSUInteger, CNFState) {
 	}
 }
 
-- (void) _notifyReady {
+- (void) _notifyLoginReady {
 	NSArray		*delegates = [self _getDelegates];
 	
 	for (id <CNFConnectionDelegate> delegate in delegates) {
-		if ([delegate respondsToSelector:@selector(ready:channel:)])
-			[delegate ready:_token channel:_channel];
+		if ([delegate respondsToSelector:@selector(loginReady:channel:)])
+			[delegate loginReady:_token channel:_channel];
+	}
+}
+
+- (void) _notifyGameReady {
+	NSArray		*delegates = [self _getDelegates];
+	
+	for (id <CNFConnectionDelegate> delegate in delegates) {
+		if ([delegate respondsToSelector:@selector(gameReady:)])
+			[delegate gameReady:_peerid];
 	}
 }
 
@@ -268,7 +297,20 @@ typedef NS_ENUM(NSUInteger, CNFState) {
 					else {
 						_state = CNFStateSubscribe;
 						CNFLog(@"got channel name %@", _channel);
+						
+						NSDictionary	*gameInfo = [rxitem objectForKey:@"game_info"];
+						if (gameInfo) {
+							_state = CNFStateSubscribed;
+							
+							[self _parseGameInfo:rxitem];
+							
+							[self _notifyLoginReady];
+							[self _notifyGameReady];
+							break;
+						}
+						
 						[self _pusherSubscribe];
+						[self _notifyLoginReady];
 					}
 					break;
 				}
@@ -300,8 +342,6 @@ typedef NS_ENUM(NSUInteger, CNFState) {
 						[_pusher unsubscribeAllChannels];
 						[_pusher disconnect];
 					}
-					else
-						[self _notifyRecv:rxitem];
 					break;
 				}
 			}
