@@ -144,6 +144,26 @@ html, body, #application {
           }
         }
       }
+
+      &.howtoplay {
+        display: flex;
+        flex-flow: row;
+
+        .aside {
+          padding: 20px;
+          flex-basis: 30%;
+          font-size: 2em;
+          color: $brand-color;
+        }
+
+        .article {
+          padding: 20px;
+
+          p:first-child {
+            margin-top: 0;
+          }
+        }
+      }
     }
   }
 

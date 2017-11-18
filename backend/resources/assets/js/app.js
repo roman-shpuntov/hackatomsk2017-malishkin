@@ -8,6 +8,7 @@ import gamePage from "./components/game.vue";
 
 import indexPage from "./pages/index";
 import creditsPage from "./pages/credits";
+import howtoplayPage from "./pages/howtoplay";
 
 Vue.use(VueRouter);
 
@@ -17,7 +18,8 @@ const router = new VueRouter({
     { path: "/credits", component: creditsPage },
     { path: "/register", component: registerPage },
     { path: "/menu", component: menuPage },
-    { path: "/game", component: gamePage }
+    { path: "/game", component: gamePage },
+    { path: "/howtoplay", component: howtoplayPage }
   ]
 });
 
