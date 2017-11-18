@@ -29,14 +29,18 @@ class GameService
      * Создание новой игры
      * @param GameOffer $offer предложение об игре от первого игрока
      * @param User      $user2 второй игрок
+     * @param int       $size размер поля, в клетках по стороне квадрата
      * @return Game
      */
-    public function newGame(GameOffer $offer, User $user2): Game
+    public function newGame(GameOffer $offer, User $user2, int $size): Game
     {
+        $snapshot = $this->initGameField($offer->user_id, $user2->id, $size);
+
         $this->model->fill([
             'type'     => $offer->type,
             'prize'    => $offer->bet * 2,
             'is_ended' => 0,
+            'snapshot' => json_encode($snapshot),
         ])->save();
 
         $this->model->users()->attach([$offer->user->id, $user2->id]);
@@ -45,36 +49,22 @@ class GameService
     }
 
     /**
-     * Название ключа в кеше: снимок поля игры
-     * @param int $gameId
-     * @return string
-     */
-    private function getGameCacheKey(int $gameId): string
-    {
-        return 'game-' . $gameId;
-    }
-
-    /**
      * Инициализация игрового поля
-     *
-     * Поле кешируется на полчаса. Должно хватить на одну игру
-     *
-     * @param int $gameId id игры
-     * @param int $turn   id игрока, чья очередь ходить
-     * @param int $size   размер поля, в клетках по стороне квадрата
+     * @param int  $userId1 id игрока, чья очередь ходить
+     * @param int  $userId2 id второго игрока
+     * @param int  $size    размер поля, в клетках по стороне квадрата
      * @return array
      */
-    public function initGameField(int $gameId, int $turn, int $size): array
+    public function initGameField(int $userId1, int $userId2, int $size): array
     {
-        $field = array_fill(0, $size, (array_fill(0, $size, CellStates::FREE)));
+        $field = array_fill(0, $size, (array_fill(0, $size, 0)));
         $max = $size - 1;
-        $field[0][$max] = $field[$max][0] = CellStates::ONE;
-        $field[0][0] = $field[$max][$max] = CellStates::TWO;
+        $field[0][$max] = $field[$max][0] = $userId1;
+        $field[0][0] = $field[$max][$max] = $userId2;
 
-        $snapshot = compact('turn', 'field');
-
-        Cache::put($this->getGameCacheKey($gameId), json_encode($snapshot), 30);
-
-        return $snapshot;
+        return [
+            'turn_user_id' => $userId1,
+            'field'        => $field,
+        ];
     }
 }

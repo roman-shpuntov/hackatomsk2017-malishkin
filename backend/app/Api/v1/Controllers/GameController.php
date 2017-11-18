@@ -3,7 +3,9 @@ namespace App\Api\V1\Controllers;
 
 use App\GameNotifier;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Requests\GameOfferRequest;
+use App\Requests\StepRequest;
 use App\Services\GameOfferService;
 use App\Services\GameService;
 use Auth;
@@ -56,27 +58,27 @@ class GameController extends Controller
      */
     public function gameOffer(GameOfferRequest $request)
     {
+        /** @var User $user */
         $user = Auth::user();
 
         $offer = $this->offerSvc->searchGame($user->id, $request['type'], $request['bet']);
 
         if ($offer) {
-            $game = $this->gameSvc->newGame($offer, $user);
-            $snapshot = $this->gameSvc->initGameField($game->id, $offer->user_id, config('game.field_size'));
+            $game = $this->gameSvc->newGame($offer, $user, config('game.field_size'));
 
-            $gameInfo = [
-                'game_id'  => $game->id,
-                'prize'    => $game->prize,
-                'users'    => $game->users->toArray(),
-                'snapshot' => $snapshot,
+            $response = [
+                'game_info' => [
+                    'game_id'  => $game->id,
+                    'prize'    => $game->prize,
+                    'users'    => $game->users->toArray(),
+                    'snapshot' => $game->snapshot,
+                ],
             ];
 
-            $this->notifier->offerAccepted($offer->game_key, $gameInfo);
+            $this->notifier->offerAccepted($offer->game_key, $response);
 
-            return response()->json([
-                'channel'   => $this->notifier->getChannelName($offer->game_key),
-                'game_info' => $gameInfo,
-            ]);
+            $response['channel'] = $this->notifier->getChannelName($offer->game_key);
+            return response()->json($response);
         } else {
             $gameKey = $this->offerSvc->addOffer($user->id, $request['type'], $request['bet']);
             return response()->json(['channel' => $this->notifier->getChannelName($gameKey)]);
@@ -85,9 +87,12 @@ class GameController extends Controller
 
     /**
      * Ход игрока
+     * @param StepRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function step()
+    public function step(StepRequest $request)
     {
-        // echo
+        $params = array_values($request->only('game_id', 'user_id', 'from', 'to'));
+        $this->gameSvc->step(...$params);
     }
 }

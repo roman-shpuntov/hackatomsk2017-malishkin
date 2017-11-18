@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $type       тип игры, см. Enums\GameTypes
  * @property int    $prize      приз игры
  * @property bool   $is_ended   игра окончена?
+ * @property string $snapshot   снимок поля
+ * @property string $log        игра лог игры
  *
  * @property User[] $users      игроки
  */
@@ -21,13 +23,13 @@ class Game extends Model
     public $timestamps = false;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
+     *
      * @var array
      */
-    protected $fillable = [
-        'type',
-        'prize',
-        'is_ended',
+    protected $guarded = [
+        'id',
+        'created_at',
     ];
 
     /**
@@ -51,11 +53,11 @@ class Game extends Model
     }
 
     /**
-     * Игроки
+     * Игроки. Выдача для game-offer
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_games')->select('id', 'name');
+        return $this->belongsToMany(User::class, 'user_games')->select(\DB::raw('id AS user_id'), 'name');
     }
 }
