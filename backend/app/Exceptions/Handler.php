@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -42,12 +43,31 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception               $e
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Exception $e)
     {
-        return parent::render($request, $exception);
+        if ($request->expectsJson()) {
+            if ($e instanceof ValidationException) {
+                $errors = $e->validator->errors()->getMessages();
+                $errors = array_flatten($errors);
+                $errors = implode(' ', $errors);
+                return response()->json(['error' => $errors], 422);
+            }
+
+            return response()->json([
+                'message' => 'Uncaught exception',
+                'exception' => [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTrace()
+                ]
+            ], 500);
+        }
+
+        return parent::render($request, $e);
     }
 }
