@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CNFParser.h"
 
-@interface RegistrationViewController : UIViewController
+@interface RegistrationViewController : UIViewController <CNFParserDelegate>
 
 @end

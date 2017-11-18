@@ -36,6 +36,7 @@
 		_delegates	= [NSMutableArray mutableArrayUsingWeakReferences];
 		_connection	= [CNFConnection sharedInstance];
 		[_connection addDelegate:self];
+		[_connection start];
 	}
 	return self;
 }
@@ -55,6 +56,27 @@
 	CNFLog(@"");
 	
 	[_connection removeDelegate:self];
+}
+
+- (void) registration:(NSString *) name email:(NSString *) email password:(NSString *) password {
+	NSDictionary	*dict = [NSDictionary dictionaryWithObjectsAndKeys:name, @"name", email, @"email", password, @"password", nil];
+	
+	CNFLog(@"name '%@' email '%@' password '%@'", name, email, password);
+	[_connection registration:dict];
+}
+
+- (void) login:(NSString *) email password:(NSString *) password {
+	NSDictionary	*dict = [NSDictionary dictionaryWithObjectsAndKeys:email, @"email", password, @"password", nil];
+	
+	CNFLog(@"email '%@' password '%@'", email, password);
+	[_connection login:dict];
+}
+
+- (void) logout {
+	NSDictionary	*dict = [[NSDictionary alloc] init];
+	
+	CNFLog(@"");
+	[_connection logout:dict];
 }
 
 - (void) addDelegate:(id <CNFParserDelegate> ) delegate {

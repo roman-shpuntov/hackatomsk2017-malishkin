@@ -11,6 +11,12 @@
 #import "CNFWeakArray.h"
 
 NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
+NSString *const	CNFConnectionServerIP			= @"http://172.16.12.51:80/api";
+NSString *const	CNFConnectionAPIVersion			= @"v1";
+
+NSString *const	CNFConnectionSuffixRegistration	= @"user";
+NSString *const	CNFConnectionSuffixLogin		= @"login";
+NSString *const	CNFConnectionSuffixLogout		= @"logout";
 
 @interface CNFConnection() {
 	BOOL			_work;
@@ -90,6 +96,55 @@ NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
 	[_pusher connect];
 }
 
+-(void) _postString:(NSString *) suffix json:(NSString *) json {
+	NSData				*data		= [json dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+	NSMutableURLRequest	*request	= [[NSMutableURLRequest alloc] init];
+	NSString			*urlstr		= [NSString stringWithFormat:@"%@/%@/%@", CNFConnectionServerIP, CNFConnectionAPIVersion, suffix];
+	
+	[request setURL:[NSURL URLWithString:urlstr]];
+	if ([suffix isEqualToString:CNFConnectionSuffixRegistration]) {
+		[request setHTTPMethod:@"POST"];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+	}
+	else if ([suffix isEqualToString:CNFConnectionSuffixLogin]) {
+		[request setHTTPMethod:@"POST"];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+	}
+	else if ([suffix isEqualToString:CNFConnectionSuffixLogout]) {
+		NSString	*bearer = [NSString stringWithFormat:@"Bearer %@", _token];
+		
+		[request setHTTPMethod:@"GET"];
+		[request setValue:bearer forHTTPHeaderField:@"Authorization"];
+	}
+	
+	[request setHTTPBody:data];
+	
+	NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+	
+	NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+		if (error && error.code)
+			CNFLog(@"err code %@ %@", @(error.code), error.domain);
+		
+		NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+		CNFLog(@"result %@", result);
+		
+		if (data && data.length) {
+			NSError			*parse;
+			NSDictionary	*dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&parse];
+			
+			[_rxcond lock];
+			[_rxarray addObject:dict];
+			[_rxcond signal];
+			[_rxcond unlock];
+		}
+	}];
+	
+	[postDataTask resume];
+}
+
 -(void) _rxProcessing:(NSNumber *) number {
 	NSArray			*tmp = [[NSArray alloc] init];
 	
@@ -117,6 +172,22 @@ NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
 		tmp = [NSArray arrayWithArray:_txarray];
 		_txarray = [[NSMutableArray alloc] init];
 		[_txcond unlock];
+		
+		for (NSDictionary *txitem in tmp) {
+			NSError			*error;
+			NSDictionary	*jsonDict	= [txitem objectForKey:@"json"];
+			NSString		*suffix		= [txitem objectForKey:@"suffix"];
+			NSData			*jsonData	= [NSJSONSerialization dataWithJSONObject:jsonDict
+																 options:NSJSONWritingPrettyPrinted
+																   error:&error];
+			
+			if (!jsonData)
+				CNFLog(@"Got an error: %@", error);
+			else {
+				NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+				[self _postString:suffix json:json];
+			}
+		}
 	}
 }
 
@@ -171,6 +242,33 @@ NSString *const	CNFConnectionKey				= @"994095a2c453e06bd4c1";
 	_work = NO;
 	[_txthread cancel];
 	[_rxthread cancel];
+}
+
+- (int) registration:(NSDictionary *) dict {
+	[_txcond lock];
+	[_txarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:CNFConnectionSuffixRegistration, @"suffix", dict, @"json", nil]];
+	[_txcond signal];
+	[_txcond unlock];
+	
+	return 0;
+}
+
+- (int) login:(NSDictionary *) dict {
+	[_txcond lock];
+	[_txarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:CNFConnectionSuffixLogin, @"suffix", dict, @"json", nil]];
+	[_txcond signal];
+	[_txcond unlock];
+	
+	return 0;
+}
+
+- (int) logout:(NSDictionary *) dict {
+	[_txcond lock];
+	[_txarray addObject:[NSDictionary dictionaryWithObjectsAndKeys:CNFConnectionSuffixLogout, @"suffix", dict, @"json", nil]];
+	[_txcond signal];
+	[_txcond unlock];
+	
+	return 0;
 }
 
 - (void) addDelegate:(id <CNFConnectionDelegate> ) delegate {

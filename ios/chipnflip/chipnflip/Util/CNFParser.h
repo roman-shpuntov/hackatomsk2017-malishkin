@@ -22,6 +22,9 @@
 - (void) dealloc;
 - (void) addDelegate:(id <CNFParserDelegate> ) delegate;
 - (void) removeDelegate:(id <CNFParserDelegate> ) delegate;
+- (void) registration:(NSString *) name email:(NSString *) email password:(NSString *) password;
+- (void) login:(NSString *) email password:(NSString *) password;
+- (void) logout;
 
 @property (nonatomic, readonly)	NSString	*user;
 @property (nonatomic, readonly)	NSUInteger	money;

@@ -1,5 +1,5 @@
 //
-//  LoginViewController.h
+//  CNFTextField.h
 //  chipnflip
 //
 //  Created by roman on 18.11.2017.
@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CNFParser.h"
 
-@interface LoginViewController : UIViewController <CNFParserDelegate>
+@interface CNFTextField : UITextField
 
 @end

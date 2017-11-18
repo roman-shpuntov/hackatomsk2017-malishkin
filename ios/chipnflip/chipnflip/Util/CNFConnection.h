@@ -15,14 +15,18 @@
 - (void) ready:(NSString *) token channel:(NSString *) channel;
 @end
 
-@interface CNFConnection : NSObject <PTPusherDelegate>
+@interface CNFConnection : NSObject <PTPusherDelegate, NSURLSessionDelegate>
 
 + (CNFConnection *) sharedInstance;
 - (void) dealloc;
 - (void) addDelegate:(id <CNFConnectionDelegate> ) delegate;
 - (void) removeDelegate:(id <CNFConnectionDelegate> ) delegate;
-
+- (int) registration:(NSDictionary *) dict;
+- (int) login:(NSDictionary *) dict;
+- (int) logout:(NSDictionary *) dict;
 - (void) start;
 - (void) stop;
+
+@property (nonatomic, readonly)	NSString	*token;
 
 @end

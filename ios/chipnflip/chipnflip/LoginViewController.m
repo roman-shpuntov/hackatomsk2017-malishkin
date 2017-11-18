@@ -20,25 +20,64 @@
 
 @end
 
+#define EMULATE_INFO
+
 @implementation LoginViewController
+
+-(void)serverError:(NSError *)error {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil)
+																   message:error.domain
+															preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction	*action = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+													 style:UIAlertActionStyleDefault
+												   handler:nil];
+	[alert addAction:action];
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void)serverReady:(NSString *)token channel:(NSString *)channel {
+	[self performSegueWithIdentifier:@"sw_login" sender:nil];
+}
 
 - (IBAction)_handleLogin:(id)sender {
 	CNFLog(@"");
 	
-	[self performSegueWithIdentifier:@"sw_login" sender:nil];
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser login:_email.text password:_password.text];
+	
+	// DEBUG
+	//[self performSegueWithIdentifier:@"sw_login" sender:nil];
 }
 
 - (IBAction)_handleRegistration:(id)sender {
 	CNFLog(@"");
+	
+	[self performSegueWithIdentifier:@"sw_l2r" sender:nil];
 }
 
 - (void)_customSetup {
 	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser addDelegate:self];
+
+#ifdef EMULATE_INFO
+	_email.text		= [NSString stringWithFormat:@"user1@m.ru"];
+	_password.text	= [NSString stringWithFormat:@"123456"];
+#endif
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 	[self _customSetup];
+}
+
+-(void)dealloc {
+	CNFLog(@"");
+	
+	CNFParser *parser = [CNFParser sharedInstance];
+	[parser removeDelegate:self];
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
