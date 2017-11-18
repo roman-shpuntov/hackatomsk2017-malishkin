@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -26,4 +31,26 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Sets the user's password.
+     * @param string $password
+     */
+    public function setPasswordAttribute($password)
+    {
+        if ($this->exists && $password === '') {
+            return;
+        }
+        $this->attributes['password'] = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    /**
+     * Validate password
+     * @param string $password
+     * @return boolean
+     */
+    public function checkPassword($password)
+    {
+        return password_verify($password, $this->password);
+    }
 }
