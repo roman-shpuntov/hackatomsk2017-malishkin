@@ -6,7 +6,6 @@ use App\Models\Game;
 use App\Models\GameOffer;
 use App\Models\User;
 use \Cache;
-use Illuminate\Validation\ValidationException;
 
 /**
  * Сервис игры
@@ -57,19 +56,20 @@ class GameService
      * Поле кешируется на полчаса. Должно хватить на одну игру
      *
      * @param int $gameId id игры
-     * @param int $turn   id игрока, чья очередь ходить
+     * @param int $userId1  id игрока, чья очередь ходить
+     * @param int $userId2  id второго игрока
      * @param int $size   размер поля, в клетках по стороне квадрата
      * @return array
      */
-    public function initGameField(int $gameId, int $turn, int $size): array
+    public function initGameField(int $gameId, int $userId1, int $userId2, int $size): array
     {
-        $field = array_fill(0, $size, (array_fill(0, $size, CellStates::FREE)));
+        $field = array_fill(0, $size, (array_fill(0, $size, 0)));
         $max = $size - 1;
-        $field[0][$max] = $field[$max][0] = CellStates::ONE;
-        $field[0][0] = $field[$max][$max] = CellStates::TWO;
+        $field[0][$max] = $field[$max][0] = $userId1;
+        $field[0][0] = $field[$max][$max] = $userId2;
 
         $snapshot = [
-            'turn_user_id' => $turn,
+            'turn_user_id' => $userId1,
             'field'        => $field,
         ];
 

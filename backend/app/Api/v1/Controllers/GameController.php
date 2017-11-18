@@ -3,6 +3,7 @@ namespace App\Api\V1\Controllers;
 
 use App\GameNotifier;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Requests\GameOfferRequest;
 use App\Requests\StepRequest;
 use App\Services\GameOfferService;
@@ -57,13 +58,14 @@ class GameController extends Controller
      */
     public function gameOffer(GameOfferRequest $request)
     {
+        /** @var User $user */
         $user = Auth::user();
 
         $offer = $this->offerSvc->searchGame($user->id, $request['type'], $request['bet']);
 
         if ($offer) {
             $game = $this->gameSvc->newGame($offer, $user);
-            $snapshot = $this->gameSvc->initGameField($game->id, $offer->user_id, config('game.field_size'));
+            $snapshot = $this->gameSvc->initGameField($game->id, $offer->user_id, $user->id, config('game.field_size'));
 
             $gameInfo = [
                 'game_id'  => $game->id,
