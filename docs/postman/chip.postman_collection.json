@@ -112,6 +112,31 @@
 			"response": []
 		},
 		{
+			"name": "step",
+			"request": {
+				"url": "{{host}}/v1/step",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 1,\n    \"game_id\": 1,\n    \"from\": \"1:1\",\n    \"to\": \"2:1\"\n}"
+				},
+				"description": "ход игрока"
+			},
+			"response": []
+		},
+		{
 			"name": "logout",
 			"request": {
 				"url": "{{host}}/v1/logout",

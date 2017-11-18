@@ -7,4 +7,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('logout', $ns . 'AuthController@logout')->middleware('jwt.auth');
 
     Route::post('game-offer', $ns . 'GameController@gameOffer')->middleware('jwt.auth');
+
+    // Ахтунг! Не закрывать эти роуты за аутентификацией. Если юзер разлогинится во время игры, это будет расценнено,
+    // как проигрыш.
+    Route::post('step', $ns . 'GameController@step');
 });
