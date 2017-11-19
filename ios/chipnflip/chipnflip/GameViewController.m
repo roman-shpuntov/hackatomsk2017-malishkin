@@ -13,8 +13,11 @@
 #import "GameInfoViewController.h"
 
 @interface GameViewController() {
-	__weak IBOutlet UILabel					*_name;
-	__weak IBOutlet	UIActivityIndicatorView	*_progress;
+	__weak IBOutlet UILabel					*_selfName;
+	__weak IBOutlet UILabel					*_peerName;
+	__weak IBOutlet UIImageView				*_imageSelf;
+	__weak IBOutlet UIImageView				*_imagePeer;
+	__weak IBOutlet UILabel					*_status;
 }
 
 @end
@@ -23,19 +26,19 @@
 
 -(void)serverStepWait {
 	CNFLog(@"");
-	[_progress stopAnimating];
+	//[_progress stopAnimating];
 }
 
 -(void)serverStepReady {
 	CNFLog(@"");
-	[_progress startAnimating];
+	//[_progress startAnimating];
 }
 
 -(void)serverGameReady:(NSString *)userName {
 	CNFLog(@"user %@", userName);
 	
-	_name.text = [NSString stringWithFormat:@"Name: %@", userName];
-	[_progress stopAnimating];
+	_peerName.text = [NSString stringWithFormat:@"%@", userName];
+	//[_progress stopAnimating];
 }
 
 -(void)serverError:(NSError *)error {
@@ -53,6 +56,8 @@
 - (void)_customSetup {
 	CNFParser *parser = [CNFParser sharedInstance];
 	[parser addDelegate:self];
+	
+	_selfName.text = parser.user;
 	
 	// Load 'GameScene.sks' as a GKScene. This provides gameplay related content
 	// including entities and graphs.

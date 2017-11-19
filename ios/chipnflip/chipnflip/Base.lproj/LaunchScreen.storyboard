@@ -18,17 +18,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chip and Flip" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DDF-Wi-UzM">
-                                <rect key="frame" x="119" y="329" width="136" height="29"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background2.png" translatesAutoresizingMaskIntoConstraints="NO" id="3sR-8s-Gd2">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="DDF-Wi-UzM" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="exb-Jw-Yxg"/>
-                            <constraint firstItem="DDF-Wi-UzM" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="lZv-4D-vmV"/>
+                            <constraint firstAttribute="bottom" secondItem="3sR-8s-Gd2" secondAttribute="bottom" id="QZe-J6-hbM"/>
+                            <constraint firstItem="3sR-8s-Gd2" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="cVQ-ZN-DAI"/>
+                            <constraint firstItem="3sR-8s-Gd2" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="dHU-09-b1L"/>
+                            <constraint firstAttribute="trailing" secondItem="3sR-8s-Gd2" secondAttribute="trailing" id="xec-18-4ob"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -38,4 +37,7 @@
             <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="background2.png" width="1125" height="2436"/>
+    </resources>
 </document>

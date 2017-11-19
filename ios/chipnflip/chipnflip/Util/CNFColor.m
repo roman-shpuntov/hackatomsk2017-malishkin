@@ -17,4 +17,18 @@
 						   alpha:1.0];
 }
 
++ (UIColor *) grayColor {
+	return [UIColor colorWithRed:(CGFloat)0xee/(CGFloat)0xff
+						   green:(CGFloat)0xee/(CGFloat)0xff
+							blue:(CGFloat)0xee/(CGFloat)0xff
+						   alpha:1.0];
+}
+
++ (UIColor *) boardColor {
+	return [UIColor colorWithRed:(CGFloat)0xc7/(CGFloat)0xff
+						   green:(CGFloat)0xaa/(CGFloat)0xff
+							blue:(CGFloat)0xe6/(CGFloat)0xff
+						   alpha:1.0];
+}
+
 @end

@@ -11,5 +11,7 @@
 @interface CNFColor : UIColor
 
 + (UIColor *) purpleColor;
++ (UIColor *) grayColor;
++ (UIColor *) boardColor;
 
 @end
