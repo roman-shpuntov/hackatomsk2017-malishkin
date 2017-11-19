@@ -42,10 +42,6 @@ class GameOfferRequest extends FormRequest
         $validator = parent::getValidatorInstance();
 
         $validator->after(function () use ($validator) {
-            if ($validator->errors()) {
-                return;
-            }
-
             [$type, $bet] = array_values($this->only('type', 'bet'));
 
             if ($type == GameTypes::FREE) {

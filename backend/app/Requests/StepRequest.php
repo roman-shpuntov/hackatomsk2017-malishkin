@@ -75,10 +75,6 @@ class StepRequest extends FormRequest
         $validator = parent::getValidatorInstance();
 
         $validator->after(function () use ($validator) {
-            if ($validator->errors()) {
-                return;
-            }
-
             [$gameId, $userId, $from, $to] = array_values($this->only('game_id', 'user_id', 'from', 'to'));
 
             $snapshot = optional($this->model->find($gameId))->snapshot;
