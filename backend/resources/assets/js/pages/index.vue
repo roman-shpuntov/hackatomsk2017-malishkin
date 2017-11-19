@@ -37,6 +37,8 @@
           })
         }).then((request) => request.json()).then((data) => {
           localStorage.token = data.token;
+          localStorage.user_id = data.user_id;
+          localStorage.user_name = data.name;
           this.authorized = true;
         });
 

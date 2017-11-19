@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import authorizePage from "./components/authorize.vue";
 import registerPage from "./components/register.vue";
 import menuPage from "./components/menu.vue";
 import gamePage from "./components/game.vue";

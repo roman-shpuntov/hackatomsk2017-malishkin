@@ -286,6 +286,10 @@ $grid-border-radius: 10px;
 
       .username {
         text-align: center;
+
+        &.active {
+          color: $brand-color;
+        }
       }
     }
 
