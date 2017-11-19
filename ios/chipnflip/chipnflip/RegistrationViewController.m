@@ -23,7 +23,7 @@
 
 @implementation RegistrationViewController
 
-#define EMULATE_INFO
+//#define EMULATE_INFO
 
 -(void)serverError:(NSError *)error {
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil)
