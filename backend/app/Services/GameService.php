@@ -247,27 +247,46 @@ class GameService
     }
 
     /**
-     * Обработчик окончания игры
-     *
-     * Если игра была на игровые деньги - правим транзакцию.
-     *
+     * Обработчик обычного окончания игры
      * @param int $gameId
      * @param int $winnerId
      * @throws \Exception
      */
     public function gameEndedHandler(int $gameId, int $winnerId)
     {
-        /** @var Game $game */
         $game = $this->game->find($gameId);
-        $userIds = $game->users->pluck('user_id')->toArray();
+        $this->updateDbAfterGameEnd($game, $winnerId);
+    }
 
+    /**
+     * Отмена игры
+     * @param int $gameId
+     * @param int $userId id юзера, запросившего отмену игры
+     */
+    public function cancelGame(int $gameId, int $userId)
+    {
+        $game = $this->game->whereNull('winner_id')->findOrFail($gameId);
+        $winnerId = $game->users()->where('user_id', '<>', $userId)->pluck('user_id')->toArray()[0];
+        $this->updateDbAfterGameEnd($game, $winnerId);
+    }
+
+    /**
+     * Обновление базы данных, кодга игра окончена
+     *
+     * Если игра была на игровые деньги - оформляем транзакцию.
+     *
+     * @param Game $game
+     * @param int  $winnerId
+     * @throws \Exception
+     */
+    private function updateDbAfterGameEnd(Game $game, int $winnerId)
+    {
         DB::beginTransaction();
         try {
             $game->winner_id = $winnerId;
             $game->save();
             if ($game->type !== GameTypes::FREE) {
-                $uid = $userIds[0] == $winnerId ? $userIds[0] : $userIds[1];
-                $this->creditOperation($game->id, $uid, $game->prize);
+                $this->creditOperation($game->id, $winnerId, $game->prize);
             }
             DB::commit();
         } catch (\Exception $e) {
