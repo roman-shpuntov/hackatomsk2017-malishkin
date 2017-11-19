@@ -24,6 +24,8 @@
 		303D35771FC1244E0091719D /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = 303D35761FC1244D0091719D /* user.png */; };
 		303D357A1FC127990091719D /* CNFInvertButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 303D35791FC127990091719D /* CNFInvertButton.m */; };
 		303D357D1FC138B70091719D /* CNFColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 303D357C1FC138B70091719D /* CNFColor.m */; };
+		303D357F1FC13CEF0091719D /* background2.png in Resources */ = {isa = PBXBuildFile; fileRef = 303D357E1FC13CEF0091719D /* background2.png */; };
+		303D35811FC13CF70091719D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 303D35801FC13CF60091719D /* icon.png */; };
 		3046BB061FC012220021F3F0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB051FC012220021F3F0 /* LoginViewController.m */; };
 		3046BB0B1FC018E70021F3F0 /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB0A1FC018E70021F3F0 /* RegistrationViewController.m */; };
 		3046BB0E1FC01DFA0021F3F0 /* GameInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3046BB0D1FC01DFA0021F3F0 /* GameInfoViewController.m */; };
@@ -60,6 +62,8 @@
 		303D35791FC127990091719D /* CNFInvertButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNFInvertButton.m; sourceTree = "<group>"; };
 		303D357B1FC138B70091719D /* CNFColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNFColor.h; sourceTree = "<group>"; };
 		303D357C1FC138B70091719D /* CNFColor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNFColor.m; sourceTree = "<group>"; };
+		303D357E1FC13CEF0091719D /* background2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background2.png; sourceTree = "<group>"; };
+		303D35801FC13CF60091719D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		3046BB041FC012220021F3F0 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		3046BB051FC012220021F3F0 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		3046BB081FC0170E0021F3F0 /* CNFLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNFLog.h; sourceTree = "<group>"; };
@@ -168,6 +172,8 @@
 			isa = PBXGroup;
 			children = (
 				300359491FC0700900F3B51F /* background.png */,
+				303D35801FC13CF60091719D /* icon.png */,
+				303D357E1FC13CEF0091719D /* background2.png */,
 				3046BB141FC033350021F3F0 /* bchip.png */,
 				3046BB131FC033350021F3F0 /* wchip.png */,
 				303D35761FC1244D0091719D /* user.png */,
@@ -247,9 +253,11 @@
 			files = (
 				3046BB161FC033350021F3F0 /* bchip.png in Resources */,
 				3003594A1FC0700900F3B51F /* background.png in Resources */,
+				303D357F1FC13CEF0091719D /* background2.png in Resources */,
 				303D35771FC1244E0091719D /* user.png in Resources */,
 				303D072A1FC004B000FE6D83 /* Main.storyboard in Resources */,
 				303D071F1FC004B000FE6D83 /* GameScene.sks in Resources */,
+				303D35811FC13CF70091719D /* icon.png in Resources */,
 				303D072C1FC004B000FE6D83 /* Assets.xcassets in Resources */,
 				303D072F1FC004B000FE6D83 /* LaunchScreen.storyboard in Resources */,
 				303D07211FC004B000FE6D83 /* Actions.sks in Resources */,
