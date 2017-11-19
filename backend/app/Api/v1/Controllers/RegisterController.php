@@ -22,7 +22,9 @@ class RegisterController extends Controller
      */
     protected function create(NewUserRequest $request)
     {
-        $user = User::create($request->only('name', 'email', 'password'));
+        $data = $request->only('name', 'email', 'password');
+        $data['credits'] = config('game.newbee_gift');
+        $user = User::create($data);
         $token = JWTAuth::fromUser($user);
         return response()->json([
             'token' => $token,

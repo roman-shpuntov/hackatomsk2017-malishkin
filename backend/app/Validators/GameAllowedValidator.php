@@ -36,7 +36,7 @@ class GameAllowedValidator
     {
         $userId = array_get($parameters, 0);
         $game = $this->game->find($gameId);
-        return $game && !$game->is_ended && $game->users->contains('user_id', $userId);
+        return $game && !$game->winner_id && $game->users->contains('user_id', $userId);
     }
 
     /**

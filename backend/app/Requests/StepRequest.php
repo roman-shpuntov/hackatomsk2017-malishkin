@@ -59,9 +59,9 @@ class StepRequest extends FormRequest
                     $query->where('id', $this->get('game_id'));
                 }),
             ],
-            'user_id' => 'required|integer',
-            'from'    => $coordinateRules,
-            'to'      => $coordinateRules,
+            'user_id'  => 'required|integer',
+            'from'     => $coordinateRules,
+            'to'       => $coordinateRules,
         ];
     }
 

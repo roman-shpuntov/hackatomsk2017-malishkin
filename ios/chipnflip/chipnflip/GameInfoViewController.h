@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "CNFParser.h"
 
-@interface GameInfoViewController : UIViewController <CNFParserDelegate>
+@interface GameInfoViewController : UIViewController <CNFParserDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @end

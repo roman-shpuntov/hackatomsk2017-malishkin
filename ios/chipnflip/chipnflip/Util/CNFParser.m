@@ -27,6 +27,7 @@ NSString *const	CNFConnectionSuffixSubscribe		= @"game-offer";
 NSString *const	CNFConnectionSuffixStep				= @"step";
 NSString *const	CNFConnectionSuffixLogout			= @"logout";
 
+NSString *const	CNFConnectionName					= @"name";
 NSString *const	CNFConnectionToken					= @"token";
 NSString *const	CNFConnectionUserID					= @"user_id";
 NSString *const	CNFConnectionGameInfo				= @"game_info";
@@ -129,9 +130,11 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 - (void) _parseToken:(NSDictionary *) json {
 	_token = [json objectForKey:CNFConnectionToken];
 	_userid = [json objectForKey:CNFConnectionUserID];
+	_user = [json objectForKey:CNFConnectionName];
 	if ((!_token || [_token isEqualToString:@""]) || !_userid) {
 		_token = @"";
 		_userid = [NSNumber numberWithLong:0];
+		_user = @"";
 		CNFLog(@"error no token");
 	}
 	else {

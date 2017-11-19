@@ -2,10 +2,13 @@
 namespace App\Services;
 
 use App\Enums\CellStates;
+use App\Enums\GameTypes;
 use App\Models\Game;
 use App\Models\GameOffer;
+use App\Models\Transaction;
 use App\Models\User;
 use \Cache;
+use \DB;
 
 /**
  * Сервис игры
@@ -15,14 +18,28 @@ class GameService
     /**
      * @var Game
      */
-    private $model;
+    private $game;
 
     /**
-     * @param Game $model
+     * @var Transaction
      */
-    public function __construct(Game $model)
+    private $transaction;
+
+    /**
+     * @var Transaction
+     */
+    private $user;
+
+    /**
+     * @param Game        $game
+     * @param Transaction $transaction
+     * @param User        $user
+     */
+    public function __construct(Game $game, Transaction $transaction, User $user)
     {
-        $this->model = $model;
+        $this->game = $game;
+        $this->transaction = $transaction;
+        $this->user = $user;
     }
 
     /**
@@ -31,22 +48,52 @@ class GameService
      * @param User      $user2 второй игрок
      * @param int       $size  размер поля, в клетках по стороне квадрата
      * @return Game
+     * @throws \Exception
      */
     public function newGame(GameOffer $offer, User $user2, int $size): Game
     {
         $snapshot = $this->initGameField($offer->user_id, $user2->id, $size);
 
-        $this->model->fill([
-            'type'     => $offer->type,
-            'prize'    => $offer->bet * 2,
-            'is_ended' => 0,
-            'snapshot' => json_encode($snapshot),
-            'game_key' => $offer->game_key,
-        ])->save();
+        DB::beginTransaction();
+        try {
+            $this->game->fill([
+                'type'     => $offer->type,
+                'prize'    => $offer->bet * 2,
+                'snapshot' => json_encode($snapshot),
+                'game_key' => $offer->game_key,
+            ])->save();
 
-        $this->model->users()->attach([$offer->user->id, $user2->id]);
+            $this->game->users()->attach([$offer->user->id, $user2->id]);
 
-        return $this->model;
+            $this->creditOperation($this->game->id, $offer->user_id, -1 * $offer->bet);
+            $this->creditOperation($this->game->id, $user2->id, -1 * $offer->bet);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return $this->game;
+    }
+
+    /**
+     * Операция на игровом счете пользователя
+     * @param int $gameId
+     * @param int $userId
+     * @param int $amount сумма операции
+     */
+    private function creditOperation(int $gameId, int $userId, int $amount): void
+    {
+        $this->transaction->create([
+            'game_id' => $gameId,
+            'user_id' => $userId,
+            'amount'  => $amount,
+        ]);
+
+        $user = $this->user->find($userId);
+        $user->credits = $user->credits + $amount;
+        $user->save();
     }
 
     /**
@@ -83,7 +130,7 @@ class GameService
     public function step(int $gameId, int $userId, string $from, string $to): array
     {
         /** @var Game $game */
-        $game = $this->model->find($gameId);
+        $game = $this->game->find($gameId);
         $players = $game->users->pluck('user_id')->toArray();
 
         $snapshot = json_decode($game->snapshot, true);
@@ -196,6 +243,36 @@ class GameService
             return $count1 > $count2 ? $id1 : $id2;
         } else {
             return $id1 == $userId ? $id2 : $id1;
+        }
+    }
+
+    /**
+     * Обработчик окончания игры
+     *
+     * Если игра была на игровые деньги - правим транзакцию.
+     *
+     * @param int $gameId
+     * @param int $winnerId
+     * @throws \Exception
+     */
+    public function gameEndedHandler(int $gameId, int $winnerId)
+    {
+        /** @var Game $game */
+        $game = $this->game->find($gameId);
+        $userIds = $game->users->pluck('user_id')->toArray();
+
+        DB::beginTransaction();
+        try {
+            $game->winner_id = $winnerId;
+            $game->save();
+            if ($game->type !== GameTypes::FREE) {
+                $uid = $userIds[0] == $winnerId ? $userIds[0] : $userIds[1];
+                $this->creditOperation($game->id, $uid, $game->prize);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
     }
 }
