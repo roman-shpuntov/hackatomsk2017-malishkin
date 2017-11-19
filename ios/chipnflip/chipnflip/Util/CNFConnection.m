@@ -14,10 +14,6 @@ NSString *const	CNFConnectionKey					= @"994095a2c453e06bd4c1";
 NSString *const	CNFConnectionServerIP				= @"http://172.16.12.51:80/api";
 NSString *const	CNFConnectionAPIVersion				= @"v1";
 
-NSString *const	CNFConnectionSubscribed				= @"subscribed";
-NSString *const	CNFConnectionShutdown				= @"shutdown";
-NSString *const	CNFConnectionChannel				= @"channel";
-
 @interface CNFConnection() {
 	BOOL			_work;
 	PTPusher 		*_pusher;

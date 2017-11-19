@@ -10,6 +10,10 @@
 #import "CNFLog.h"
 #import "CNFWeakArray.h"
 
+@implementation CNFMove
+
+@end
+
 typedef NS_ENUM(NSUInteger, CNFState) {
 	CNFStateNone = 0,
 	CNFStateLoggedin,
@@ -20,11 +24,16 @@ typedef NS_ENUM(NSUInteger, CNFState) {
 NSString *const	CNFConnectionSuffixRegistration		= @"user";
 NSString *const	CNFConnectionSuffixLogin			= @"login";
 NSString *const	CNFConnectionSuffixSubscribe		= @"game-offer";
+NSString *const	CNFConnectionSuffixStep				= @"step";
 NSString *const	CNFConnectionSuffixLogout			= @"logout";
 
-NSString *const	CNFConnectionLoginAnswerToken		= @"token";
-NSString *const	CNFConnectionLoginAnswerUserID		= @"user_id";
-NSString *const	CNFConnectionSubscribeAnswerChannel	= @"channel";
+NSString *const	CNFConnectionToken					= @"token";
+NSString *const	CNFConnectionUserID					= @"user_id";
+NSString *const	CNFConnectionGameInfo				= @"game_info";
+NSString *const	CNFConnectionGameID					= @"game_id";
+NSString *const	CNFConnectionGameKey				= @"game_key";
+NSString *const	CNFConnectionChannel				= @"channel";
+NSString *const	CNFConnectionTurnUserID				= @"turn_user_id";
 
 NSString *const	CNFConnectionEventOfferAccepted		= @"offer-accepted";
 NSString *const	CNFConnectionEventGridUpdated		= @"grid-updated";
@@ -84,6 +93,28 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 	});
 }
 
+- (void) _notifyStepWait {
+	NSArray	*delegates = [self _getDelegates];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^(void) {
+		for (id <CNFParserDelegate> delegate in delegates) {
+			if ([delegate respondsToSelector:@selector(serverStepWait)])
+				[delegate serverStepWait];
+		}
+	});
+}
+
+- (void) _notifyStepReady {
+	NSArray	*delegates = [self _getDelegates];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^(void) {
+		for (id <CNFParserDelegate> delegate in delegates) {
+			if ([delegate respondsToSelector:@selector(serverStepReady)])
+				[delegate serverStepReady];
+		}
+	});
+}
+
 - (void) _notifyFieldUpdate:(NSArray *) array {
 	NSArray	*delegates = [self _getDelegates];
 	
@@ -96,8 +127,8 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 }
 
 - (void) _parseToken:(NSDictionary *) json {
-	_token = [json objectForKey:CNFConnectionLoginAnswerToken];
-	_userid = [json objectForKey:CNFConnectionLoginAnswerUserID];
+	_token = [json objectForKey:CNFConnectionToken];
+	_userid = [json objectForKey:CNFConnectionUserID];
 	if ((!_token || [_token isEqualToString:@""]) || !_userid) {
 		_token = @"";
 		_userid = [NSNumber numberWithLong:0];
@@ -114,8 +145,13 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 	CNFLog(@"");
 	
 	NSDictionary	*snap	= [json objectForKey:@"snapshot"];
-	NSNumber		*turnid	= [snap objectForKey:@"turn_user_id"];
+	NSNumber		*turnid	= [snap objectForKey:CNFConnectionTurnUserID];
 	NSArray			*rows	= [snap valueForKey:@"field"];
+	
+	if ([turnid isEqualToNumber:_userid])
+		[self _notifyStepWait];
+	else
+		[self _notifyStepReady];
 	
 	[self _notifyFieldUpdate:rows];
 }
@@ -123,9 +159,15 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 - (void) _parseGameInfo:(NSDictionary *) json {
 	CNFLog(@"");
 	
-	NSDictionary	*gameInfo = [json objectForKey:@"game_info"];
+	NSDictionary	*gameInfo = [json objectForKey:CNFConnectionGameInfo];
 	if (!gameInfo) {
 		CNFLog(@"no game info");
+		return;
+	}
+	
+	_gamekey = [gameInfo objectForKey:CNFConnectionGameKey];
+	if (!_gamekey) {
+		CNFLog(@"no gamekey");
 		return;
 	}
 	
@@ -136,21 +178,21 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 	}
 	
 	for (NSDictionary *u in users) {
-		NSNumber *userid = [u objectForKey:CNFConnectionLoginAnswerUserID];
+		NSNumber *userid = [u objectForKey:CNFConnectionUserID];
 		if ([userid longValue] != [_userid longValue]) {
 			_peerName = [u objectForKey:@"name"];
-			_peerid = [u objectForKey:@"user_id"];
+			_peerid = [u objectForKey:CNFConnectionUserID];
 		}
 	}
 	
 	_prize = [gameInfo objectForKey:@"prize"];
-	_gameid = [gameInfo objectForKey:@"game_id"];
+	_gameid = [gameInfo objectForKey:CNFConnectionGameID];
 	
 	[self _parseSnapshot:gameInfo];
 }
 
 - (void) _parseChannel:(NSDictionary *) json {
-	_channel = [json objectForKey:CNFConnectionSubscribeAnswerChannel];
+	_channel = [json objectForKey:CNFConnectionChannel];
 	if (!_channel || [_channel isEqualToString:@""]) {
 		_channel = @"";
 		CNFLog(@"error no channel name");
@@ -184,7 +226,7 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 }
 
 - (void) _parseSubscribe:(NSDictionary *) json {
-	NSDictionary	*gameInfo = [json objectForKey:@"game_info"];
+	NSDictionary	*gameInfo = [json objectForKey:CNFConnectionGameInfo];
 	if (gameInfo) {
 		_state = CNFStateSubscribed;
 		
@@ -306,6 +348,28 @@ NSString *const	CNFConnectionEventGameEnded			= @"game-ended";
 							bearer, @"Authorization", nil];
 	
 	return [_connection send:json suffix:CNFConnectionSuffixSubscribe method:@"POST" header:header];
+}
+
+- (int) step:(CNFMove *) from to:(CNFMove *) to {
+	CNFLog(@"");
+	
+	if (_state < CNFStateSubscribed)
+		return -1;
+	
+	NSString *sfrom = [NSString stringWithFormat:@"%@:%@", @(from.x), @(from.y)];
+	NSString *sto = [NSString stringWithFormat:@"%@:%@", @(to.x), @(to.y)];
+	NSDictionary *json = [NSDictionary dictionaryWithObjectsAndKeys:
+						  _userid, CNFConnectionUserID,
+						  _gameid, CNFConnectionGameID,
+						  _gamekey, CNFConnectionGameKey,
+						  sfrom, @"from",
+						  sto, @"to", nil];
+	
+	NSDictionary *header = [NSDictionary dictionaryWithObjectsAndKeys:
+							@"application/json", @"Content-Type",
+							@"application/json", @"Accept", nil];
+	
+	return [_connection send:json suffix:CNFConnectionSuffixStep method:@"POST" header:header];
 }
 
 - (int) logout {
