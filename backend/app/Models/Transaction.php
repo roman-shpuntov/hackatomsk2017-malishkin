@@ -4,18 +4,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $id
- * @property int    $user_id    id юзера, предложивший игру
- * @property string $type       тип игры, см. Enums\GameTypes
- * @property int    $prize      приз игры
- * @property int    $winner_id  id победителя
- * @property string $snapshot   снимок поля
- * @property string $log        игра лог игры
- * @property string $game_key   защитный ключ игры
- *
- * @property User[] $users      игроки
+ * @property int $id
+ * @property int $game_id    id игры, на основании которой выполнена операция
+ * @property int $user_id    id пользователя, на чьем счету выполняется операция
+ * @property int $amount     сумма операции
  */
-class Game extends Model
+class Transaction extends Model
 {
     /**
      * Нужно только одно поле с датой, created_at. Исключить updated_at. см. self::boot()
@@ -38,7 +32,7 @@ class Game extends Model
      * @var array
      */
     protected $casts = [
-        'prize'    => 'integer',
+        'amount' => 'integer',
     ];
 
     /**
@@ -50,14 +44,5 @@ class Game extends Model
         static::creating(function ($model) {
             $model->created_at = $model->freshTimestamp();
         });
-    }
-
-    /**
-     * Игроки. Выдача для game-offer
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_games')->select(\DB::raw('id AS user_id'), 'name');
     }
 }
