@@ -15,11 +15,17 @@
         .username(v-else) Search...
 
     .row-grid
-      .grid
+      .grid(v-bind:class="{ active: moveFrom }")
         .row(v-for="(row, y) in field_reversed")
           .cell(v-for="(user_id, x) in row" @click="onCellClick" :data-coords-x="x" :data-coords-y="y")
-            .check.first-check(v-if="user_id != 0 && user_id == game_info.users[0].user_id")
-            .check.second-check(v-if="user_id != 0 && user_id == game_info.users[1].user_id")
+            .check.first-check(
+              v-if="user_id != 0 && user_id == game_info.users[0].user_id"
+              v-bind:class="{ active: moveFrom && x == moveFrom.x && y == moveFrom.y}"
+            )
+            .check.second-check(
+              v-if="user_id != 0 && user_id == game_info.users[1].user_id"
+              v-bind:class="{ active: moveFrom && x == moveFrom.x && y == moveFrom.y}"
+            )
     .row-buttons
       button.button-solid Cancel the game
 </template>
@@ -104,9 +110,17 @@
       },
       onCellClick(event) {
         if (event.target.classList.contains("check")) {
-          this.moveFrom = {
-            x: parseInt(event.currentTarget.dataset.coordsX),
-            y: parseInt(event.currentTarget.dataset.coordsY)
+          if (
+            this.moveFrom &&
+            this.moveFrom.x == event.currentTarget.dataset.coordsX &&
+            this.moveFrom.y == event.currentTarget.dataset.coordsY
+          ) {
+            this.moveFrom = null;
+          } else {
+            this.moveFrom = {
+              x: parseInt(event.currentTarget.dataset.coordsX),
+              y: parseInt(event.currentTarget.dataset.coordsY)
+            }
           }
         } else if (this.moveFrom) {
           let moveTo = {

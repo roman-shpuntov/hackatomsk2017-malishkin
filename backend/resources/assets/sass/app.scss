@@ -333,23 +333,43 @@ $grid-border-radius: 10px;
 
           @include center-content;
 
+          &:hover {
+            background: #e8d7fd;
+          }
+
           .check {
             display: inline-block;
             width: 90%;
             height: 90%;
             border-radius: 100px;
 
+            cursor: pointer;
+
             &.first-check {
               background: white;
               box-shadow: inset 0px 0px 20px 10px #FCDDA8;
+
+              &.active {
+                box-shadow: inset 0px 0px 20px 10px #FCDDA8, 0px 0px 2px 4px green;
+              }
             }
 
             &.second-check {
               background: #8B35C6;
               box-shadow: inset 0px 0px 15px 15px #37154E;
+
+              &.active {
+                box-shadow: inset 0px 0px 15px 15px #37154E, 0px 0px 2px 4px green;
+              }
             }
+
+            transition: box-shadow 0.2s ease-in-out;
           }
         }
+      }
+
+      &.active .cell {
+        cursor: pointer;
       }
     }
   }
