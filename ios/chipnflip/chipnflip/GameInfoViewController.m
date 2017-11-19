@@ -9,8 +9,14 @@
 #import "GameInfoViewController.h"
 #import "GameViewController.h"
 #import "CNFLog.h"
+#import "CNFColor.h"
 
-@interface GameInfoViewController ()
+@interface GameInfoViewController () {
+	__weak IBOutlet	UILabel		*_nickname;
+	__weak IBOutlet UITableView	*_menu;
+	
+	NSArray						*_items;
+}
 
 @end
 
@@ -19,8 +25,13 @@
 - (void)_customSetup {
 	CNFLog(@"");
 	
+	_menu.allowsSelection = NO;
+	
 	CNFParser *parser = [CNFParser sharedInstance];
 	[parser addDelegate:self];
+	_nickname.text = parser.user;
+	
+	_items = @[@"id_help", @"id_profile", @"id_settings", @"id_logout"];
 }
 
 - (void)viewDidLoad {
@@ -105,6 +116,36 @@
 		GameViewController *pvc = (GameViewController *) dvc;
 		pvc.prevViewController = self;
 	}
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSString		*cellid	= [_items objectAtIndex:indexPath.row];
+	UITableViewCell	*cell	= [tableView dequeueReusableCellWithIdentifier:cellid];
+	
+	if (!cell || !cell.detailTextLabel)
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellid];
+	
+	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	
+	if ([cellid isEqualToString:@"id_help"])
+		cell.textLabel.text = NSLocalizedString(@"How to play", nil);
+	else if ([cellid isEqualToString:@"id_profile"]) {
+		cell.textLabel.text = NSLocalizedString(@"Profile", nil);
+		cell.detailTextLabel.text = @"120 credits";
+		cell.detailTextLabel.textColor = [CNFColor purpleColor];
+	}
+	else if ([cellid isEqualToString:@"id_settings"])
+		cell.textLabel.text = NSLocalizedString(@"Settings", nil);
+	else if ([cellid isEqualToString:@"id_logout"]) {
+		cell.textLabel.text = NSLocalizedString(@"Logout", nil);
+		cell.accessoryType = UITableViewCellAccessoryNone;
+	}
+	
+	return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return _items.count;
 }
 
 @end
