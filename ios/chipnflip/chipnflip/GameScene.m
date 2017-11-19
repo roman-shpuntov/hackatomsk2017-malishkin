@@ -8,6 +8,7 @@
 
 #import "GameScene.h"
 #import "CNFLog.h"
+#import "CNFColor.h"
 
 @implementation GameScene {
 	CGFloat			_side;
@@ -26,6 +27,7 @@ const NSUInteger	CNFStepMax		= 3;
 const NSUInteger	CNFGridSpace	= 10;
 const CGFloat		CNFTouchAplha	= 0.5;
 const CGFloat		CNFTouchMove	= 0.2;
+const CGFloat		CNFOffset		= 80;
 
 -(void)dealloc {
 	CNFLog(@"");
@@ -73,7 +75,7 @@ const CGFloat		CNFTouchMove	= 0.2;
 	int				i = (int) xpos.longValue;
 	int				j = (int) ypos.longValue;
 	CGFloat			x = i * _side + i * _space;
-	CGFloat			y = j * _side + j * _space + (self.size.height - self.size.width) / 2;
+	CGFloat			y = j * _side + j * _space + (self.size.height - self.size.width) / 2 - CNFOffset;
 	CGFloat			mx = x + _side / 2 + _space / 2;
 	CGFloat			my = y + _side / 2 + _space / 2;
 	
@@ -92,6 +94,7 @@ const CGFloat		CNFTouchMove	= 0.2;
 - (void)sceneDidLoad {
 	CNFLog(@"");
 	
+	self.backgroundColor = [CNFColor grayColor];
 	_stepWait = NO;
 	
 	CNFParser *parser = [CNFParser sharedInstance];
@@ -112,7 +115,7 @@ const CGFloat		CNFTouchMove	= 0.2;
 	for (int i=0; i<CNFGridSide; i++) {
 		for (int j=0; j<CNFGridSide; j++) {
 			CGFloat			x = i * _side + i * _space;
-			CGFloat			y = j * _side + j * _space + (self.size.height - self.size.width) / 2;
+			CGFloat			y = j * _side + j * _space + (self.size.height - self.size.width) / 2 - CNFOffset;
 			CGFloat			mx = x + _side / 2 + _space / 2;
 			CGFloat			my = y + _side / 2 + _space / 2;
 			
@@ -121,12 +124,12 @@ const CGFloat		CNFTouchMove	= 0.2;
 				_fieldRange.origin.y = y;
 			}
 			
-			SKShapeNode *item = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(_cover, _cover)];
+			SKShapeNode *item = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(_cover-2, _cover-2)];
 			item.name = @"grid";
 			if ((i + j) % 2)
-				item.fillColor = SKColor.whiteColor;
+				item.fillColor = [CNFColor boardColor];
 			else
-				item.fillColor = SKColor.blackColor;
+				item.fillColor = [CNFColor boardColor];
 			
 			item.lineWidth = 0.0;
 			item.position = CGPointMake(mx, my);
