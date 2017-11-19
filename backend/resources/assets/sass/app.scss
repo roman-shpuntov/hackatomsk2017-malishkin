@@ -281,6 +281,12 @@ $grid-border-radius: 10px;
   flex-flow: column;
   height: 100%;
 
+  &.disabled {
+    .bet, .row-grid {
+      filter: opacity(20%) grayscale(100%);
+    }
+  }
+
   .row-avatars {
     margin-top: 20px;
     display: flex;

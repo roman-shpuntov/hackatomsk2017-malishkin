@@ -1,5 +1,5 @@
 <template lang="pug">
-  .page-game
+  .page-game(v-bind:class="{ disabled: !game_info_fetched }")
     .row-avatars
       .avatar.avatar-left
         img(src="/images/avatar.png", alt="avatar")
