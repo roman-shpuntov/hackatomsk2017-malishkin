@@ -13,7 +13,7 @@ class GamesAddWinner extends Migration
     {
         DB::statement(
             "ALTER TABLE `games` 
-            ADD COLUMN `winner_id` INT UNSIGNED NULL COMMENT 'id победителя' AFTER `is_ended`,
+            ADD COLUMN `winner_id` INT UNSIGNED NULL COMMENT 'id победителя' AFTER `prize`,
             DROP COLUMN `is_ended`"
         );
     }
