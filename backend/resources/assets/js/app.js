@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import registerPage from "./components/register.vue";
 import menuPage from "./components/menu.vue";
 import gamePage from "./components/game.vue";
 
@@ -9,6 +8,7 @@ import indexPage from "./pages/index";
 import creditsPage from "./pages/credits";
 import howtoplayPage from "./pages/howtoplay";
 import settingsPage from "./pages/settings";
+import registerPage from "./pages/register";
 
 Vue.use(VueRouter);
 

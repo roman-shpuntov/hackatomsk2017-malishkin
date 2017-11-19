@@ -1,10 +1,12 @@
-<template>
-  <form class="register-form" method="post" @submit="authorize">
-    <input type="email" name="email" placeholder="Your Email">
-    <input type="text" name="username" placeholder="Your name">
-    <input type="password" name="password" placeholder="Your password">
-    <input type="submit" value="register">
-  </form>
+<template lang="pug">
+  .page-register.fullheight
+    .unauthorized-variant.fullheight
+      img(src="/images/logo.png")
+      form.authorize-form(method="post" @submit="authorize")
+        input.input-rounded(type="email" name="email" placeholder="Your Email")
+        input.input-rounded(type="name" name="name" placeholder="Your name")
+        input.input-rounded(type="password" name="password" placeholder="Password")
+        input.button-light(type="submit" value="Sign up")
 </template>
 
 <script>

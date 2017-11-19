@@ -235,12 +235,18 @@ html, body, #application {
   }
 }
 
-.page-index {
+.page-index, .page-register {
   .unauthorized-variant {
     background: linear-gradient(to bottom, #7633c7 0%, #8744d9 100%);
+    display: flex;
+
+    img {
+      max-height: 100%;
+    }
 
     .authorize-form, .register-form {
       height: 100%;
+      margin-right: auto;
 
       display: flex;
       flex-flow: column;

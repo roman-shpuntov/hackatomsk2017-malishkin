@@ -8,6 +8,7 @@
         a.button-solid(href="#/game") Start the game
 
     .unauthorized-variant.fullheight(v-else)
+      img(src="/images/logo.png")
       form.authorize-form(method="post" @submit="authorize")
         input.input-rounded(type="email" name="email" placeholder="Your Email")
         input.input-rounded(type="password" name="password" placeholder="Password")
