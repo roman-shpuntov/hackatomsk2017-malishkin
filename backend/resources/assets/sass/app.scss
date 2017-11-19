@@ -267,35 +267,96 @@ html, body, #application {
   text-decoration: none;
 }
 
+$cell-size: 50px;
+$grid-border-radius: 10px;
+
 .page-game {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-flow: column;
   height: 100%;
 
-  .grid {
-    .row {
-      .cell {
-        display: inline-block;
-        height: 50px;
-        width: 50px;
-        background: rgba(0, 0, 0, 0.4);
-        margin: 0 2px;
+  .row-avatars {
+    margin-top: 20px;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
 
-        .check {
-          display: inline-block;
-          width: 100%;
-          height: 100%;
+    .avatar-left, .avatar-right {
+      margin: 0 auto;
 
-          &.first-check {
-            background: black;
+      .username {
+        text-align: center;
+      }
+    }
+
+    .bet {
+      font-size: 2em;
+      display: flex;
+      align-items: end;
+      margin: auto 0;
+    }
+  }
+
+  .row-grid {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+
+    .grid {
+      display: flex;
+      flex-flow: column;
+
+      .row {
+        display: flex;
+        flex-flow: row;
+
+        &:nth-child(1) {
+          :nth-child(1) {
+            border-top-left-radius: $grid-border-radius;
           }
+          :nth-child(7) {
+            border-top-right-radius: $grid-border-radius;
+          }
+        }
 
-          &.second-check {
-            background: white;
+        .cell {
+          border-radius: 8px;
+          display: inline-block;
+          height: $cell-size;
+          width: $cell-size;
+          background: #d6c0f2;
+          margin: 2px;
+
+          @include center-content;
+
+          .check {
+            display: inline-block;
+            width: 90%;
+            height: 90%;
+            border-radius: 100px;
+
+            &.first-check {
+              background: white;
+              box-shadow: inset 0px 0px 20px 10px #FCDDA8;
+            }
+
+            &.second-check {
+              background: #8B35C6;
+              box-shadow: inset 0px 0px 15px 15px #37154E;
+            }
           }
         }
       }
+    }
+  }
+
+  .row-buttons {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+
+    button {
+      margin: 20px;
     }
   }
 }

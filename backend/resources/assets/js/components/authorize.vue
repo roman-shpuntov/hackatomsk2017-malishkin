@@ -23,7 +23,8 @@
           })
         }).then((request) => request.json()).then((data) => {
           localStorage.token = data.token;
-          this.$router.push("/menu");
+          localStorage.name = data.name;
+          this.$router.push("/");
         });
 
         event.preventDefault();
