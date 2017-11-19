@@ -7,7 +7,7 @@
         input.input-rounded(type="name" name="name" placeholder="Your name")
         input.input-rounded(type="password" name="password" placeholder="Password")
         input.button-light(type="submit" value="Sign up")
-        a.register-link(href="/") Sign in
+        a.register-link(href="#/") Sign in
 </template>
 
 <script>

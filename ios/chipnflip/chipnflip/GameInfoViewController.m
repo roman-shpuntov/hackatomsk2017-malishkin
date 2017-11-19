@@ -25,8 +25,6 @@
 - (void)_customSetup {
 	CNFLog(@"");
 	
-	_menu.allowsSelection = NO;
-	
 	CNFParser *parser = [CNFParser sharedInstance];
 	[parser addDelegate:self];
 	_nickname.text = parser.user;
@@ -46,21 +44,6 @@
 	[parser removeDelegate:self];
 }
 
-- (IBAction)_handleHelp:(id)sender {
-	CNFLog(@"");
-	
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Help", nil)
-																   message:NSLocalizedString(@"Help info", nil)
-															preferredStyle:UIAlertControllerStyleAlert];
-	
-	UIAlertAction* noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Ok", nil)
-													   style:UIAlertActionStyleDefault
-													 handler:^(UIAlertAction * action) {
-													 }];
-	[alert addAction:noAction];
-	[self presentViewController:alert animated:YES completion:nil];
-}
-
 - (IBAction)_handlePlay:(id)sender {
 	CNFLog(@"");
 	
@@ -68,45 +51,6 @@
 	[parser startGame];
 	
 	[self performSegueWithIdentifier:@"sw_game" sender:nil];
-}
-
-- (IBAction)_handleSettings:(id)sender {
-	CNFLog(@"");
-	
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Settings", nil)
-																   message:NSLocalizedString(@"Some settings", nil)
-															preferredStyle:UIAlertControllerStyleAlert];
-	
-	UIAlertAction* noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Ok", nil)
-													   style:UIAlertActionStyleDefault
-													 handler:^(UIAlertAction * action) {
-													 }];
-	[alert addAction:noAction];
-	[self presentViewController:alert animated:YES completion:nil];
-}
-
-- (IBAction)_handlePersonalInfo:(id)sender {
-	CNFLog(@"");
-	
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Personal info", nil)
-																   message:NSLocalizedString(@"Info", nil)
-															preferredStyle:UIAlertControllerStyleAlert];
-	
-	UIAlertAction* noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Ok", nil)
-													   style:UIAlertActionStyleDefault
-													 handler:^(UIAlertAction * action) {
-													 }];
-	[alert addAction:noAction];
-	[self presentViewController:alert animated:YES completion:nil];
-}
-
-- (IBAction)_handleLogout:(id)sender {
-	CNFLog(@"");
-	
-	CNFParser	*parser = [CNFParser sharedInstance];
-	[parser logout];
-	
-	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -146,6 +90,19 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return _items.count;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([_items[indexPath.row] isEqualToString:@"id_logout"]) {
+		CNFLog(@"");
+		
+		CNFParser	*parser = [CNFParser sharedInstance];
+		[parser logout];
+		
+		[self dismissViewControllerAnimated:YES completion:nil];
+	}
+	else
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
