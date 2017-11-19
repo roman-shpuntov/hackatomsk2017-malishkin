@@ -21,11 +21,33 @@
 
 @implementation GameViewController
 
+-(void)serverStepWait {
+	CNFLog(@"");
+	[_progress stopAnimating];
+}
+
+-(void)serverStepReady {
+	CNFLog(@"");
+	[_progress startAnimating];
+}
+
 -(void)serverGameReady:(NSString *)userName {
 	CNFLog(@"user %@", userName);
 	
 	_name.text = [NSString stringWithFormat:@"Name: %@", userName];
 	[_progress stopAnimating];
+}
+
+-(void)serverError:(NSError *)error {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil)
+																   message:error.domain
+															preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction	*action = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+													 style:UIAlertActionStyleDefault
+												   handler:nil];
+	[alert addAction:action];
+	[self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)_customSetup {
