@@ -13,14 +13,14 @@ class GameOfferService
     /**
      * @var GameOffer
      */
-    private $model;
+    private $offer;
 
     /**
-     * @param GameOffer $model
+     * @param GameOffer $offer
      */
-    public function __construct(GameOffer $model)
+    public function __construct(GameOffer $offer)
     {
-        $this->model = $model;
+        $this->offer = $offer;
     }
 
     /**
@@ -38,12 +38,12 @@ class GameOfferService
 
         $gameKey = str_random(6);
 
-        $this->model->fill([
+        $this->offer->create([
             'user_id'  => $userId,
             'type'     => $type,
             'bet'      => $bet,
             'game_key' => $gameKey,
-        ])->save();
+        ]);
 
         return $gameKey;
     }
@@ -66,7 +66,7 @@ class GameOfferService
 
         while (1) {
             /* @var GameOffer $offer */
-            $offer = $this->model
+            $offer = $this->offer
                 ->where('user_id', '<>', $userId)
                 ->where('type', $type)
                 ->where('bet', $bet)
