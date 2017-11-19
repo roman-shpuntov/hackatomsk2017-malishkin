@@ -26,19 +26,28 @@
 
 -(void)serverStepWait {
 	CNFLog(@"");
-	//[_progress stopAnimating];
+	
+	_imagePeer.image = [UIImage imageNamed:@"peer.png"];
+	_imageSelf.image = [UIImage imageNamed:@"self.green.png"];
+	
+	_status.text = @"It's your turn...";
+	_status.textColor = [UIColor greenColor];
 }
 
 -(void)serverStepReady {
 	CNFLog(@"");
-	//[_progress startAnimating];
+	
+	_imagePeer.image = [UIImage imageNamed:@"peer.green.png"];
+	_imageSelf.image = [UIImage imageNamed:@"self.png"];
+	
+	_status.text = @"Waiting";
+	_status.textColor = [UIColor darkGrayColor];
 }
 
 -(void)serverGameReady:(NSString *)userName {
 	CNFLog(@"user %@", userName);
 	
 	_peerName.text = [NSString stringWithFormat:@"%@", userName];
-	//[_progress stopAnimating];
 }
 
 -(void)serverError:(NSError *)error {

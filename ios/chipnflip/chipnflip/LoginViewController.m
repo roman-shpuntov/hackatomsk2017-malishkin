@@ -20,7 +20,7 @@
 
 @end
 
-#define EMULATE_INFO
+//#define EMULATE_INFO
 
 @implementation LoginViewController
 
