@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Enums\CellStates;
+use App\Enums\GameTypes;
 use App\Models\Game;
 use App\Models\GameOffer;
 use App\Models\Transaction;
@@ -264,8 +265,10 @@ class GameService
         try {
             $game->winner_id = $winnerId;
             $game->save();
-            $uid = $userIds[0] == $winnerId ? $userIds[0] : $userIds[1];
-            $this->creditOperation($game->id, $uid, $game->prize);
+            if ($game->type !== GameTypes::FREE) {
+                $uid = $userIds[0] == $winnerId ? $userIds[0] : $userIds[1];
+                $this->creditOperation($game->id, $uid, $game->prize);
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
