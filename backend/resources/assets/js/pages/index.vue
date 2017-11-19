@@ -5,7 +5,7 @@
         .user
           img(src="/images/avatar.png")
           | {{username}}
-        button.button-solid Start the game
+        a.button-solid(href="#/game") Start the game
 
     .unauthorized-variant.fullheight(v-else)
       form.authorize-form(method="post" @submit="authorize")
