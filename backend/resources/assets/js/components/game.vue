@@ -27,7 +27,7 @@
               v-bind:class="{ active: moveFrom && x == moveFrom.x && y == moveFrom.y}"
             )
     .row-buttons
-      button.button-solid Cancel the game
+      button.button-solid(@click="cancelGame") Cancel the game
 </template>
 
 <script>
@@ -77,6 +77,22 @@
       }
     },
     methods: {
+      cancelGame() {
+        fetch("/api/v1/cancel-game", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+              "user_id": this.user_id,
+              "game_id": this.game_info.game_id,
+              "game_key": this.game_info.game_key
+          })
+        }).then((request) => request.json()).then(() => {
+          document.location = "/";
+        });
+      },
       offerGame() {
         fetch("/api/v1/game-offer", {
           method: "POST",
