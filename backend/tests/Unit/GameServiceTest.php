@@ -120,4 +120,75 @@ class GameServiceTest extends TestCase
         // Эта осталась без изменений
         $this->assertEquals(7, $field[6][3]);
     }
+
+    /**
+     * Тест: сможет ли ходить другой игрок или игра окончена. В таком случае выявляем победителя.
+     * @dataProvider winnerFields
+     * @param array $field
+     */
+    public function test_checkAnyWinner(array $field, int $exceptedWinnerId)
+    {
+        $snapshot = [
+            'turn_user_id' => 3,
+            'field'        => $field,
+        ];
+
+        $winnerId = $this->service->checkAnyWinner($snapshot);
+        $this->assertEquals($exceptedWinnerId, $winnerId);
+    }
+
+    /**
+     * Данне для теста победителя
+     */
+    public function winnerFields()
+    {
+        return [
+            'граница, есть ход' => [
+                'field'            => [
+                    [3, 0, 3],
+                    [7, 7, 7],
+                    [0, 0, 0],
+                ],
+                'exceptedWinnerId' => 0,
+            ],
+
+            'центр, есть ход' => [
+                'field'            => [
+                    [7, 7, 0, 0],
+                    [0, 0, 0, 0],
+                    [0, 0, 3, 0],
+                    [0, 0, 0, 0],
+                ],
+                'exceptedWinnerId' => 0,
+            ],
+
+            'нет хода' => [
+                'field'            => [
+                    [3, 3, 7, 7],
+                    [7, 7, 7, 7],
+                    [7, 7, 7, 7],
+                    [0, 0, 0, 0],
+                ],
+                'exceptedWinnerId' => 7,
+            ],
+
+            'победа по счету' => [
+                'field'            => [
+                    [3, 3, 3],
+                    [7, 7, 7],
+                    [3, 3, 7],
+                ],
+                'exceptedWinnerId' => 3,
+            ],
+
+            'кончились фишки' => [
+                'field'            => [
+                    [7, 7, 7],
+                    [7, 7, 0],
+                    [0, 0, 0],
+                ],
+                'exceptedWinnerId' => 7,
+            ],
+        ];
+    }
 }
