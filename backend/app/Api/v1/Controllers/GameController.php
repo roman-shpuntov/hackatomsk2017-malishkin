@@ -69,6 +69,7 @@ class GameController extends Controller
             $response = [
                 'game_info' => [
                     'game_id'  => $game->id,
+                    'game_key' => $game->game_key,
                     'prize'    => $game->prize,
                     'users'    => $game->users->toArray(),
                     'snapshot' => json_decode($game->snapshot, true),
@@ -97,7 +98,7 @@ class GameController extends Controller
 
         $gameKey = $request->get('game_key');
 
-        if ($winnerId = $this->gameSvc->anyWinner($snapshot)) {
+        if ($winnerId = $this->gameSvc->checkAnyWinner($snapshot)) {
             $this->notifier->gameEnded($gameKey, $winnerId);
             return response()->json(['game_ended' => $winnerId]);
         }

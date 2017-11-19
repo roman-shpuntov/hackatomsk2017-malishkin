@@ -18,6 +18,7 @@
 	SKSpriteNode	*_selectedNode;
 	CGPoint			_selectedLocation;
 	NSArray			*_lastMove;
+	BOOL			_stepWait;
 }
 
 const NSUInteger	CNFGridSide		= 7;
@@ -33,17 +34,33 @@ const CGFloat		CNFTouchMove	= 0.2;
 	[parser removeDelegate:self];
 }
 
+-(void)serverStepWait {
+	CNFLog(@"");
+	_stepWait = YES;
+}
+
+-(void)serverStepReady {
+	CNFLog(@"");
+	_stepWait = NO;
+}
+
 - (void) serverFields:(NSArray *) fields {
 	CNFParser	*parser = [CNFParser sharedInstance];
+	
+	for (SKNode* node in self.children) {
+		if ([node.name isEqualToString:@"wchip"] ||
+			[node.name isEqualToString:@"bchip"])
+			[node removeFromParent];
+	}
 	
 	for (int i=0; i<fields.count; i++) {
 		NSArray *row = fields[i];
 		for (int j=0; j<row.count; j++) {
 			NSNumber	*col = [row objectAtIndex:j];
-			if (col == parser.peerid) {
+			if ([col isEqualToNumber:parser.peerid]) {
 				[self _createChip:[NSNumber numberWithLong:i] ypos:[NSNumber numberWithLong:j] selfChip:NO];
 			}
-			else if (col == parser.userid) {
+			else if ([col isEqualToNumber:parser.userid]) {
 				[self _createChip:[NSNumber numberWithLong:i] ypos:[NSNumber numberWithLong:j] selfChip:YES];
 			}
 		}
@@ -65,12 +82,17 @@ const CGFloat		CNFTouchMove	= 0.2;
 	
 	n.position = CGPointMake(mx, my);
 	n.size  = CGSizeMake(_side, _side);
-	n.name = @"chip";
+	if (selfChip)
+		n.name = @"wchip";
+	else
+		n.name = @"bchip";
 	[self addChild:n];
 }
 
 - (void)sceneDidLoad {
 	CNFLog(@"");
+	
+	_stepWait = NO;
 	
 	CNFParser *parser = [CNFParser sharedInstance];
 	[parser removeDelegate:self];
@@ -147,6 +169,9 @@ const CGFloat		CNFTouchMove	= 0.2;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	if (!_stepWait)
+		return;
+	
 	for (UITouch *touch in touches) {
 		CGPoint location = [touch locationInNode:self];
 		_selectedLocation = [self _location2grid:location];
@@ -155,7 +180,7 @@ const CGFloat		CNFTouchMove	= 0.2;
 		CNFLog(@"%f:%f", location.x, location.y);
 		
 		if (touchedNode != self) {
-			if ([touchedNode.name isEqualToString:@"chip"]) {
+			if ([touchedNode.name isEqualToString:@"wchip"]) {
 				_selectedNode = (SKSpriteNode *) touchedNode;
 				
 				if ([touchedNode isKindOfClass:[SKSpriteNode class]]) {
@@ -197,20 +222,33 @@ const CGFloat		CNFTouchMove	= 0.2;
 				[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
 			}
 			else {
-				CGPoint		grid = [self _location2cell:location];
-				NSArray		*xarr = _lastMove[(int) grid.x];
-				NSNumber	*yval = xarr[(int) grid.y];
+				CGPoint		new		= [self _location2cell:location];
+				NSArray		*xarr	= _lastMove[(int) new.x];
+				NSNumber	*yval	= xarr[(int) new.y];
 				if ([yval longValue])
 					[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
 				else {
-					CGPoint		old = [self _location2cell:_selectedLocation];
-					int			x = (int) (old.x - grid.x);
-					int			y = (int) (old.y - grid.y);
+					CGPoint		old	= [self _location2cell:_selectedLocation];
+					int			dx	= (int) (old.x - new.x);
+					int			dy	= (int) (old.y - new.y);
 					
-					if (abs(x) >= CNFStepMax || abs(y) >= CNFStepMax)
+					if (abs(dx) >= CNFStepMax || abs(dy) >= CNFStepMax)
 						[_selectedNode runAction:[SKAction moveTo:_selectedLocation duration:CNFTouchMove]];
-					else
+					else {
 						[_selectedNode runAction:[SKAction moveTo:location duration:CNFTouchMove]];
+						
+						CNFMove	*from = [[CNFMove alloc] init];
+						CNFMove	*to = [[CNFMove alloc] init];
+						
+						from.x = (int) old.x;
+						from.y = (int) old.y;
+						
+						to.x = (int) new.x;
+						to.y = (int) new.y;
+						
+						CNFParser	*parser = [CNFParser sharedInstance];
+						[parser step:from to:to];
+					}
 				}
 			}
 			
