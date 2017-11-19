@@ -7,7 +7,7 @@
           .tab: a(href="#/credits") 150 credits
           .tab: a(href="#/howtoplay") How to play
           .tab: a(href="#/settings") Settings
-          .tab: a(href="#/logout") Log out&nbsp;&nbsp;#[img(src="/images/log-out.png")]
+          .tab: a(href="#/logout" @click="logout") Log out&nbsp;&nbsp;#[img(src="/images/log-out.png")]
     slot
     footer
       .container.fullheight
@@ -28,6 +28,12 @@
 
 <script>
 export default {
-  props: ["dickBig"]
+  props: ["dickBig"],
+  methods: {
+    logout() {
+      delete localStorage.token;
+      document.location = "/";
+    }
+  }
 }
 </script>
