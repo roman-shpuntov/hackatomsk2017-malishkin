@@ -11,4 +11,5 @@ Route::group(['prefix' => 'v1'], function () {
     // Ахтунг! Не закрывать эти роуты за аутентификацией. Если юзер разлогинится во время игры, это будет расценнено,
     // как проигрыш.
     Route::post('step', $ns . 'GameController@step');
+    Route::post('cancel-game', $ns . 'GameController@cancelGame');
 });

@@ -4,6 +4,7 @@ namespace App\Api\V1\Controllers;
 use App\GameNotifier;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Requests\CancelRequest;
 use App\Requests\GameOfferRequest;
 use App\Requests\StepRequest;
 use App\Services\GameOfferService;
@@ -107,5 +108,17 @@ class GameController extends Controller
         $snapshot = compact('snapshot');
         $this->notifier->gridUpdated($gameKey, $snapshot);
         return response()->json($snapshot);
+    }
+
+    /**
+     * Отмена игры
+     * @param CancelRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancelGame(CancelRequest $request)
+    {
+        $this->gameSvc->cancelGame($request->get('game_id'), $request->get('user_id'));
+        $this->notifier->gameCanceled($request->get('gameKey'), $request->get('user_id'));
+        return response()->json(['success' => 'You canceled the game.']);
     }
 }

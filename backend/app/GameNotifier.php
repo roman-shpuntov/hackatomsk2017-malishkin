@@ -78,7 +78,21 @@ class  GameNotifier
         $this->pusher->trigger(
             $this->getChannelName($gameKey),
             'game-ended',
-            $winnerId
+            ['winner' => $winnerId]
+        );
+    }
+
+    /**
+     * Игра отменена указанным пользователем
+     * @param string $gameKey     защитный ключ игры
+     * @param int    $initiatorId id юзера, отменившего игру
+     */
+    public function gameCanceled(string $gameKey, int $initiatorId)
+    {
+        $this->pusher->trigger(
+            $this->getChannelName($gameKey),
+            'game-canceled',
+            ['initiator' => $initiatorId]
         );
     }
 }
