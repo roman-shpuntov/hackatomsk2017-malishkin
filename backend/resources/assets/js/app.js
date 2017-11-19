@@ -9,6 +9,7 @@ import creditsPage from "./pages/credits";
 import howtoplayPage from "./pages/howtoplay";
 import settingsPage from "./pages/settings";
 import registerPage from "./pages/register";
+import termsandconditionsPage from "./pages/termsandconditions";
 
 Vue.use(VueRouter);
 
@@ -20,7 +21,8 @@ const router = new VueRouter({
     { path: "/menu", component: menuPage },
     { path: "/game", component: gamePage },
     { path: "/howtoplay", component: howtoplayPage },
-    { path: "/settings", component: settingsPage }
+    { path: "/settings", component: settingsPage },
+    { path: "/terms", component: termsandconditionsPage }
   ]
 });
 
