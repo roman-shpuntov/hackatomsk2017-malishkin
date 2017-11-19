@@ -11,7 +11,7 @@
     slot
     footer
       .container.fullheight
-        .brand Chip'n'Flip
+        .brand: img(src="/images/logo-footer.png")
         .links
           a(href="#/credits") Credits
           a(href="#/howtoplay") How to play

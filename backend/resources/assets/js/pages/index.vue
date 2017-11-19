@@ -22,7 +22,7 @@
     components: {chipnflipLayout},
     data: () => ({
       authorized: localStorage.token != undefined,
-      username: null
+      username: localStorage.user_name
     }),
     methods: {
       authorize(event) {
