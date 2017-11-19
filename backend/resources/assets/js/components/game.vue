@@ -42,6 +42,7 @@
     data: () => ({
       game_info: {
         snapshot: {
+            turnUserId: 0,
             field: [
               [0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0],
@@ -86,9 +87,14 @@
           this.channel = data.channel;
 
           echo.channel(data.channel).listen(".offer-accepted", (event) => {
+            console.log("Accepted");
             this.game_info = event.game_info;
             this.game_info_fetched = true;
           });
+
+          echo.channel(data.channel).listen(".grid-updated", (event) => {
+            this.game_info.snapshot = event.snapshot;
+          })
 
           if (data.game_info) {
             this.game_info = data.game_info;
@@ -102,7 +108,7 @@
             x: parseInt(event.currentTarget.dataset.coordsX),
             y: parseInt(event.currentTarget.dataset.coordsY)
           }
-        } else {
+        } else if (this.moveFrom) {
           let moveTo = {
             x: parseInt(event.currentTarget.dataset.coordsX),
             y: parseInt(event.currentTarget.dataset.coordsY)
@@ -124,10 +130,10 @@
                 "to": `${6 - moveTo.y}:${moveTo.x}`
             })
           }).then((request) => request.json()).then((data) => {
-            if (data.snapshot) {
-              this.game_info.snapshot = data.snapshot;
-              console.log(data.snapshot.turn_user_id);
-            }
+            // if (data.snapshot) {
+            //   this.game_info.snapshot = data.snapshot;
+            //   console.log(data.snapshot.turn_user_id);
+            // }
           });
         }
       }
