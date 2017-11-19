@@ -24,7 +24,9 @@
           })
         }).then((request) => request.json()).then((data) => {
           localStorage.token = data.token;
-          this.$router.push("/menu");
+          localStorage.user_id = data.user_id;
+          localStorage.user_name = data.name;
+          this.$router.push("/");
         });
 
         event.preventDefault();

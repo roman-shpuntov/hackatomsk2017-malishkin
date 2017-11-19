@@ -267,35 +267,120 @@ html, body, #application {
   text-decoration: none;
 }
 
+$cell-size: 50px;
+$grid-border-radius: 10px;
+
 .page-game {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-flow: column;
   height: 100%;
 
-  .grid {
-    .row {
-      .cell {
-        display: inline-block;
-        height: 50px;
-        width: 50px;
-        background: rgba(0, 0, 0, 0.4);
-        margin: 0 2px;
+  .row-avatars {
+    margin-top: 20px;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
 
-        .check {
+    .avatar-left, .avatar-right {
+      margin: 0 auto;
+
+      .username {
+        text-align: center;
+
+        &.active {
+          color: $brand-color;
+        }
+      }
+    }
+
+    .bet {
+      font-size: 2em;
+      display: flex;
+      align-items: end;
+      margin: auto 0;
+    }
+  }
+
+  .row-grid {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+
+    .grid {
+      display: flex;
+      flex-flow: column;
+
+      .row {
+        display: flex;
+        flex-flow: row;
+
+        &:nth-child(1) {
+          :nth-child(1) {
+            border-top-left-radius: $grid-border-radius;
+          }
+          :nth-child(7) {
+            border-top-right-radius: $grid-border-radius;
+          }
+        }
+
+        .cell {
+          border-radius: 8px;
           display: inline-block;
-          width: 100%;
-          height: 100%;
+          height: $cell-size;
+          width: $cell-size;
+          background: #d6c0f2;
+          margin: 2px;
 
-          &.first-check {
-            background: black;
+          @include center-content;
+
+          &:hover {
+            background: #e8d7fd;
           }
 
-          &.second-check {
-            background: white;
+          .check {
+            display: inline-block;
+            width: 90%;
+            height: 90%;
+            border-radius: 100px;
+
+            cursor: pointer;
+
+            &.first-check {
+              background: white;
+              box-shadow: inset 0px 0px 20px 10px #FCDDA8;
+
+              &.active {
+                box-shadow: inset 0px 0px 20px 10px #FCDDA8, 0px 0px 2px 4px green;
+              }
+            }
+
+            &.second-check {
+              background: #8B35C6;
+              box-shadow: inset 0px 0px 15px 15px #37154E;
+
+              &.active {
+                box-shadow: inset 0px 0px 15px 15px #37154E, 0px 0px 2px 4px green;
+              }
+            }
+
+            transition: box-shadow 0.2s ease-in-out;
           }
         }
       }
+
+      &.active .cell {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .row-buttons {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+
+    button {
+      margin: 20px;
     }
   }
 }

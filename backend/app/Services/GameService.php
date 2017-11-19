@@ -142,12 +142,60 @@ class GameService
      *
      * Если вычисление определит победителя, возвращаем его id, иначе - 0
      *
+     * Возможные ситуации: игроку некуда сходить, хотя пустые клетки есть - проиграл, нет пустых клеток - победит тот,
+     * у кого больше фишек. Игрок потерял все фишки - проиграл.
+     *
      * @param array $snapshot снимок поля
      * @return int
      */
-    public function anyWinner(array $snapshot): int
+    public function checkAnyWinner(array $snapshot): int
     {
-        // TODO
-        return 0;
+        $field = $snapshot['field'];
+        $userId = $snapshot['turn_user_id'];
+        $size = count($field);
+
+        $hasFreeSpace = function (int $curRow, int $curCol) use ($field, $size) {
+            for ($row = max(0, $curRow - 2); $row <= min($size - 1, $curRow + 2); $row++) {
+                for ($col = max(0, $curCol - 2); $col <= min($size - 1, $curCol + 2); $col++) {
+                    if ($field[$row][$col] == 0) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        $counts = [0 => 0];
+        for ($row = 0; $row < $size; $row++) {
+            for ($col = 0; $col < $size; $col++) {
+                $cellState = $field[$row][$col];
+                if ($cellState == $userId && $hasFreeSpace($row, $col)) {
+                    return 0;
+                }
+
+                $counts[$cellState] = isset($counts[$cellState]) ? $counts[$cellState] + 1 : 1;
+            }
+        }
+
+        $freeCellsCount = $counts[0];
+        unset($counts[0]);
+
+        if (count($counts) === 1) {
+            $winnerId = array_flip($counts);
+            $winnerId = array_pop($winnerId);
+            return $winnerId;
+        }
+
+        $ids = array_keys($counts);
+        $id2 = array_pop($ids);
+        $id1 = array_pop($ids);
+        $count2 = array_pop($counts);
+        $count1 = array_pop($counts);
+
+        if ($freeCellsCount == 0) {
+            return $count1 > $count2 ? $id1 : $id2;
+        } else {
+            return $id1 == $userId ? $id2 : $id1;
+        }
     }
 }

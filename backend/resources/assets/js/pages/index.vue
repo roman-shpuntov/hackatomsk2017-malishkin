@@ -5,7 +5,7 @@
         .user
           img(src="/images/avatar.png")
           | {{username}}
-        button.button-solid Start the game
+        a.button-solid(href="#/game") Start the game
 
     .unauthorized-variant.fullheight(v-else)
       form.authorize-form(method="post" @submit="authorize")
@@ -37,6 +37,8 @@
           })
         }).then((request) => request.json()).then((data) => {
           localStorage.token = data.token;
+          localStorage.user_id = data.user_id;
+          localStorage.user_name = data.name;
           this.authorized = true;
         });
 

@@ -98,7 +98,7 @@ class GameController extends Controller
 
         $gameKey = $request->get('game_key');
 
-        if ($winnerId = $this->gameSvc->anyWinner($snapshot)) {
+        if ($winnerId = $this->gameSvc->checkAnyWinner($snapshot)) {
             $this->notifier->gameEnded($gameKey, $winnerId);
             return response()->json(['game_ended' => $winnerId]);
         }
